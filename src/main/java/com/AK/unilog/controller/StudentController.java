@@ -3,6 +3,7 @@ package com.AK.unilog.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /*
@@ -11,6 +12,7 @@ and specify the files as /student/{htmlFileName}
  */
 
 @Controller
+@RequestMapping("/student")
 public class StudentController {
 
     @GetMapping("/availableCourses")

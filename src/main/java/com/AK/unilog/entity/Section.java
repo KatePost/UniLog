@@ -35,11 +35,13 @@ public class Section {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @Column(nullable = false)
     @NotEmpty
     @Min(10)
     @Max(50)
     private int seatsAvailable;
 
+    @Column(nullable = false)
     @Min(2021)
     @Max(2100)
     private int year;
