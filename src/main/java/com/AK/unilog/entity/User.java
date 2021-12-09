@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -28,12 +29,12 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(length = 200)
-    @Size(min = 3, max = 200)
+    @Size(min = 2, max = 200)
     @NotEmpty
     private String firstName;
 
     @Column(length = 200)
-    @Size(min = 3, max = 200)
+    @Size(min = 2, max = 200)
     @NotEmpty
     private String lastName;
 
@@ -47,10 +48,12 @@ public class User implements UserDetails {
 
     @NotNull
     @Column(length = 64, nullable = false)
+    @Size(min = 6, max = 64)
+    @Pattern(regexp = "^[A-Za-z0-9]{6,15}$")
     private String password;
 
     @NotNull
-    @Column(length = 150, nullable = false)
+    @Column(length = 150, nullable = false, unique = true)
     @Size(min = 6, max = 150)
     private String email;
 

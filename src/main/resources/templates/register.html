@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>New Student Account</title>
 </head>
 <body>
+<div class="container text-center">
+<form method="post" th:action="@{/registration}" th:object="${user}" class="form">
 
+    <label class="form-label">First Name: </label>
+    <input type="text" th:field="*{firstName}" class="form-control">
+    <p class="text-danger" th:if="${#fields.hasErrors('firstName')}"  th:errors="*{firstName}"></p>
+
+    <label class="form-label">Last Name: </label>
+    <input type="text" th:field="*{lastName}" class="form-control">
+    <p class="text-danger" th:if="${#fields.hasErrors('lastName')}"  th:errors="*{lastName}"></p>
+
+    <label class="form-label">Address: </label>
+    <input type="text" th:field="*{address}" class="form-control">
+    <p class="text-danger" th:if="${#fields.hasErrors('address')}"  th:errors="*{address}"></p>
+
+    <label class="form-label">Birthday: </label>
+    <input type="text" th:field="*{birthdate}" class="form-control">
+    <p class="text-danger" th:if="${#fields.hasErrors('birthdate')}"  th:errors="*{birthdate}"></p>
+
+</form>
+</div>
 </body>
 </html>
