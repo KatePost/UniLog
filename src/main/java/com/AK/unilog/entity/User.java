@@ -43,4 +43,9 @@ public class User {
     @Column(length = 64, nullable = false)
     private String password;
 
+    @NotNull
+    @Column(length = 150, nullable = false)
+    @Size(min = 6, max = 150)
+    private String email;
+
 }
