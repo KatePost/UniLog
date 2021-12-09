@@ -2,6 +2,8 @@ package com.AK.unilog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class UnilogApplication {
@@ -10,4 +12,9 @@ public class UnilogApplication {
 		SpringApplication.run(UnilogApplication.class, args);
 	}
 
+	// could maybe move this to security config later
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }
