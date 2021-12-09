@@ -1,6 +1,5 @@
 package com.AK.unilog.entity;
 
-import com.AK.unilog.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -86,5 +85,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public enum Role {
+        STUDENT, ADMIN
     }
 }

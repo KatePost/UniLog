@@ -23,8 +23,11 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user, User.Role role){
         user.setPassword(pwEncoder.encode(user.getPassword()));
-        user.setRoles
+        user.setRole(role);
+        return userRepo.save(user);
     }
+
+
 }
