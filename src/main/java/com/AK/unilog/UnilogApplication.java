@@ -17,4 +17,6 @@ public class UnilogApplication {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+
 }
