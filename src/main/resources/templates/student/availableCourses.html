@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+    <title>Available Courses</title>
 </head>
 <body>
-
+<header th:insert="fragments/studentGeneral.html :: header"></header>
+<div class="container">
+    <aside th:insert="fragments/studentGeneral.html :: aside"></aside>
+</div>
 </body>
 </html>

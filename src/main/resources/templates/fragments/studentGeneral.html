@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <span class="fs-4">UniLog</span>
+
+            </a>
+
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a th:href="@{/student/home}" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a th:href="@{/student/paymentHistory}" class="nav-link">Student Details</a></li>
+                <header th:insert="fragments/components.html :: header"></header>
+            </ul>
+        </header>
+    </div>
+</header>
+
+<aside th:fragment="aside" class="row">
+    <div class="col-3">
+    <div class="p-3 bg-light">
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a th:href="@{/student/availableCourses}" class="nav-link">
+                    View all courses
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/student/paymentHistory}" class="nav-link">
+                    Payments
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/student/registeredCourses}" class="nav-link">
+                    Registered courses
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/student/cart}" class="nav-link">
+                    Course cart
+                </a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+</div>
+<!--    <div th:fragment="body">-->
+    <div class="col-9">
+        Where does it come from?
+        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    </div>
+<!--    </div>-->
+</aside>
+
+</body>
+</html>

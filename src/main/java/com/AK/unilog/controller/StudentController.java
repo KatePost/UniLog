@@ -22,7 +22,7 @@ public class StudentController {
 
     @GetMapping("/availableCourses")
     public String availableCourses(){
-        return "availableCourses";
+        return "/student/availableCourses";
     }
 
     @GetMapping("/cart")
@@ -32,21 +32,21 @@ public class StudentController {
 
     @PostMapping("/checkout")
     public String checkout(){
-        return "checkout";
+        return "/student/checkout";
     }
 
     @PostMapping("/paymentConfirmation")
     public String confirmPayment() {
-        return "paymentConfirmation";
+        return "/student/paymentConfirmation";
     }
 
     @GetMapping("/registeredCourses")
     public String registeredCourses(){
-        return "registeredCourses";
+        return "/student/registeredCourses";
     }
 
     @GetMapping("paymentHistory")
     public String paymentHistory(){
-        return "paymentHistory";
+        return "/student/paymentHistory";
     }
 }

@@ -4,13 +4,12 @@
     <title>Student Home</title>
 </head>
 <body>
-<header th:insert="fragments/components.html :: header"></header>
-<div sec:authorize="hasAuthority('STUDENT')">
-    Logged in Student auth
+<header th:insert="fragments/studentGeneral.html :: header"></header>
+<div class="container">
+<aside th:insert="fragments/studentGeneral.html :: aside"></aside>
 </div>
-<div sec:authorize="hasRole('STUDENT')">
-    Logged in Student role
-</div>
-Student home
+
 </body>
 </html>
+
+

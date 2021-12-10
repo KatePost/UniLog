@@ -20,6 +20,9 @@
     <div sec:authorize="hasRole('STUDENT')">
         Logged in Student
     </div>
+    <div sec:authorize="hasAuthority('STUDENT')">
+        Logged in Student auth
+    </div>
     <div sec:authorize="isAnonymous()">
         Logged out User
     </div>
@@ -29,7 +32,7 @@
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin
     </div>
-    <div sec:authorize="hasRole('ROLE_STUDENT')">
+    <div sec:authorize="hasRole('STUDENT')">
         Logged in Student
     </div>
     <div sec:authorize="isAnonymous()">
