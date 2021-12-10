@@ -35,11 +35,9 @@ public class UniController {
         return "index";
     }
 
-    @GetMapping("/login")
-    public ModelAndView login(){
-        ModelAndView mav = new ModelAndView("login");
-        mav.addObject("user", new User());
-        return mav;
+    @GetMapping("/login") //login is taken care of by spring security. no model necessary
+    public String login(){
+        return "login";
     }
 
     @GetMapping("/register")
