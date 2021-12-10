@@ -8,10 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,32 +25,31 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(length = 200)
-    @Size(min = 2, max = 200)
-    @NotEmpty
+    @Size(min = 2, max = 200, message = "Please enter a valid name")
     private String firstName;
 
     @Column(length = 200)
-    @Size(min = 2, max = 200)
-    @NotEmpty
+    @Size(min = 2, max = 200, message = "Please enter a valid name")
     private String lastName;
 
     @Column(length = 400)
-    @Size(min = 20, max = 400)
-    @NotEmpty
+    @Size(min = 20, max = 400, message = "Please enter a full address")
     private String address;
 
-    @NotEmpty
+    @NotNull
+    @Past
     private LocalDate birthdate;
 
-    @NotNull
     @Column(length = 64, nullable = false)
-    @Size(min = 6, max = 64)
-    @Pattern(regexp = "^[A-Za-z0-9]{6,15}$")
     private String password;
 
-    @NotNull
+    @Transient
+    @Pattern(regexp = "^[A-Za-z0-9]{6,15}$", message = "Password must be 6 - 15 characters with only alphanumeric values")
+    private String passwordMatch;
+
     @Column(length = 150, nullable = false, unique = true)
-    @Size(min = 6, max = 150)
+    @Size(min = 6, max = 150, message = "Please enter a valid email")
+    @Email(message = "Please enter a valid email")
     private String email;
 
     private Role role;

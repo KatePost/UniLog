@@ -5,6 +5,9 @@ import com.AK.unilog.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import java.time.LocalDate;
 
 @Service
 public class UserService {
@@ -29,5 +32,14 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    public void validateRegistration(BindingResult bindingResult, User user) {
+        LocalDate date = LocalDate.now().minusYears(18);
+        if(bindingResult.hasFieldErrors("birthdate") || user.getBirthdate().isAfter(date)){
+            bindingResult.rejectValue("birthdate", "age.invalid", "You must be 18 years old to register");
+        }
+        if(bindingResult.hasFieldErrors("password") || bindingResult.hasFieldErrors("passwordMatch") || !user.getPassword().equals(user.getPasswordMatch())){
+            bindingResult.rejectValue("password", "no.match", "Passwords must match");
+        }
+    }
 
 }

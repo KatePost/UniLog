@@ -1,6 +1,8 @@
 package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.User;
+import com.AK.unilog.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,13 @@ import javax.validation.Valid;
 
 @Controller
 public class UniController {
+
+    private UserService userService;
+
+    @Autowired
+    public UniController(UserService userService){
+        this.userService = userService;
+    }
 
     @GetMapping("/")
     public String home(){
@@ -31,9 +40,14 @@ public class UniController {
     @PostMapping("/register")
     public String registerSubmit(@Valid User user, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "register";
+            return "/register";
         }
-
+        userService.validateRegistration(bindingResult, user);
+        if(bindingResult.hasErrors()){
+            return "/register";
+        }
+        System.out.println("no errors");
+        userService.saveUser(user, User.Role.valueOf("STUDENT"));
         return "redirect:/login";
     }
 
