@@ -23,7 +23,6 @@ public class LoginService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByEmail(username);
-        Set<GrantedAuthority> authorities = user.getAuthorities();
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities());
     }
 }
