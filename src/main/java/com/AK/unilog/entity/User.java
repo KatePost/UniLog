@@ -52,6 +52,7 @@ public class User implements UserDetails {
     @Email(message = "Please enter a valid email")
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override

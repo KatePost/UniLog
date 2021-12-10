@@ -4,6 +4,26 @@
     <title>Log In</title>
 </head>
 <body>
+<div class="container p-4">
+    <header th:insert="fragments/components.html :: header"></header>
+    <div th:if="${param.error}">Invalid username and password</div>
+    <form method="post" action="#" th:action="@{/login}" class="form">
 
+        <div class="row justify-content-around">
+            <div class="col-3 p-3 text-end">Email Address:</div>
+            <div class="col-5 p-3"><input type="email" name="username" id="username" class="form-control"></div>
+        </div>
+
+        <div class="row justify-content-around">
+            <div class="col-3 p-3 text-end"> <label class="form-label">Password: </label></div>
+            <div class="col-5 p-3"><input type="password" id="password" class="form-control" name="password"></div>
+        </div>
+
+        <div class="row justify-content-center">
+            <input class="btn-primary btn col-auto" type="submit" value="Login">
+        </div>
+
+    </form>
+</div>
 </body>
 </html>

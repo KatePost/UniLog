@@ -34,11 +34,14 @@ public class UserService {
 
     public void validateRegistration(BindingResult bindingResult, User user) {
         LocalDate date = LocalDate.now().minusYears(18);
-        if(bindingResult.hasFieldErrors("birthdate") || user.getBirthdate().isAfter(date)){
+        if(user.getBirthdate().isAfter(date)){
             bindingResult.rejectValue("birthdate", "age.invalid", "You must be 18 years old to register");
         }
-        if(bindingResult.hasFieldErrors("password") || bindingResult.hasFieldErrors("passwordMatch") || !user.getPassword().equals(user.getPasswordMatch())){
+        if(!user.getPassword().equals(user.getPasswordMatch())){
             bindingResult.rejectValue("password", "no.match", "Passwords must match");
+        }
+        if(userRepo.findByEmail(user.getEmail()) != null){
+            bindingResult.rejectValue("email", "already.in.use", "That email already has an associated account");
         }
     }
 

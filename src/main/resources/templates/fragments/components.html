@@ -23,6 +23,7 @@
     <div sec:authorize="isAnonymous()">
         Logged out User
     </div>
+    <h4 th:text="${message}"></h4>
 </header>
 <footer>
     <div sec:authorize="hasRole('ADMIN')">

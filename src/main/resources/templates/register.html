@@ -4,6 +4,7 @@
     <title>Register for an account</title>
 </head>
 <body>
+<header th:insert="fragments/components.html :: header"></header>
 <div class="container p-4">
 <form method="post" th:action="@{/register}" th:object="${user}" class="form">
 

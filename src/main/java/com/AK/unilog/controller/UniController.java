@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -27,8 +29,10 @@ public class UniController {
     }
 
     @GetMapping("/login")
-    public String login(){
-        return "login";
+    public ModelAndView login(){
+        ModelAndView mav = new ModelAndView("login");
+        mav.addObject("user", new User());
+        return mav;
     }
 
     @GetMapping("/register")
@@ -38,7 +42,7 @@ public class UniController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@Valid User user, BindingResult bindingResult){
+    public String registerSubmit(@Valid User user, BindingResult bindingResult, RedirectAttributes redirAttrs){
         if(bindingResult.hasErrors()){
             return "/register";
         }
@@ -47,7 +51,8 @@ public class UniController {
             return "/register";
         }
         System.out.println("no errors");
-        userService.saveUser(user, User.Role.valueOf("STUDENT"));
+        userService.saveUser(user, User.Role.STUDENT);
+        redirAttrs.addFlashAttribute("message", "Your account has been created!");
         return "redirect:/login";
     }
 
