@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+    <title>Registration Cart</title>
 </head>
 <body>
-
+<header th:insert="fragments/studentGeneral.html :: header"></header>
+<div class="container">
+    <aside th:replace="fragments/studentGeneral.html :: aside(~{:: #text})"><div id="text">hi hi hi hi hi </div></aside>
+</div>
 </body>
 </html>

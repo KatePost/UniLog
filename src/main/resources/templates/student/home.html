@@ -6,7 +6,7 @@
 <body>
 <header th:insert="fragments/studentGeneral.html :: header"></header>
 <div class="container">
-<aside th:insert="fragments/studentGeneral.html :: aside"></aside>
+    <aside th:replace="fragments/studentGeneral.html :: aside(~{:: #text})"><div id="text">Home page</div></aside>
 </div>
 
 </body>

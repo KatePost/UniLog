@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
     <title>Available Courses</title>
 </head>
 <body>
 <header th:insert="fragments/studentGeneral.html :: header"></header>
 <div class="container">
-    <aside th:insert="fragments/studentGeneral.html :: aside"></aside>
+    <aside th:replace="fragments/studentGeneral.html :: aside(~{:: #text})"><div id="text">
+        <div class="container">
+
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+
+    </div></aside>
 </div>
 </body>
 </html>
