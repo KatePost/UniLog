@@ -8,28 +8,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @GetMapping("/home")
+    public String home(){
+        return "/admin/home";
+    }
+
     @GetMapping("/courses")
     public String showCourses(){
-        return "courses";
+        return "/admin/courses";
     }
 
     @GetMapping("/newCourse")
     public String newCoursePage(){
-        return "newCourse";
+        return "/admin/newCourse";
     }
 
     @GetMapping("/registrations")
     public String showRegistrations(){
-        return "registrations";
+        return "/admin/registrations";
     }
 
     @GetMapping("/register")
     public String register(){
-        return "register";
+        return "/admin/register";
     }
 
     @GetMapping("/outstanding")
     public String showOutstandingFees(){
-        return "outstanding";
+        return "/admin/outstanding";
     }
 }

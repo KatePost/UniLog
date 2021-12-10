@@ -77,6 +77,6 @@ public class UniController {
         if (roles.contains("STUDENT")) {
             return "redirect:/student/home";
         }
-        return "redirect:/admin/";
+        return "redirect:/admin/home";
     }
 }
