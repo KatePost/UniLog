@@ -28,3 +28,24 @@ Aly
 2. What I plan to do from this scrum to next? (next 24 hours)
 -cloud/hosting
 3. Where do I need assistance? What do I need to figure out?
+
+12/10/2021
+Kate
+1. What I have done / not done since last Scrum?
+-login and register
+-trello
+-made mock ups
+2. What I plan to do from this scrum to next? (next 24 hours)
+-view courses for students
+3. Where do I need assistance? What do I need to figure out?
+-stripe
+-localdate not parsing correctly
+
+Aly
+1. What I have done / not done since last Scrum?
+-spring security
+2. What I plan to do from this scrum to next? (next 24 hours)
+-bootstrap admin dashboard
+-scss/sass stuff
+3. Where do I need assistance? What do I need to figure out?
+-?

@@ -22,7 +22,7 @@ public class StudentController {
 
     @GetMapping("/cart")
     public String showCart(){
-        return "cart";
+        return "/student/cart";
     }
 
     @PostMapping("/checkout")
