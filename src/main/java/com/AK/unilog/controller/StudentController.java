@@ -15,6 +15,11 @@ and specify the files as /student/{htmlFileName}
 @RequestMapping("/student")
 public class StudentController {
 
+    @GetMapping("/home")
+    public String home(){
+        return "/student/home";
+    }
+
     @GetMapping("/availableCourses")
     public String availableCourses(){
         return "availableCourses";

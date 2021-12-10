@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+    <title>Student Home</title>
+</head>
+<body>
+<header th:insert="fragments/components.html :: header"></header>
+<div sec:authorize="hasAuthority('STUDENT')">
+    Logged in Student auth
+</div>
+<div sec:authorize="hasRole('STUDENT')">
+    Logged in Student role
+</div>
+Student home
+</body>
+</html>

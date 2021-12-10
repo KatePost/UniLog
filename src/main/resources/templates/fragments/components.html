@@ -29,7 +29,7 @@
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin
     </div>
-    <div sec:authorize="hasRole('STUDENT')">
+    <div sec:authorize="hasRole('ROLE_STUDENT')">
         Logged in Student
     </div>
     <div sec:authorize="isAnonymous()">

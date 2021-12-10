@@ -3,6 +3,11 @@ package com.AK.unilog.controller;
 import com.AK.unilog.entity.User;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class UniController {
@@ -64,10 +73,13 @@ public class UniController {
     }
 
     @RequestMapping("/default")
-    public String defaultAfterLogin(HttpServletRequest request) {
-        if (request.isUserInRole("ADMIN")) {
-            return "redirect:/admin/";
+    public String defaultAfterLogin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Set<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        if (roles.contains("STUDENT")) {
+            return "redirect:/student/home";
         }
-        return "redirect:/student/";
+        return "redirect:/admin/";
     }
 }
