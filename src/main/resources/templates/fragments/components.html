@@ -14,14 +14,11 @@
 </head>
 <body>
 <header th:fragment="header">
-    <div sec:authorize="hasRole('ADMIN')">
+    <div sec:authorize="hasAuthority('ADMIN')">
         Logged in Admin
     </div>
-    <div sec:authorize="hasRole('STUDENT')">
-        Logged in Student
-    </div>
     <div sec:authorize="hasAuthority('STUDENT')">
-        Logged in Student auth
+        Logged in Student
     </div>
     <div sec:authorize="isAnonymous()">
         Logged out User

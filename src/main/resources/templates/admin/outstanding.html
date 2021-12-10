@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-    <title>Title</title>
+    <title>Admin Home</title>
 </head>
 <body>
+<header th:insert="fragments/adminGeneral.html :: header"></header>
+<div class="container">
+    <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">Home page</div></aside>
+</div>
 
 </body>
 </html>
+
+

@@ -14,10 +14,10 @@
             <ul class="nav nav-pills">
                 <li class="nav-item"><a th:href="@{/student/home}" class="nav-link active">Home</a></li>
                 <li class="nav-item"><a th:href="@{/student/paymentHistory}" class="nav-link">Student Details</a></li>
-                <li><form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                    <input hidden type="submit" value="Sign Out" />
+                <li class="nav-item"><a class="nav-link" href="javascript: document.logoutForm.submit()">Sign out</a><form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                    <input hidden class="btn-primary" type="submit" value="Sign Out" />
                 </form></li>
-                <header th:insert="fragments/components.html :: header"></header>
+
             </ul>
         </header>
     </div>
@@ -26,6 +26,9 @@
 <aside th:fragment="aside(text)" class="row">
     <div class="col-3">
     <div class="p-3 bg-light">
+        <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item" th:insert="fragments/components.html :: header"></li>
+        </ul>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
