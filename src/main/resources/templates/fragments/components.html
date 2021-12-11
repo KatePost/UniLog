@@ -6,25 +6,30 @@
     <!-- Bootstrap CSS -->
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" th:href="@{/styles/bootstrap.css}">
+    <style>
+        #uniLogo {
+            content: url("../images/UniLog.png");
+            height: 3em;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
     <th:block th:replace="${links}"/>
     <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script th:src="@{/webjars/jquery/3.6.0/jquery.js}"></script>
     <!-- Bootstrap Javascript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js}" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <th:block th:replace="${scripts}"/>
 </head>
 <body>
-<div class="container">
     <header th:fragment="header" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="/" class="d-flex align-items-center mb-3 ms-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-            <span class="fs-4">UniLog</span>
+            <span class="fs-4" id="uniLogo" name="uniLogo">UniLog</span>
         </a>
         <ul class="nav nav-pills">
 
             <!-- Home button -->
             <li class="nav-item">
-<!--                <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/home}" class="nav-link active">Home</a>-->
-<!--                <a sec:authorize="hasAuthority('STUDENT')" th:href="@{/student/home}" class="nav-link active">Home</a>-->
                 <a sec:authorize="isAuthenticated()" href="home" class="nav-link active">Home</a>
                 <a sec:authorize="isAnonymous()" th:href="@{/}" class="nav-link active">Home</a>
             </li>
@@ -32,6 +37,7 @@
             <!-- Other Nav Items -->
             <li sec:authorize="hasAuthority('STUDENT')" class="nav-item"><a th:href="@{/student/paymentHistory}" class="nav-link">Student Details</a></li>
             <li sec:authorize="isAnonymous()" class="nav-item"><a th:href="@{/register}" class="nav-link">Register</a></li>
+
             <!-- Sign In/Out button -->
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <button class="nav-link" form="logoutForm">Sign Out</button>
@@ -42,8 +48,6 @@
             </li>
         </ul>
     </header>
-<!--    <h4 th:text="${message}"></h4>-->
-</div>
 <footer>
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin

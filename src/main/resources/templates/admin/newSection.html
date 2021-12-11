@@ -5,14 +5,14 @@
 </head>
 <body>
 <div class="container">
-  <header th:insert="fragments/components :: header"></header>
-  <div th:replace="fragments/adminGeneral.html :: aside(~{:: #text})">
+  <header th:replace="fragments/components :: header"></header>
+  <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
     <div id="text">
 
     <h3>Add a Course</h3>
     <ul class="nav nav-tabs ">
       <li class="nav-item showhide">
-        <a class="nav-link" href="/admin/newCourse">New Course</a>
+        <a class="nav-link" th:href="@{/admin/newCourse}">New Course</a>
       </li>
       <li class="nav-item showhide">
         <a class="nav-link active" href="#">New Section</a>

@@ -29,12 +29,12 @@ public class AdminController {
 
     @GetMapping("home")
     public String home(){
-        return "/admin/home";
+        return "admin/home";
     }
 
     @GetMapping("courses")
     public String showCourses(){
-        return "/admin/courses";
+        return "admin/courses";
     }
 
     @GetMapping("newCourse")
@@ -46,32 +46,32 @@ public class AdminController {
     @GetMapping("newSection")
     public String newSectionPage(Model model){
         model.addAttribute("sectionFormModel", new SectionFormModel());
-        return "/admin/newSection";
+        return "admin/newSection";
     }
 
     @GetMapping("registrations")
     public String showRegistrations(){
-        return "/admin/registrations";
+        return "admin/registrations";
     }
 
     @GetMapping("register")
     public String register(){
-        return "/admin/register";
+        return "admin/register";
     }
 
     @GetMapping("outstanding")
     public String showOutstandingFees(){
-        return "/admin/outstanding";
+        return "admin/outstanding";
     }
 
     @PostMapping("newSection")
     public String newSectionForm(@Valid SectionFormModel section, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
-            return "/admin/newSection";
+            return "admin/newSection";
         }
         courseService.verifySection(section, bindingResult);
         if(bindingResult.hasErrors()){
-            return "/admin/newSection";
+            return "admin/newSection";
         }
         courseService.saveSection(section);
         redirectAttributes.addAttribute("message", "New Section added successfully");

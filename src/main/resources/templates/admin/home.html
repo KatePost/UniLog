@@ -6,7 +6,7 @@
 <body>
 <div class="container">
   <header th:insert="fragments/components :: header"></header>
-  <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})"><div id="text">Home page</div></div>
+  <div th:replace="fragments/adminGeneral :: frame(~{:: #text})"><div id="text">Home page</div></div>
 </div>
 </body>
 </html>
