@@ -5,24 +5,24 @@
   <title>Title</title>
 </head>
 <body>
-<header th:fragment="header">
-  <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <span class="fs-4">UniLog</span>
-      </a>
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a th:href="@{/admin/home}" class="nav-link">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="javascript: document.logoutForm.submit()">Sign out</a><form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-          <input hidden class="btn-primary" type="submit" value="Sign Out" />
-        </form></li>
-      </ul>
-    </header>
-  </div>
-</header>
+<!--<header th:fragment="header">-->
+<!--  <div class="container">-->
+<!--    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">-->
+<!--      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">-->
+<!--        <span class="fs-4">UniLog</span>-->
+<!--      </a>-->
+<!--      <ul class="nav nav-pills">-->
+<!--        <li class="nav-item"><a th:href="@{/admin/home}" class="nav-link">Home</a></li>-->
+<!--        <li class="nav-item"><a class="nav-link" href="javascript: document.logoutForm.submit()">Sign out</a><form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">-->
+<!--          <input hidden class="btn-primary" type="submit" value="Sign Out" />-->
+<!--        </form></li>-->
+<!--      </ul>-->
+<!--    </header>-->
+<!--  </div>-->
+<!--</header>-->
 
-<aside th:fragment="aside(text)" class="row">
-  <div class="col-3">
+<div th:fragment="frame(text)" class="row">
+  <aside class="col-3">
     <div class="p-3 bg-light">
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item" th:insert="fragments/components.html :: header"></li>
@@ -52,11 +52,9 @@
       </ul>
       <hr>
     </div>
-  </div>
-  <div class="col-9">
-    <th:block th:replace="${text}"/>
-  </div>
-</aside>
+  </aside>
+  <main class="col-9" th:insert="${text}"></main>
+</div>
 
 </body>
 </html>

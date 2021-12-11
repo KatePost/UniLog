@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-  <title>New Section</title>
+  <title>Admin Home</title>
 </head>
 <body>
-<header th:insert="fragments/adminGeneral.html :: header"></header>
 <div class="container">
-  <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">
+  <header th:insert="fragments/components :: header"></header>
+  <div th:replace="fragments/adminGeneral.html :: aside(~{:: #text})">
+    <div id="text">
 
     <h3>Add a Course</h3>
     <ul class="nav nav-tabs ">
@@ -66,7 +67,8 @@
     </form>
 
 
-  </div></aside>
+  </div>
+</div>
 </div>
 </body>
 </html>
