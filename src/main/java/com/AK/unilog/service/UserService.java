@@ -3,11 +3,16 @@ package com.AK.unilog.service;
 import com.AK.unilog.entity.User;
 import com.AK.unilog.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -43,6 +48,13 @@ public class UserService {
         if(userRepo.findByEmail(user.getEmail()) != null){
             bindingResult.rejectValue("email", "already.in.use", "That email already has an associated account");
         }
+    }
+
+    public Set<String> getRoles(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Set<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        return roles;
     }
 
 }

@@ -69,12 +69,24 @@ public class UniController {
     @RequestMapping("/default")
     public String defaultAfterLogin(RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", "Login Successful");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Set<String> roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-        if (roles.contains("STUDENT")) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Set<String> roles = authentication.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        if (userService.getRoles().contains("STUDENT")) {
             return "redirect:/student/home";
         }
         return "redirect:/admin/home";
+    }
+
+    @GetMapping("/home")
+    public String getHome(){
+        Set<String>roles = userService.getRoles();
+        if(roles.contains("STUDENT")){
+            return "redirect:/student/home";
+        }
+        if(roles.contains("ADMIN")){
+            return "redirect:/admin/home";
+        }
+        return "redirect:/";
     }
 }
