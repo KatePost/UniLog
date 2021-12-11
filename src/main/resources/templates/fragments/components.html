@@ -5,6 +5,7 @@
     <title th:replace="${title}">UniLog</title>
     <!-- Bootstrap CSS -->
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/styles/bootstrap.css}">
     <th:block th:replace="${links}"/>
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -13,18 +14,36 @@
     <th:block th:replace="${scripts}"/>
 </head>
 <body>
-<header th:fragment="header">
-    <div sec:authorize="hasAuthority('ADMIN')">
-        Logged in Admin
-    </div>
-    <div sec:authorize="hasAuthority('STUDENT')">
-        Logged in Student
-    </div>
-    <div sec:authorize="isAnonymous()">
-        Logged out User
-    </div>
-    <h4 th:text="${message}"></h4>
-</header>
+<div class="container">
+    <header th:fragment="header" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center mb-3 ms-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <span class="fs-4">UniLog</span>
+        </a>
+        <ul class="nav nav-pills">
+
+            <!-- Home button -->
+            <li class="nav-item">
+<!--                <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/home}" class="nav-link active">Home</a>-->
+<!--                <a sec:authorize="hasAuthority('STUDENT')" th:href="@{/student/home}" class="nav-link active">Home</a>-->
+                <a sec:authorize="isAuthenticated()" href="home" class="nav-link active">Home</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/}" class="nav-link active">Home</a>
+            </li>
+
+            <!-- Other Nav Items -->
+            <li sec:authorize="hasAuthority('STUDENT')" class="nav-item"><a th:href="@{/student/paymentHistory}" class="nav-link">Student Details</a></li>
+
+            <!-- Sign In/Out button -->
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <button class="nav-link" form="logoutForm">Sign Out</button>
+                <form name="logoutForm" id="logoutForm" th:action="@{/logout}" method="post" th:hidden="true"></form>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" th:href="@{/login}">Sign In</a>
+            </li>
+        </ul>
+    </header>
+<!--    <h4 th:text="${message}"></h4>-->
+</div>
 <footer>
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin

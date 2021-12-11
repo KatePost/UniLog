@@ -4,8 +4,9 @@
     <title>Log In</title>
 </head>
 <body>
+<div class="container">
+<header th:insert="fragments/components.html :: header"></header>
 <div class="container p-4">
-    <header th:insert="fragments/components.html :: header"></header>
     <div th:if="${param.error}">Invalid username and password</div>
     <form method="post" action="#" th:action="@{/login}" class="form">
 
@@ -20,10 +21,11 @@
         </div>
 
         <div class="row justify-content-center">
-            <input class="btn-primary btn col-auto" type="submit" value="Login">
+            <input class="btn-goldbro btn col-auto" type="submit" value="Login">
         </div>
 
     </form>
+</div>
 </div>
 </body>
 </html>
