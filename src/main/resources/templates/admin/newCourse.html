@@ -1,14 +1,60 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-    <title>Admin Home</title>
+    <title>New Course</title>
 </head>
 <body>
 <header th:insert="fragments/adminGeneral.html :: header"></header>
 <div class="container">
-    <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">Home page</div></aside>
-</div>
+    <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">
 
+        <h3>Add a Course</h3>
+        <ul class="nav nav-tabs ">
+            <li class="nav-item showhide">
+                <a class="nav-link active" href="#">New Course</a>
+            </li>
+            <li class="nav-item showhide">
+                <a class="nav-link" href="/admin/newSection">New Section</a>
+            </li>
+        </ul>
+
+        <form method="post" th:action="@{/admin/newCourse}" class="form" th:object="${courseFormModel}">
+            <div class="row justify-content-around">
+                <div class="col-3 p-3 text-end">Course Number (7 characters):</div>
+                <div class="col-5 p-3"><input type="text" th:field="*{courseNumber}" class="form-control"></div>
+                <p class="text-danger text-center" th:if="${#fields.hasErrors('courseNumber')}"  th:errors="*{courseNumber}"></p>
+            </div>
+
+            <div class="row justify-content-around">
+                <div class="col-3 p-3 text-end"> <label class="form-label">Course Title: </label></div>
+                <div class="col-5 p-3"><input type="text" th:field="*{title}" class="form-control"></div>
+                <p class="text-danger text-center" th:if="${#fields.hasErrors('title')}"  th:errors="*{title}"></p>
+            </div>
+
+            <div class="row justify-content-around">
+                <div class="col-3 p-3 text-end"><label class="form-label">Course Description: </label></div>
+                <div class="col-5 p-3"><textarea th:field="*{description}" class="form-control"></textarea> </div>
+                <p class="text-danger text-center" th:if="${#fields.hasErrors('description')}"  th:errors="*{description}"></p>
+            </div>
+
+            <div class="row justify-content-around">
+                <div class="col-3 p-3 text-end"><label class="form-label">Price: </label></div>
+                <div class="col-5 p-3"><input type="number" step="0.01" th:field="*{price}" class="form-control"></div>
+                <p class="text-danger text-center" th:if="${#fields.hasErrors('price')}"  th:errors="*{price}"></p>
+            </div>
+
+            <div class="row justify-content-around">
+                <div class="col-3 p-3 text-end"> <label class="form-label">Prerequisite Course Number: </label></div>
+                <div class="col-5 p-3"><input type="text" th:field="*{prereq}" class="form-control"></div>
+                <p class="text-danger text-center" th:if="${#fields.hasErrors('prereq')}"  th:errors="*{prereq}"></p>
+            </div>
+
+            <div class="row justify-content-center">
+                <input class="btn-primary btn col-auto" type="submit" value="Add Course">
+            </div>
+        </form>
+    </div></aside>
+</div>
 </body>
 </html>
 

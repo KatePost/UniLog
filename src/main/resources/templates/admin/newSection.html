@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+  <title>New Section</title>
+</head>
+<body>
+<header th:insert="fragments/adminGeneral.html :: header"></header>
+<div class="container">
+  <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">
+
+    <h3>Add a Course</h3>
+    <ul class="nav nav-tabs ">
+      <li class="nav-item showhide">
+        <a class="nav-link" href="/admin/newCourse">New Course</a>
+      </li>
+      <li class="nav-item showhide">
+        <a class="nav-link active" href="#">New Section</a>
+      </li>
+    </ul>
+
+    <form method="post" th:action="@{/admin/newSection}" class="form" th:object="${sectionFormModel}">
+      <div class="row justify-content-around">
+        <div class="col-3 p-3 text-end">Course Number (7 characters):</div>
+        <div class="col-5 p-3"><input type="text" th:field="*{courseNumber}" class="form-control"></div>
+        <p class="text-danger text-center" th:if="${#fields.hasErrors('courseNumber')}"  th:errors="*{courseNumber}"></p>
+      </div>
+
+      <div class="row justify-content-around">
+        <div class="col-3 p-3 text-end"> <label class="form-label">Semester: </label></div>
+        <div class="col-5 p-3">
+          <select th:field="*{semester}" class="form-control">
+            <optgroup label="semester">
+              <option value="SPRING">Spring</option>
+              <option value="SUMMER">Summer</option>
+              <option value="FALL">Fall</option>
+              <option value="WINTER">Winter</option>
+            </optgroup>
+          </select>
+        </div>
+        <p class="text-danger text-center" th:if="${#fields.hasErrors('semester')}"  th:errors="*{semester}"></p>
+      </div>
+
+      <div class="row justify-content-around">
+        <div class="col-3 p-3 text-end"><label class="form-label">Year : </label></div>
+        <div class="col-5 p-3"><select th:field="*{year}" class="form-control">
+          <optgroup label="year">
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </optgroup>
+        </select></div>
+        <p class="text-danger text-center" th:if="${#fields.hasErrors('year')}"  th:errors="*{year}"></p>
+      </div>
+
+      <div class="row justify-content-around">
+        <div class="col-3 p-3 text-end"> <label class="form-label">Seats Available: </label></div>
+        <div class="col-5 p-3"><input type="number" th:field="*{seatsAvailable}" class="form-control"></div>
+        <p class="text-danger text-center" th:if="${#fields.hasErrors('seatsAvailable')}"  th:errors="*{seatsAvailable}"></p>
+      </div>
+
+      <div class="row justify-content-center">
+        <input class="btn-primary btn col-auto" type="submit" value="Add Course">
+      </div>
+    </form>
+
+
+  </div></aside>
+</div>
+</body>
+</html>
+
+

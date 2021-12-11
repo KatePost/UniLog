@@ -18,13 +18,20 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 7, nullable = false)
+    @Column(length = 7, nullable = false, unique = true)
     @Size(min = 7, max = 7)
     private String courseNumber;
+
+    @Column(length = 40, nullable = false)
+    @NotEmpty
+    @NotNull
+    @Size(max = 40)
+    private String title;
 
     @Column(length = 500, nullable = false)
     @NotEmpty
     @NotNull
+    @Size(max = 500)
     private String description;
 
     @Column(columnDefinition ="decimal(5,2)", nullable = false)
@@ -32,8 +39,8 @@ public class Course {
     @NotNull
     private Double price;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "prereq_id", nullable = false)
-    private Course course;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prereq_id", columnDefinition="integer")
+    private Course prereq;
 
 }

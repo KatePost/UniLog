@@ -29,8 +29,8 @@ public class RegisteredCourse {
     @JoinColumn(name = "student_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "payment_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "payment_id", nullable = true)
     private PaymentRecord paymentRecord;
 
     @Column(nullable = false)

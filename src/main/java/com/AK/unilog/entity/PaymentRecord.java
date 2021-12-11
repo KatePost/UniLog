@@ -1,5 +1,6 @@
 package com.AK.unilog.entity;
 
+import com.AK.unilog.service.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "payment_records")
 public class PaymentRecord {
-    public enum Semesters{
-        SUMMER,
-        FALL,
-        WINTER,
-        SPRING
-    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +37,7 @@ public class PaymentRecord {
     private LocalDate paymentDate;
 
     @NotNull
-    private Semesters semester;
+    private Semester semester;
 
     @Column(nullable = false)
     @Min(2021)

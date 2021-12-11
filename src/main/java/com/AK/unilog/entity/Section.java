@@ -1,5 +1,6 @@
 package com.AK.unilog.entity;
 
+import com.AK.unilog.service.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,19 +17,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Table(name = "sections")
 public class Section {
-    public enum Semesters{
-        SUMMER,
-        FALL,
-        WINTER,
-        SPRING
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    private Semesters semester;
+    @NotNull
+    private Semester semester;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -36,9 +31,8 @@ public class Section {
     private Course course;
 
     @Column(nullable = false)
-    @NotEmpty
-    @Min(10)
-    @Max(50)
+    @Min(value = 10, message = "At least 10 seats must be available")
+    @Max(value = 50, message = "No more than 50 seats may be available")
     private int seatsAvailable;
 
     @Column(nullable = false)
