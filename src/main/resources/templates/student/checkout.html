@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-    <title>Checkout</title>
-</head>
-<body>
-<header th:insert="fragments/studentGeneral.html :: header"></header>
-<div class="container">
-    <aside th:replace="fragments/studentGeneral.html :: aside(~{:: #text})"><div id="text">hi hi hi hi hi </div></aside>
-</div>
-</body>
+    <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+        <title>Student Checkout</title>
+    </head>
+    <body>
+        <div class="container">
+            <header th:replace="fragments/components :: header"></header>
+            <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
+                <div id="text">hi hi hi hi hi </div>
+            </div>
+        </div>
+    </body>
 </html>
