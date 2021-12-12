@@ -4,9 +4,10 @@
     <title>New Course</title>
 </head>
 <body>
-<header th:insert="fragments/adminGeneral.html :: header"></header>
 <div class="container">
-    <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">
+    <header th:insert="fragments/components.html :: header"></header>
+    <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
+        <div id="text">
 
         <h3>Add a Course</h3>
         <ul class="nav nav-tabs ">
@@ -53,7 +54,8 @@
                 <input class="btn-primary btn col-auto" type="submit" value="Add Course">
             </div>
         </form>
-    </div></aside>
+    </div>
+    </div>
 </div>
 </body>
 </html>

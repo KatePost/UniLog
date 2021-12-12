@@ -4,11 +4,10 @@
     <title>Admin Home</title>
 </head>
 <body>
-<header th:insert="fragments/adminGeneral.html :: header"></header>
 <div class="container">
-    <aside th:replace="fragments/adminGeneral.html :: aside(~{:: #text})"><div id="text">Home page</div></aside>
+    <header th:insert="fragments/components :: header"></header>
+    <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})"><div id="text">Registrations</div></div>
 </div>
-
 </body>
 </html>
 
