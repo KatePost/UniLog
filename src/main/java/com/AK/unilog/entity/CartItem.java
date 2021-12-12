@@ -16,4 +16,12 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private User student;
+
+    @ManyToOne
+    @JoinColumn(name = "section_id")
+    private Section section;
 }

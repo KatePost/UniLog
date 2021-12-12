@@ -55,6 +55,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "student")
+    private Set<CartItem>cart;
+
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority>authorities = new HashSet<>();

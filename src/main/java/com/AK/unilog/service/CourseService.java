@@ -90,4 +90,9 @@ public class CourseService {
     public List<Course> getAllCourses(){
         return courseRepository.findAll();
     }
+
+    /* -- */
+    public CourseRepository getRepo(){
+        return this.courseRepository;
+    }
 }

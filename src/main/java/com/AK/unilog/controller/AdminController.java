@@ -4,6 +4,7 @@ import com.AK.unilog.entity.Section;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.SectionFormModel;
 import com.AK.unilog.service.CourseService;
+import com.AK.unilog.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +22,12 @@ import java.util.zip.CheckedOutputStream;
 public class AdminController {
 
     private CourseService courseService;
+    private RegistrationService registrationService;
 
     @Autowired
-    public AdminController(CourseService courseService){
+    public AdminController(CourseService courseService, RegistrationService registrationService){
         this.courseService = courseService;
+        this.registrationService = registrationService;
     }
 
     @GetMapping("home")
