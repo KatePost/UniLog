@@ -1,6 +1,7 @@
 package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.User;
+import com.AK.unilog.service.LoginService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,10 +25,12 @@ import java.util.stream.Collectors;
 public class UniController {
 
     private UserService userService;
+    private LoginService loginService;
 
     @Autowired
-    public UniController(UserService userService){
+    public UniController(UserService userService, LoginService loginService){
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @GetMapping("/")
@@ -69,10 +72,7 @@ public class UniController {
     @RequestMapping("/default")
     public String defaultAfterLogin(RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", "Login Successful");
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Set<String> roles = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-        if (userService.getRoles().contains("STUDENT")) {
+        if (loginService.getRoles().contains("STUDENT")) {
             return "redirect:/student/home";
         }
         return "redirect:/admin/home";
@@ -80,7 +80,7 @@ public class UniController {
 
     @GetMapping("/home")
     public String getHome(){
-        Set<String>roles = userService.getRoles();
+        Set<String>roles = loginService.getRoles();
         if(roles.contains("STUDENT")){
             return "redirect:/student/home";
         }
