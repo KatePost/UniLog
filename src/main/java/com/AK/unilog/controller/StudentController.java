@@ -12,35 +12,35 @@ and specify the files as /student/{htmlFileName}
  */
 
 @Controller
-@RequestMapping("/student")
+@RequestMapping("/student/*")
 public class StudentController {
 
-    @GetMapping("/home")
+    @GetMapping("home")
     public String home(){
         return "/student/home";
     }
 
-    @GetMapping("/availableCourses")
+    @GetMapping("availableCourses")
     public String availableCourses(){
         return "/student/availableCourses";
     }
 
-    @GetMapping("/cart")
+    @GetMapping("cart")
     public String showCart(){
         return "/student/cart";
     }
 
-    @PostMapping("/checkout")
+    @PostMapping("checkout")
     public String checkout(){
         return "/student/checkout";
     }
 
-    @PostMapping("/paymentConfirmation")
+    @PostMapping("paymentConfirmation")
     public String confirmPayment() {
         return "/student/paymentConfirmation";
     }
 
-    @GetMapping("/registeredCourses")
+    @GetMapping("registeredCourses")
     public String registeredCourses(){
         return "/student/registeredCourses";
     }
