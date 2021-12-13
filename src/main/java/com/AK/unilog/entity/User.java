@@ -67,7 +67,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, Role role, Set<CartItem> cart) {
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,6 +78,7 @@ public class User implements UserDetails {
         this.email = email;
         this.role = role;
         this.cart = cart;
+        this.registeredCourses = registeredCourses;
     }
 
     public Long getId() {

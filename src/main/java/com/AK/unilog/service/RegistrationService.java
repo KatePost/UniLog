@@ -41,6 +41,7 @@ public class RegistrationService {
         messages.put("confirmations", new ArrayList<>());
         messages.put("errors", new ArrayList<>());
         for(CartItem item : cart){
+            //TODO: think about moving this stuff to its own method
             Section section = item.getSection();
             Boolean errors = false;
             /* validation */

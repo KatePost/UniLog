@@ -26,20 +26,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="course: ${registeredCourses}">
-                    <td th:text="${course.section.course.courseNumber}"></td>
-                    <td th:text="${course.section.course.title}"></td>
-                    <td th:text="${course.section.course.description}"></td>
-                    <td><span th:text="${course.section.semester}"></span> <span th:text="${item.section.year}"></span></td>
-                    <th th:text="${course.dueDate}"></th>
-                    <td>$<span th:text="${course.section.course.price}"></span></td>
-                    <td th:unless="${course.paymentRecord}"><input type="checkbox" value=""></td>
-                    <td th:if="${course.paymentRecord}">PAID</td>
+                <tr th:each="regCourse: ${registeredCourses}">
+                    <td th:text="${regCourse.section.course.courseNumber}"></td>
+                    <td th:text="${regCourse.section.course.title}"></td>
+                    <td th:text="${regCourse.section.course.description}"></td>
+                    <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
+                    <td th:text="${regCourse.dueDate}"></td>
+                    <td>$<span th:text="${regCourse.section.course.price}"></span></td>
+                    <td th:unless="${regCourse.paymentRecord}"><input type="checkbox" value=""></td>
+                    <td th:if="${regCourse.paymentRecord}">PAID</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
-                    <th scope="row" class="text-right">Subtotal</th>
-                    <td>$<span th:text="${total}"></span></td>
+                    <th scope="row" class="text-right">Total</th>
+<!--                    <td>$<span th:text="${total}"></span></td>-->
                 </tr>
                 </tbody>
             </table>
