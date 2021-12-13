@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /*
@@ -68,9 +65,9 @@ public class StudentController {
     public String checkout(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
 
-        //FIXME: this is not ideal - showing errors, not successes.
-        ArrayList<String> errorMsgs = registrationService.registerCart(student.getCart());
-        model.addAttribute("errorMsgs", errorMsgs);
+        HashMap<String, ArrayList<String>> messages = registrationService.registerCart(student.getCart());
+        model.addAttribute("errorMsgs", messages.get("errors"));
+        model.addAttribute("confMsgs", messages.get("confirmations"));
         return "student/checkout";
     }
 

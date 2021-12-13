@@ -7,7 +7,16 @@
         <div class="container">
             <header th:replace="fragments/components :: header"></header>
             <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
-                <div id="text">hi hi hi hi hi </div>
+                <div id="text">
+
+                    <h1>Registration Confirmation</h1>
+                    <ul>
+                        <li th:each="confirm : ${confMsgs}" th:text="${confirm}"></li>
+                    </ul>
+                    <ul th:unless="${errorMsgs.isEmpty()}">
+                        <li th:each="error : ${errorMsgs}" th:text="${error}"></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>
