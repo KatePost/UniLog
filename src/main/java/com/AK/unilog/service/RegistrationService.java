@@ -41,13 +41,16 @@ public class RegistrationService {
         messages.put("confirmations", new ArrayList<>());
         messages.put("errors", new ArrayList<>());
         for(CartItem item : cart){
+            //TODO: think about moving this stuff to its own method
             Section section = item.getSection();
             Boolean errors = false;
+            /* validation */
             if(section.isDisabled()){
                 messages.get("errors").add(section.getCourse().getTitle() + " is not currently available");
                 errors = true;
             }
-            if(section.getYear() < LocalDate.now().getYear()){
+            //TODO: check date validation and due date assignment
+            if(section.getStartDate().isBefore(LocalDate.now())){
                 messages.get("errors").add(section.getCourse().getTitle() + " cannot be registered in the past");
                 errors = true;
             }
@@ -55,8 +58,11 @@ public class RegistrationService {
                 messages.get("errors").add(section.getCourse().getTitle() + " is full.");
                 errors = true;
             }
-            //FIXME: date checking must include cross referencing the semester with the year to make sure it didn't happen earlier this year
             //if there are errors, do not proceed to registration of this course
+            //TODO: check prerequisites validation
+            if(!item.getStudent().hasPrerequisite(section)){
+                messages.get("errors").add(section.getCourse().getTitle() + " - you do not have the prerequisites to take this course.");
+            }
             if(errors){
                 messages.get("confirmations").add(String.format("Unable to register for %s %s %s. See conflicts.",
                         section.getCourse().getTitle(), section.getSemester().name(), section.getYear()));
@@ -65,7 +71,7 @@ public class RegistrationService {
             RegisteredCourse registration = new RegisteredCourse();
             registration.setSection(section);
             registration.setUser(item.getStudent());
-            registration.setDueDate(generateDueDate(section));
+            registration.setDueDate(section.getStartDate().plusMonths(3));
             registrationRepo.save(registration);
 
             messages.get("confirmations").add(String.format("Successfully registered for %s %s %s",
@@ -75,20 +81,5 @@ public class RegistrationService {
         return messages;
     }
 
-    private static LocalDate generateDueDate(Section section){
-        int month = switch (section.getSemester()){
-            case WINTER -> 4;
-            case SPRING -> 7;
-            case SUMMER -> 10;
-            case FALL -> 1;
-        };
-
-        int year = switch (section.getSemester()){
-            case WINTER, SPRING, SUMMER -> section.getYear();
-            case FALL -> section.getYear() + 1;
-        };
-
-        return LocalDate.of(year, month, 1);
-    }
 
 }

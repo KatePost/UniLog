@@ -1,13 +1,10 @@
 package com.AK.unilog.controller;
 
-import com.AK.unilog.entity.Course;
-import com.AK.unilog.entity.Section;
+import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.CartItemRepository;
 import com.AK.unilog.service.CartItemService;
 import com.AK.unilog.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.AK.unilog.entity.CartItem;
-import com.AK.unilog.entity.User;
 import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +96,9 @@ public class StudentController {
     }
 
     @GetMapping("registeredCourses")
-    public String registeredCourses(){
+    public String registeredCourses(Model model, Principal principal){
+        HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
+        model.addAttribute("registeredCourses", registeredCourses);
         return "student/registeredCourses";
     }
 
