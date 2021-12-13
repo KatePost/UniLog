@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -43,4 +44,16 @@ public class Section {
 
     @Column(nullable = false)
     private boolean disabled = false;
+
+
+    public LocalDate getStartDate(){
+        int month = switch (semester){
+            case WINTER -> 1;
+            case SPRING -> 4;
+            case SUMMER -> 7;
+            case FALL -> 10;
+        };
+        return LocalDate.of(this.year, month, 1);
+    }
+
 }

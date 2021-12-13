@@ -7,7 +7,44 @@
 <div class="container">
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
-        <div id="text">hi hi hi hi hi </div>
+        <div id="text">
+            <!-- This will be almost a copy of cart with a few exceptions:
+                - due date is shown
+                - whether or not it's been paid for is shown
+                - functionality to pay for it
+                - think about adding functionality to do payments in bulk -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Payment</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="course: ${registeredCourses}">
+                    <td th:text="${course.section.course.courseNumber}"></td>
+                    <td th:text="${course.section.course.title}"></td>
+                    <td th:text="${course.section.course.description}"></td>
+                    <td><span th:text="${course.section.semester}"></span> <span th:text="${item.section.year}"></span></td>
+                    <th th:text="${course.dueDate}"></th>
+                    <td>$<span th:text="${course.section.course.price}"></span></td>
+                    <td th:unless="${course.paymentRecord}"><input type="checkbox" value=""></td>
+                    <td th:if="${course.paymentRecord}">PAID</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <th scope="row" class="text-right">Subtotal</th>
+                    <td>$<span th:text="${total}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
 </div>
 </body>

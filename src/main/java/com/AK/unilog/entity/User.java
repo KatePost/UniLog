@@ -61,6 +61,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<CartItem> cart;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<RegisteredCourse> registeredCourses;
+
     public User() {
     }
 
@@ -158,6 +161,14 @@ public class User implements UserDetails {
         this.cart = cart;
     }
 
+    public Set<RegisteredCourse> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    public void setRegisteredCourses(Set<RegisteredCourse> registeredCourses) {
+        this.registeredCourses = registeredCourses;
+    }
+
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority>authorities = new HashSet<>();
@@ -188,6 +199,26 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasPrerequisite(Section section){
+        /*
+        check the student's registered courses against the section they're trying to get into
+        loop through the student's registered courses. for each registered course, check if it matches the prerequisite.
+        if it does, check that this prerequisite is scheduled on the same date or before the section being passed.
+        since a student may take a course more than once, we must continue checking entries if the prerequisite is found
+        but starts after the passed section
+         */
+        Course prerequisite = section.getCourse().getPrereq();
+        for(RegisteredCourse registeredCourse : registeredCourses){
+            if(registeredCourse.getSection().getCourse().getId() == prerequisite.getId()){
+                if(!registeredCourse.getSection().getStartDate().isAfter(section.getStartDate())){
+                    return true;
+                }
+            }
+        }
+        //check if section start date is at least after registered course start date
+        return false;
     }
 
     public enum Role {
