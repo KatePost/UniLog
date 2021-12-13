@@ -8,7 +8,7 @@
   <header th:replace="fragments/components :: header"></header>
   <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
     <div id="text">
-
+<h2>Edit Section</h2>
       <div class="row">
 
         <div class="col-6">
@@ -58,8 +58,7 @@
 
             <input type="submit" class="btn-primary btn float-end m-2" value="Save Changes">
             <input type="reset" class="btn-secondary text-light btn float-end m-2" value="Discard Changes">
-            <button type="button" class=" btn-danger btn text-light float-end m-2" id="disable" th:attr="onclick=|disableSection('${sectionUpdateFormModel.id}')|" >Disable Section</button>
-
+            <a type="button" class=" btn-danger btn text-light float-end m-2" id="disable" th:href="@{/api/admin/disableSection/{id}(id=${sectionUpdateFormModel.id})}"><span th:unless="${singleSection.disabled}">Disable Section</span><span th:if="${singleSection.disabled}">Enable Section</span></a>
           </form>
         </div>
         <div class="col-6">
@@ -67,7 +66,7 @@
             <div class="card-body bg-light">
               <h4 class="text-center text-primary" th:text="${singleSection.course.courseNumber}"></h4>
               <p class="fw-bold text-center text-primary" th:text="${singleSection.course.title}"></p>
-<!--              <p th:text="${singleSection.course.description}"></p>-->
+              <p th:text="${singleSection.course.description}"></p>
               <p>Semester: <span th:text="${singleSection.semester}"></span> <span th:text="${singleSection.year}"></span></p>
               <p>Seats Available: <span th:text="${singleSection.seatsAvailable}"></span></p>
               <p>Disabled: <span th:text="${singleSection.disabled}"></span></p>

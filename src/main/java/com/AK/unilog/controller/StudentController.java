@@ -31,8 +31,8 @@ and specify the files as /student/{htmlFileName}
 @RequestMapping("/student/*")
 public class StudentController {
 
-    private UserService userService;
-    private RegistrationService registrationService;
+    private final UserService userService;
+    private final RegistrationService registrationService;
     private final CourseService courseService;
     private final CartItemService cartItemService;
     private SectionsRepository sectionsRepository;
@@ -58,6 +58,11 @@ public class StudentController {
     @GetMapping("availableCourses")
     public String availableCourses(){
         return "student/availableCourses";
+    }
+
+    @GetMapping("availableSections")
+    public String availableSections(){
+        return "student/availableSections";
     }
 
     @GetMapping("cart")
@@ -118,9 +123,9 @@ public class StudentController {
     public String showSpecificSections(@PathVariable String courseNumber, Model model){
         System.out.println("inside student/sections/courseNumber");
         courseService.getCourseByNumber(courseNumber);
-        model.addAttribute("section", courseService.getSectionsByCourseNumber(courseNumber));
-        System.out.println(courseService.getSectionsByCourseNumber(courseNumber));
-        return "student/availableSections";
+        model.addAttribute("listSections", courseService.getAvailableSectionsByCourse(courseNumber));
+        System.out.println(courseService.getAvailableSectionsByCourse(courseNumber));
+        return "student/singleCourseSections";
     }
 
     @GetMapping("addToCart/{id}")

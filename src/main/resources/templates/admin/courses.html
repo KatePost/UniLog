@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-    <title>Student Cart</title>
+    <title>Courses</title>
 </head>
 <body>
 <div class="container">
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/adminGeneral :: frame(~{::#text})">
         <div id="text" class=" p-3">
+            <h2>Courses</h2>
             <form class="d-flex pb-2">
                 <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" onclick="searchCourses()" type="button">Search</button>
