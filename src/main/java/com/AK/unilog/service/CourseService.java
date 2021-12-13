@@ -133,4 +133,16 @@ public class CourseService {
         Optional<Section> section = sectionsRepository.findById(id);
         return section.orElse(null);
     }
+
+    public List<Section> getSectionsByCourseNumber(String courseNumber){
+        Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
+        if(course.isPresent()) {
+             if(sectionsRepository.findByCourse(course.get()).isPresent()){
+                 return sectionsRepository.findByCourse(course.get()).get();
+             }
+        }
+        return null;
+    }
+
+
 }

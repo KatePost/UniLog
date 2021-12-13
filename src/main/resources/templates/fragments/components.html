@@ -69,8 +69,7 @@
         </div>
     </div>
 
-    <div th:fragment="sectionsList" th:unless="${#lists.isEmpty(listSections)}" >
-        here
+    <div th:fragment="sectionsList" th:unless="${#lists.isEmpty(listSections)}">
         <div class="row">
             <div class="col-5">
                 <div class="list-group-item list-group-item-action" th:each="section : ${listSections}" th:attr="onclick=|displaySection('${section.id}')|" >
@@ -81,7 +80,7 @@
                     <p class="mb-1" th:text="${section.course.title}"></p>
                     <p class="mb-1" >Seats Available: <span th:text="${section.seatsAvailable}"></span></p>
                     <p class="mb-1">Semester: <span th:text="${section.semester}"></span> <span th:text="${section.year}"></span></p>
-                                    <small th:text="${section.course.price}"></small>
+                                    <small>$<span th:text="${section.course.price}"></span></small>
                 </div>
             </div>
             <div class="col-7">

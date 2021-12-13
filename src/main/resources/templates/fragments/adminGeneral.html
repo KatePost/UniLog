@@ -72,7 +72,7 @@
       <p>Price: $<span th:text="${singleCourse.price}"></span> </p>
       <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>
 
-      <a class="btn-secondary btn text-light fw-bold float-end m-3" id="edit" th:href="@{/admin/updateCourse/{id}(id=${singleCourse.courseNumber})}">Edit Course</a>
+      <a class="btn-secondary btn text-light fw-bold float-end m-3" th:href="@{/admin/updateCourse/{id}(id=${singleCourse.courseNumber})}">Edit Course</a>
     </div>
   </div>
 </div>

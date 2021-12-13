@@ -58,4 +58,15 @@ public class CartItem {
     public void setSection(Section section) {
         this.section = section;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+        if(!(o instanceof CartItem cartItem)){
+            return false;
+        }
+        return cartItem.student.equals(this.student) && cartItem.section.equals(this.section);
+    }
 }

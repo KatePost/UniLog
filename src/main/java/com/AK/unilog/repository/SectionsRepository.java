@@ -13,4 +13,10 @@ import java.util.Optional;
 public interface SectionsRepository extends JpaRepository<Section, Long> {
     Optional<Section> findByCourseAndYearAndSemester(Course course, int year, Semester semester );
 
+    Optional<List<Section>> findByCourse(Course course);
+
+    Optional<List<Section>> findByCourseAndDisabledIsFalse(Course course);
+
+    Optional<List<Section>> findByDisabledFalse();
 }
+
