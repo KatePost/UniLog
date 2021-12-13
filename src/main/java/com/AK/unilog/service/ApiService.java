@@ -67,4 +67,25 @@ public class ApiService {
         }
     }
 
+    public List<Section> getAvailableSectionsByCourse(String courseNumber){
+        Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
+        if(course.isPresent()){
+            Optional<List<Section>> listOfSections =  sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
+            if(listOfSections.isPresent()){
+                return listOfSections.get();
+            }
+        }
+        return null;
+    }
+
+    public List<Section> getAvailableSections(){
+        Optional<List<Section>> listOfSections = sectionsRepository.findByDisabledFalse();
+        return listOfSections.orElse(null);
+    }
+
+    public Section getSectionById(Long id) {
+        Optional<Section> section = sectionsRepository.findById(id);
+        return section.orElse(null);
+    }
+
 }

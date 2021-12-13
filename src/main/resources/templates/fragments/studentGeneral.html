@@ -37,6 +37,11 @@
                         View all courses
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a th:href="@{/student/availableSections}" class="nav-link">
+                        View all sections
+                    </a>
+                </li>
                 <li>
                     <a th:href="@{/student/paymentHistory}" class="nav-link">
                         Payments
@@ -70,16 +75,25 @@
             <p th:text="${singleCourse.description}"></p>
             <p>Price: $<span th:text="${singleCourse.price}"></span> </p>
             <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>
-
-
-<!--            for section!!! not course-->
-<!--            <button class="btn-secondary btn text-light fw-bold float-end" value="Add to Course Cart">Add to Course Cart</button>-->
+            <a th:href="@{/student/sections/{id}(id=${singleCourse.courseNumber})}" class="btn-primary btn">View Sections for this course</a>
 
         </div>
     </div>
 </div>
 
+<div th:fragment="singleSection" th:object="${singleSection}">
+    <div class="card">
+        <div class="card-body bg-light">
+            <h4 class="text-center text-primary" th:text="${singleSection.course.courseNumber}"></h4>
+            <p class="fw-bold text-center text-primary" th:text="${singleSection.course.title}"></p>
+            <p>Semester: <span th:text="${singleSection.semester}"></span> <span th:text="${singleSection.year}"></span></p>
+            <!--      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>-->
+            <!--      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>-->
 
+            <a class="btn-secondary btn text-light fw-bold float-end" th:href="@{/student/addToCart/{id}(id=${singleSection.id})}" >Add to Course Cart</a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

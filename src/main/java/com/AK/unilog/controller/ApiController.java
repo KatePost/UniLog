@@ -71,4 +71,31 @@ public class ApiController {
         System.out.println("success");
         return "redirect:/";
     }
+
+    //show students the available sections
+    @GetMapping("/availableSection/{courseNumber}")
+    public String availableSectionsSearch(Model model, @PathVariable String courseNumber) {
+        System.out.println("in /availableSection/{courseNumber} ");
+        if (courseNumber.equals("")) {
+            model.addAttribute("listSections", apiService.getAvailableSections());
+        } else {
+            courseNumber = "^[A-Z0-9]*" + courseNumber + "[A-Z0-9]*$";
+            model.addAttribute("listSections", apiService.getAvailableSectionsByCourse(courseNumber));
+        }
+
+        return "fragments/studentGeneral :: singleSection";
+    }
+
+    @GetMapping("/availableSection/")
+    public String availableSections(Model model) {
+            model.addAttribute("listSections", apiService.getAvailableSections());
+        return "fragments/components :: sectionsList";
+    }
+
+    @GetMapping("/student/singleSection/{id}")
+    public String singleSectionStudent(Model model, @PathVariable Long id) {
+        model.addAttribute("singleSection", apiService.getSectionById(id));
+        System.out.println(apiService.getSectionById(id));
+        return "fragments/studentGeneral :: singleSection";
+    }
 }
