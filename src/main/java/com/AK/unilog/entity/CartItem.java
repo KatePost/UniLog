@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Table(name = "cart_item")
 public class CartItem {
 
@@ -25,4 +25,37 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
     private Section section;
+
+    public CartItem() {
+    }
+
+    public CartItem(Long id, User student, Section section) {
+        this.id = id;
+        this.student = student;
+        this.section = section;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getStudent() {
+        return student;
+    }
+
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
 }

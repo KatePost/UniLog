@@ -9,28 +9,34 @@
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
         <div id="text">
             <h2>Cart</h2>
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
-                    <th>Course Code</th>
-                    <th>Title</th>
-                    <th>Semester</th>
-                    <th>Year</th>
-                    <th>Description</th>
-                    <th>Price</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Price</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="item: ${cart}">
                     <td th:text="${item.section.course.courseNumber}"></td>
                     <td th:text="${item.section.course.title}"></td>
-                    <td th:text="${item.section.semester}"></td>
-                    <td th:text="${item.section.year}"></td>
                     <td th:text="${item.section.course.description}"></td>
-                    <td th:text="${item.section.course.price}"></td>
+                    <td><span th:text="${item.section.semester}"></span> <span th:text="${item.section.year}"></span></td>
+                    <td>$<span th:text="${item.section.course.price}"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <th scope="row" class="text-right">Subtotal</th>
+                    <td>$<span th:text="${total}"></span></td>
                 </tr>
                 </tbody>
             </table>
+            <form class="d-flex w-100 justify-content-end" action="#" method="post" th:action="@{/student/checkout}">
+                <button class="btn btn-secondary" type="submit">Proceed to Checkout</button>
+            </form>
         </div>
     </div>
 </div>

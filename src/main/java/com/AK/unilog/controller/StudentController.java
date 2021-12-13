@@ -2,6 +2,7 @@ package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.CartItem;
 import com.AK.unilog.entity.User;
+import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,10 +29,12 @@ and specify the files as /student/{htmlFileName}
 public class StudentController {
 
     private UserService userService;
+    private RegistrationService registrationService;
 
     @Autowired
-    public StudentController(UserService userService) {
+    public StudentController(UserService userService, RegistrationService registrationService) {
         this.userService = userService;
+        this.registrationService = registrationService;
     }
 
     @GetMapping("home")
@@ -45,15 +50,27 @@ public class StudentController {
     @GetMapping("cart")
     public String showCart(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
-        System.err.println(student.getCart());
-        List<CartItem>cart = new ArrayList<>(student.getCart());
-        System.err.println(cart);
+        Set<CartItem>cart = new HashSet<>(student.getCart());
         model.addAttribute("cart", cart);
+        //get the subtotal of all the cart items
+        double total = 0;
+        for(CartItem item : cart){
+            total += item.getSection().getCourse().getPrice();
+        }
+        model.addAttribute("total", total);
+        //figure out what the due date is
+        //student and section can be passed from cart item.
+        //these cart items have to disappear when the post is made
         return "student/cart";
     }
 
     @PostMapping("checkout")
-    public String checkout(){
+    public String checkout(Model model, Principal principal){
+        User student = userService.findByEmail(principal.getName());
+
+        //FIXME: this is not ideal - showing errors, not successes.
+        ArrayList<String> errorMsgs = registrationService.registerCart(student.getCart());
+        model.addAttribute("errorMsgs", errorMsgs);
         return "student/checkout";
     }
 

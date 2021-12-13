@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -58,9 +58,105 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    //putting mapped by here seems to cause stack overflow
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<CartItem> cart;
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private Set<CartItem> cart;
+
+    public User() {
+    }
+
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, Role role, Set<CartItem> cart) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.birthdate = birthdate;
+        this.password = password;
+        this.passwordMatch = passwordMatch;
+        this.email = email;
+        this.role = role;
+        this.cart = cart;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordMatch() {
+        return passwordMatch;
+    }
+
+    public void setPasswordMatch(String passwordMatch) {
+        this.passwordMatch = passwordMatch;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Set<CartItem> getCart() {
+        return cart;
+    }
+
+    public void setCart(Set<CartItem> cart) {
+        this.cart = cart;
+    }
 
     @Override
     public Set<GrantedAuthority> getAuthorities() {
