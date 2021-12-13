@@ -70,3 +70,25 @@ Aly
 -making registrations
 3. Where do I need assistance? What do I need to figure out?
 -?
+
+12/09/2021
+Kate
+1. What I have done / not done since last Scrum?
+-crud for sections and courses
+-api service/repository
+2. What I plan to do from this scrum to next? (next 24 hours)
+-add course to cart for students
+-disable button on sections and courses
+3. Where do I need assistance? What do I need to figure out?
+-?
+
+Aly
+1. What I have done / not done since last Scrum?
+-cart page for students
+-started registration cart
+2. What I plan to do from this scrum to next? (next 24 hours)
+-registration cart page
+-view registrations - crud
+-payment
+3. Where do I need assistance? What do I need to figure out?
+-?
