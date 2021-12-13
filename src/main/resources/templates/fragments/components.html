@@ -48,6 +48,48 @@
             </li>
         </ul>
     </header>
+
+
+    <div th:fragment="resultsList" th:unless="${#lists.isEmpty(listCourses)}" id="results-block">
+        <div class="row">
+            <div class="col-5">
+                <div class="list-group-item list-group-item-action" th:each="course : ${listCourses}" th:attr="onclick=|displayCourse('${course.courseNumber}')|" >
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1" th:text="${course.courseNumber}"></h5>
+                        <!--        <small>3 days ago</small>-->
+                    </div>
+                    <p class="mb-1" th:text="${course.title}"></p>
+                    <p class="mb-1" th:text="${course.description}"></p>
+                    <!--                <small th:text="${course.price}"></small>-->
+                </div>
+            </div>
+            <div class="col-7">
+                <div id="singleCourse"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="sectionsList" th:unless="${#lists.isEmpty(listSections)}" >
+        here
+        <div class="row">
+            <div class="col-5">
+                <div class="list-group-item list-group-item-action" th:each="section : ${listSections}" th:attr="onclick=|displaySection('${section.id}')|" >
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1" th:text="${section.course.courseNumber}"></h5>
+                        <!--        <small>3 days ago</small>-->
+                    </div>
+                    <p class="mb-1" th:text="${section.course.title}"></p>
+                    <p class="mb-1" >Seats Available: <span th:text="${section.seatsAvailable}"></span></p>
+                    <p class="mb-1">Semester: <span th:text="${section.semester}"></span> <span th:text="${section.year}"></span></p>
+                                    <small th:text="${section.course.price}"></small>
+                </div>
+            </div>
+            <div class="col-7">
+                <div id="singleSection"></div>
+            </div>
+        </div>
+    </div>
+
 <footer>
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin

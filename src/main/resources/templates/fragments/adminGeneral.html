@@ -40,6 +40,11 @@
           </a>
         </li>
         <li>
+          <a th:href="@{/admin/sections}" class="nav-link">
+            View Sections
+          </a>
+        </li>
+        <li>
           <a th:href="@{/admin/registrations}" class="nav-link">
             View Registrations
           </a>
@@ -55,6 +60,37 @@
   </aside>
   <main class="col-9" th:insert="${text}"></main>
 </div>
+
+
+<div th:fragment="singleCourse" th:object="${singleCourse}">
+  <div class="card">
+    <div class="card-body bg-light">
+      <h4 class="text-center text-primary" th:text="${singleCourse.courseNumber}"></h4>
+      <p class="fw-bold text-center text-primary" th:text="${singleCourse.title}"></p>
+      <p th:text="${singleCourse.description}"></p>
+      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>
+      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>
+
+      <a class="btn-secondary btn text-light fw-bold float-end m-3" id="edit" th:href="@{/admin/updateCourse/{id}(id=${singleCourse.courseNumber})}">Edit Course</a>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="singleSection" th:object="${singleSection}">
+  <div class="card">
+    <div class="card-body bg-light">
+      <h4 class="text-center text-primary" th:text="${singleSection.course.courseNumber}"></h4>
+      <p class="fw-bold text-center text-primary" th:text="${singleSection.course.title}"></p>
+      <p>Semester: <span th:text="${singleSection.semester}"></span> <span th:text="${singleSection.year}"></span></p>
+<!--      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>-->
+<!--      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>-->
+
+      <a class="btn-secondary btn text-light fw-bold float-end m-3" id="edit" th:href="@{/admin/updateSection/{id}(id=${singleSection.id})}">Edit Section</a>
+    </div>
+  </div>
+</div>
+
+
 
 </body>
 </html>
