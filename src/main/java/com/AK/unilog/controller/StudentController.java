@@ -2,6 +2,7 @@ package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.CartItemRepository;
+import com.AK.unilog.repository.SectionsRepository;
 import com.AK.unilog.service.CartItemService;
 import com.AK.unilog.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,8 @@ import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
@@ -36,14 +35,17 @@ public class StudentController {
     private RegistrationService registrationService;
     private final CourseService courseService;
     private final CartItemService cartItemService;
+    private SectionsRepository sectionsRepository;
 
 
     @Autowired
-    public StudentController(UserService userService, RegistrationService registrationService, CourseService courseService, CartItemService cartItemService) {
+    public StudentController(UserService userService, RegistrationService registrationService,
+                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.courseService = courseService;
         this.cartItemService = cartItemService;
+        this.sectionsRepository = sectionsRepository;
     }
 
 
@@ -88,6 +90,16 @@ public class StudentController {
     @PostMapping("paymentConfirmation")
     public String confirmPayment() {
         return "student/paymentConfirmation";
+    }
+
+    @PostMapping("makePayment")
+    public String proceedToPayment(@RequestParam(name = "sectionId") List<String> sectionIdList,
+                                   @RequestParam(name = "total")String total){
+        List<Section>sectionList = new ArrayList<>();
+        for(String id: sectionIdList){
+            sectionList.add(sectionsRepository.getById(Long.parseLong(id)));
+        }
+        return "makePayment";
     }
 
     @GetMapping("registeredCourses")

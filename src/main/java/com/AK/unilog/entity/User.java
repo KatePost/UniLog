@@ -211,6 +211,9 @@ public class User implements UserDetails {
         but starts after the passed section
          */
         Course prerequisite = section.getCourse().getPrereq();
+        if(prerequisite == null){
+            return true;
+        }
         for(RegisteredCourse registeredCourse : registeredCourses){
             if(registeredCourse.getSection().getCourse().getId() == prerequisite.getId()){
                 if(!registeredCourse.getSection().getStartDate().isAfter(section.getStartDate())){

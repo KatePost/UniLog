@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{::script})">
     <title>Registered Courses</title>
+    <script>
+        $(document).ready(function(){
+            $(":checkbox").change(function(){
+                var sum = 0;
+                $(":checkbox:checked").each(function(){
+                    sum += parseFloat($(this).siblings("input").val())
+                });
+                $("#total").val(sum);
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -26,21 +37,35 @@
                 </tr>
                 </thead>
                 <tbody>
+                <form action="#" th:action="@{/student/makePayment}" method="post">
                 <tr th:each="regCourse: ${registeredCourses}">
                     <td th:text="${regCourse.section.course.courseNumber}"></td>
                     <td th:text="${regCourse.section.course.title}"></td>
                     <td th:text="${regCourse.section.course.description}"></td>
                     <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
                     <td th:text="${regCourse.dueDate}"></td>
-                    <td>$<span th:text="${regCourse.section.course.price}"></span></td>
-                    <td th:unless="${regCourse.paymentRecord}"><input type="checkbox" value=""></td>
                     <td th:if="${regCourse.paymentRecord}">PAID</td>
+                    <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.section.course.price}"></span></td>
+                    <td th:unless="${regCourse.paymentRecord}">
+                        <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
+                        <input type="hidden" th:value="${regCourse.section.course.price}">
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <th scope="row" class="text-right">Total</th>
-<!--                    <td>$<span th:text="${total}"></span></td>-->
+                    <td><span class="text-right">$</span></td>
+                    <td><input class="form-control-plaintext m-0 p-0" readonly type="text" id="total" name="total"></td>
                 </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-secondary">Proceed to Payment</button>
+                    </td>
+                    <td>
+                        <button type="submit" disabled>Delete</button>
+                    </td>
+                </tr>
+                </form>
                 </tbody>
             </table>
 
