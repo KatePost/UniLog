@@ -4,6 +4,7 @@ import com.AK.unilog.entity.Course;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
+import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class AdminController {
         return "admin/courses";
     }
 
+    @GetMapping("sections")
+    public String showSections(Model model){
+        System.out.println("get sections");
+        return "admin/sections";
+    }
+
     @GetMapping("/updateCourse/{courseNumber}")
     public String updateCourse(Model model, @PathVariable String courseNumber){
         if(courseService.getCourseByNumber(courseNumber) == null){
@@ -52,6 +59,18 @@ public class AdminController {
         courseUpdateFormModel.setCourseNumber(courseNumber);
         model.addAttribute("courseUpdateFormModel", courseUpdateFormModel);
         return "admin/updateCourse";
+    }
+
+    @GetMapping("/updateSection/{id}")
+    public String updateSection(Model model, @PathVariable Long id){
+        if(courseService.getSectionById(id) == null){
+//            return error page TODO
+        }
+        model.addAttribute("singleSection", courseService.getSectionById(id));
+        SectionUpdateFormModel sectionUpdateFormModel = new SectionUpdateFormModel();
+        sectionUpdateFormModel.setId(id);
+        model.addAttribute("sectionUpdateFormModel", sectionUpdateFormModel);
+        return "admin/updateSection";
     }
 
     @GetMapping("newCourse")
@@ -87,6 +106,14 @@ public class AdminController {
         model.addAttribute("singleCourse", courseService.getCourseByNumber(courseNumber));
         model.addAttribute("courseUpdateFormModel", new CourseUpdateFormModel());
         return "fragments/adminGeneral :: singleCourse";
+    }
+
+    @GetMapping("/singleSection/{id}")
+    public String singleSectionAdmin(Model model, @PathVariable Long id) {
+        System.out.println("inside singlesection controller");
+        model.addAttribute("singleSection", courseService.getSectionById(id));
+        model.addAttribute("sectionUpdateFormModel", new SectionUpdateFormModel());
+        return "fragments/adminGeneral :: singleSection";
     }
 
     @PostMapping("newSection")
@@ -130,5 +157,17 @@ public class AdminController {
         return "redirect:/admin/updateCourse/" + courseUpdateFormModel.getCourseNumber();
     }
 
+    @PostMapping("sections")
+    public String updateSectionForm(Model model, @Valid SectionUpdateFormModel sectionUpdateFormModel, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        System.out.println("post update" + sectionUpdateFormModel.getId());
+        if(bindingResult.hasErrors()){
+            model.addAttribute("singleSection", courseService.getSectionById(sectionUpdateFormModel.getId()));
+            return "/admin/updateSection";
+        }
+        System.out.println(sectionUpdateFormModel.getId());
+        model.addAttribute(courseService.saveSection(sectionUpdateFormModel));
+        redirectAttributes.addFlashAttribute("message", "Section information has been updated");
+        return "redirect:/admin/updateSection/" + sectionUpdateFormModel.getId();
+    }
 
 }

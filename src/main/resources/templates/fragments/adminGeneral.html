@@ -76,6 +76,21 @@
   </div>
 </div>
 
+<div th:fragment="singleSection" th:object="${singleSection}">
+  <div class="card">
+    <div class="card-body bg-light">
+      <h4 class="text-center text-primary" th:text="${singleSection.course.courseNumber}"></h4>
+      <p class="fw-bold text-center text-primary" th:text="${singleSection.course.title}"></p>
+      <p>Semester: <span th:text="${singleSection.semester}"></span> <span th:text="${singleSection.year}"></span></p>
+<!--      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>-->
+<!--      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>-->
+
+      <a class="btn-secondary btn text-light fw-bold float-end m-3" id="edit" th:href="@{/admin/updateSection/{id}(id=${singleSection.id})}">Edit Section</a>
+    </div>
+  </div>
+</div>
+
+
 
 </body>
 </html>

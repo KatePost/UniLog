@@ -46,6 +46,17 @@ public class ApiService {
         return matchingCourses;
     }
 
+    public List<Section> getSectionByNumberRegex(String regex){
+        List<Section> sectionList = sectionsRepository.findAll();
+        ArrayList<Section> matchingSections = new ArrayList<>();
+        for(Section section : sectionList){
+            if(section.getCourse().getCourseNumber().matches(regex)){
+                matchingSections.add(section);
+            }
+        }
+        return matchingSections;
+    }
+
     public void toggleDisableCourse(String courseNumber) {
         Optional<Course> course =  courseRepository.findByCourseNumber(courseNumber);
         System.out.println(courseNumber);
@@ -55,4 +66,5 @@ public class ApiService {
             System.out.println(courseObj);
         }
     }
+
 }

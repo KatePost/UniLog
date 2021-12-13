@@ -5,6 +5,7 @@ import com.AK.unilog.entity.Section;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
+import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.repository.CourseRepository;
 import com.AK.unilog.repository.SectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,8 +114,23 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
+    public Section saveSection(SectionUpdateFormModel sectionUpdateFormModel) {
+        System.out.println("in save section");
+        Section section = sectionsRepository.findById(sectionUpdateFormModel.getId()).get();
+        section.setSemester(sectionUpdateFormModel.getSemester());
+        section.setYear(sectionUpdateFormModel.getYear());
+        if (sectionUpdateFormModel.getSeatsAvailable() != section.getSeatsAvailable()) {
+            section.setSeatsAvailable(sectionUpdateFormModel.getSeatsAvailable());
+        }
+        return sectionsRepository.save(section);
+    }
     public Course getCourseByNumber(String courseNumber){
         Optional<Course> course =  courseRepository.findByCourseNumber(courseNumber);
         return course.orElse(null);
+    }
+
+    public Section getSectionById(Long id) {
+        Optional<Section> section = sectionsRepository.findById(id);
+        return section.orElse(null);
     }
 }

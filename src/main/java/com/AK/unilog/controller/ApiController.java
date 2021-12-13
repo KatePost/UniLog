@@ -38,6 +38,26 @@ public class ApiController {
         return "fragments/components :: resultsList";
     }
 
+    @GetMapping("allSections/")
+    public String getAllSections(Model model) {
+        System.out.println("in all sections");
+        model.addAttribute("listSections", apiService.getSections());
+        System.out.println(apiService.getSections());
+        return "fragments/components :: sectionsList";
+    }
+
+    @GetMapping("/allSections/{courseNumber}")
+    public String findSections(Model model, @PathVariable String courseNumber) {
+        System.out.println("here");
+        if (courseNumber.equals("")) {
+            model.addAttribute("listSections", apiService.getCourses());
+        } else {
+            courseNumber = "^[A-Z0-9]*" + courseNumber + "[A-Z0-9]*$";
+            model.addAttribute("listSections", apiService.getCourseByNumberRegex(courseNumber));
+        }
+        return "fragments/components :: sectionsList";
+    }
+
     @GetMapping("/student/singleCourse/{courseNumber}")
     public String singleCourseStudent(Model model, @PathVariable String courseNumber) {
         model.addAttribute("singleCourse", apiService.getCourseByNumber(courseNumber));
