@@ -7,7 +7,31 @@
 <div class="container">
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
-        <div id="text">hi hi hi hi hi </div>
+        <div id="text">
+            <h2>Cart</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Title</th>
+                    <th>Semester</th>
+                    <th>Year</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item: ${cart}">
+                    <td th:text="${item.section.course.courseNumber}"></td>
+                    <td th:text="${item.section.course.title}"></td>
+                    <td th:text="${item.section.semester}"></td>
+                    <td th:text="${item.section.year}"></td>
+                    <td th:text="${item.section.course.description}"></td>
+                    <td th:text="${item.section.course.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

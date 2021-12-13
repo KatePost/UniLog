@@ -23,6 +23,7 @@ public class Section {
     private Long id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Semester semester;
 
     @NotNull

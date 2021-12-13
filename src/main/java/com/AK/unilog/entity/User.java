@@ -1,5 +1,6 @@
 package com.AK.unilog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,8 +58,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "student")
-    private Set<CartItem>cart;
+    //putting mapped by here seems to cause stack overflow
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<CartItem> cart;
 
     @Override
     public Set<GrantedAuthority> getAuthorities() {
