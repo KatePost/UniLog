@@ -8,7 +8,7 @@
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
         <div id="text">
-
+<h2>Edit Course</h2>
             <div class="row">
 
                 <div class="col-6">
@@ -42,7 +42,7 @@
 
                         <input type="submit" class="btn-primary btn float-end m-2" value="Save Changes">
                         <input type="reset" class="btn-secondary text-light btn float-end m-2" value="Discard Changes">
-                        <button type="button" class=" btn-danger btn text-light float-end m-2" id="disable" th:attr="onclick=|disableCourse('${courseUpdateFormModel.courseNumber}')|" >Disable Course</button>
+                        <a type="button" class=" btn-danger btn text-light float-end m-2" id="disable" th:href="@{/api/admin/disableCourse/{courseNumber}(courseNumber=${singleCourse.courseNumber})}" ><span th:unless="${singleCourse.disabled}">Disable Course</span><span th:if="${singleCourse.disabled}">Enable Course</span></a>
 
                     </form>
                 </div>
@@ -63,22 +63,9 @@
         </div>
     </div>
 </div>
-<!--<script>-->
-<!-- function disableCourse(courseNumber){-->
+<script>
 
-<!--     let json = {-->
-<!--         "courseNumber": courseNumber-->
-<!--     };-->
-
-<!--     $.ajax({-->
-<!--        url: "/api/admin/disableCourse",-->
-<!--        type: "POST",-->
-<!--        data: json-->
-<!--    }).done(function(result){-->
-<!--        re-->
-<!--    });-->
-<!-- }-->
-<!--</script>-->
+</script>
 </body>
 </html>
 

@@ -58,9 +58,13 @@
                         <h5 class="mb-1" th:text="${course.courseNumber}"></h5>
                         <!--        <small>3 days ago</small>-->
                     </div>
+
                     <p class="mb-1" th:text="${course.title}"></p>
                     <p class="mb-1" th:text="${course.description}"></p>
                     <!--                <small th:text="${course.price}"></small>-->
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        <p>Disabled Status: <span class="mb-1" th:text="${course.disabled}"></span></p>
+                    </div>
                 </div>
             </div>
             <div class="col-7">
@@ -81,6 +85,9 @@
                     <p class="mb-1" >Seats Available: <span th:text="${section.seatsAvailable}"></span></p>
                     <p class="mb-1">Semester: <span th:text="${section.semester}"></span> <span th:text="${section.year}"></span></p>
                                     <small>$<span th:text="${section.course.price}"></span></small>
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        <p>Disabled Status: <span class="mb-1" th:text="${section.disabled}"></span></p>
+                    </div>
                 </div>
             </div>
             <div class="col-7">

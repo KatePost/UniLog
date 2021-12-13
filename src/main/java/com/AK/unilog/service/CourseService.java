@@ -144,5 +144,22 @@ public class CourseService {
         return null;
     }
 
+    public List<Section> getAvailableSectionsByCourse(String courseNumber){
+        Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
+        if(course.isPresent()){
+            Optional<List<Section>> listOfSections =  sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
+            if(listOfSections.isPresent()){
+                System.out.println("list of sections by course number" + listOfSections.get());
+                return listOfSections.get();
+            }
+        }
+        System.out.println("no available section with " + courseNumber);
+        return null;
+    }
+
+    public List<Section> getAvailableSections(){
+        Optional<List<Section>> listOfSections = sectionsRepository.findByDisabledFalse();
+        return listOfSections.orElse(null);
+    }
 
 }

@@ -47,7 +47,7 @@ public class ApiService {
     }
 
     public List<Section> getSectionByNumberRegex(String regex){
-        List<Section> sectionList = sectionsRepository.findAll();
+        List<Section> sectionList = sectionsRepository.findByDisabledFalse().get();
         ArrayList<Section> matchingSections = new ArrayList<>();
         for(Section section : sectionList){
             if(section.getCourse().getCourseNumber().matches(regex)){
@@ -59,11 +59,20 @@ public class ApiService {
 
     public void toggleDisableCourse(String courseNumber) {
         Optional<Course> course =  courseRepository.findByCourseNumber(courseNumber);
-        System.out.println(courseNumber);
         if(course.isPresent()){
             Course courseObj = course.get();
             courseObj.setDisabled(!courseObj.isDisabled());
             System.out.println(courseObj);
+            courseRepository.save(courseObj);
+        }
+    }
+
+    public void toggleDisableSection(Long id) {
+        Optional<Section> section = sectionsRepository.findById(id);
+        if(section.isPresent()){
+            Section sectionObj = section.get();
+            sectionObj.setDisabled(!sectionObj.isDisabled());
+            sectionsRepository.save(sectionObj);
         }
     }
 
@@ -72,9 +81,11 @@ public class ApiService {
         if(course.isPresent()){
             Optional<List<Section>> listOfSections =  sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
             if(listOfSections.isPresent()){
+                System.out.println("list of sections by course number" + listOfSections.get());
                 return listOfSections.get();
             }
         }
+        System.out.println("no available section with " + courseNumber);
         return null;
     }
 
@@ -83,9 +94,15 @@ public class ApiService {
         return listOfSections.orElse(null);
     }
 
+    public List<Course> getAvailableCourses(){
+        Optional<List<Course>> listOfCourses = courseRepository.findByDisabledFalse();
+        return listOfCourses.orElse(null);
+    }
+
     public Section getSectionById(Long id) {
         Optional<Section> section = sectionsRepository.findById(id);
         return section.orElse(null);
     }
+
 
 }

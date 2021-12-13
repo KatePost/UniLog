@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
-  <title>Admin Home</title>
+  <title>New Section</title>
 </head>
 <body>
 <div class="container">
@@ -9,7 +9,7 @@
   <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
     <div id="text">
 
-    <h3>Add a Course</h3>
+    <h3>Add a Section</h3>
     <ul class="nav nav-tabs ">
       <li class="nav-item showhide">
         <a class="nav-link" th:href="@{/admin/newCourse}">New Course</a>

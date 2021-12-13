@@ -8,6 +8,7 @@
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
         <div id="text" class=" p-3">
+            <h2>Available Courses</h2>
             <form class="d-flex pb-2">
                 <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" onclick="searchSections()" type="button">Search</button>
@@ -22,7 +23,7 @@
         searchSections();
     })
     function searchSections() {
-        let url = '/api/allCourses/';
+        let url = '/api/availableCourses/';
         if ($('#searchVal').val() != '') {
             url = url + $('#searchVal').val();
         }

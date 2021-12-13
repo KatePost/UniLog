@@ -1,6 +1,5 @@
 package com.AK.unilog.controller;
 
-import com.AK.unilog.entity.Course;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
@@ -23,8 +22,8 @@ import javax.validation.Valid;
 @RequestMapping("/admin/*")
 public class AdminController {
 
-    private CourseService courseService;
-    private RegistrationService registrationService;
+    private final CourseService courseService;
+    private final RegistrationService registrationService;
 
     @Autowired
     public AdminController(CourseService courseService, RegistrationService registrationService){

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findByCourseNumber(String courseNumber);
 
+    Optional<List<Course>> findByDisabledFalse();
 }

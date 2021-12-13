@@ -3,9 +3,11 @@ package com.AK.unilog.controller;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -58,18 +60,33 @@ public class ApiController {
         return "fragments/components :: sectionsList";
     }
 
+    @GetMapping("/availableCourses/")
+    public String getAvailableCourses(Model model) {
+        model.addAttribute("listCourses", apiService.getAvailableCourses());
+        System.out.println(apiService.getAvailableCourses());
+        return "fragments/components :: resultsList";
+    }
+
     @GetMapping("/student/singleCourse/{courseNumber}")
     public String singleCourseStudent(Model model, @PathVariable String courseNumber) {
         model.addAttribute("singleCourse", apiService.getCourseByNumber(courseNumber));
         return "fragments/studentGeneral :: singleCourse";
     }
 
-    @PostMapping(name = "/admin/disableCourse")
-    public String disableCourse(@RequestBody String courseNumber){
-        System.out.println(courseNumber);
+    @GetMapping("/admin/disableCourse/{courseNumber}")
+    public String disableCourse(@PathVariable String courseNumber, RedirectAttributes redirectAttributes){
         apiService.toggleDisableCourse(courseNumber);
         System.out.println("success");
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("message", "Course information has been updated");
+        return "redirect:/admin/updateCourse/" + courseNumber;
+    }
+
+    @GetMapping("/admin/disableSection/{id}")
+    public String disableSection(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        apiService.toggleDisableSection(id);
+        System.out.println("success");
+        redirectAttributes.addFlashAttribute("message", "Section information has been updated");
+        return "redirect:/admin/updateSection/" + id;
     }
 
     //show students the available sections
@@ -80,15 +97,17 @@ public class ApiController {
             model.addAttribute("listSections", apiService.getAvailableSections());
         } else {
             courseNumber = "^[A-Z0-9]*" + courseNumber + "[A-Z0-9]*$";
-            model.addAttribute("listSections", apiService.getAvailableSectionsByCourse(courseNumber));
+            model.addAttribute("listSections", apiService.getSectionByNumberRegex(courseNumber));
+            System.out.println(apiService.getAvailableSectionsByCourse(courseNumber));
         }
 
-        return "fragments/studentGeneral :: singleSection";
+        return "fragments/components :: sectionsList";
     }
 
     @GetMapping("/availableSection/")
     public String availableSections(Model model) {
             model.addAttribute("listSections", apiService.getAvailableSections());
+        System.out.println(apiService.getAvailableSections());
         return "fragments/components :: sectionsList";
     }
 
