@@ -3,6 +3,7 @@ package com.AK.unilog.service;
 import com.AK.unilog.entity.Course;
 import com.AK.unilog.entity.Section;
 import com.AK.unilog.model.CourseFormModel;
+import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
 import com.AK.unilog.repository.CourseRepository;
 import com.AK.unilog.repository.SectionsRepository;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,5 +94,27 @@ public class CourseService {
     /* -- */
     public CourseRepository getRepo(){
         return this.courseRepository;
+    }
+
+
+    public Course saveCourse(CourseUpdateFormModel courseUpdateFormModel) {
+        System.out.println("in save course");
+        Course course = courseRepository.findByCourseNumber(courseUpdateFormModel.getCourseNumber()).get();
+        if(!courseUpdateFormModel.getTitle().isEmpty()){
+            course.setTitle(courseUpdateFormModel.getTitle());
+        }
+        if(!courseUpdateFormModel.getDescription().isEmpty()){
+            course.setDescription(courseUpdateFormModel.getDescription());
+        }
+        if(courseUpdateFormModel.getPrice() != null){
+            course.setPrice(courseUpdateFormModel.getPrice());
+        }
+        System.out.println(course);
+        return courseRepository.save(course);
+    }
+
+    public Course getCourseByNumber(String courseNumber){
+        Optional<Course> course =  courseRepository.findByCourseNumber(courseNumber);
+        return course.orElse(null);
     }
 }

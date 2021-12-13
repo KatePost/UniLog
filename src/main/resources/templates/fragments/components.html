@@ -48,6 +48,28 @@
             </li>
         </ul>
     </header>
+
+
+    <div th:fragment="resultsList" th:unless="${#lists.isEmpty(listCourses)}" id="results-block">
+        <div class="row">
+            <div class="col-5">
+                <div class="list-group-item list-group-item-action" th:each="course : ${listCourses}" th:attr="onclick=|displayCourse('${course.courseNumber}')|" >
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1" th:text="${course.courseNumber}"></h5>
+                        <!--        <small>3 days ago</small>-->
+                    </div>
+                    <p class="mb-1" th:text="${course.title}"></p>
+                    <p class="mb-1" th:text="${course.description}"></p>
+                    <!--                <small th:text="${course.price}"></small>-->
+                </div>
+            </div>
+            <div class="col-7">
+                <div id="singleCourse"></div>
+            </div>
+        </div>
+    </div>
+
+
 <footer>
     <div sec:authorize="hasRole('ADMIN')">
         Logged in Admin

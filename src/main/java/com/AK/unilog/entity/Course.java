@@ -43,4 +43,7 @@ public class Course {
     @JoinColumn(name = "prereq_id", columnDefinition="integer")
     private Course prereq;
 
+    @Column(nullable = false)
+    private boolean disabled = false;
+
 }

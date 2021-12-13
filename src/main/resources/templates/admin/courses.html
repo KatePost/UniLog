@@ -7,8 +7,33 @@
 <div class="container">
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/adminGeneral :: frame(~{::#text})">
-        <div id="text">Home Page</div>
+        <div id="text" class=" p-3">
+            <form class="d-flex pb-2">
+                <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" onclick="searchCourses()" type="button">Search</button>
+            </form>
+            <div id="searchResults">
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    $(document).ready( function() {
+        searchCourses();
+    })
+    function searchCourses() {
+        let url = '/api/allCourses/';
+        if ($('#searchVal').val() != '') {
+            url = url + $('#searchVal').val();
+        }
+        $("#searchResults").load(url);
+    }
+
+    function displayCourse(courseNumber) {
+        console.log("display course")
+        let url = '/admin/singleCourse/' + courseNumber;
+        $("#singleCourse").load(url);
+    }
+</script>
 </body>
 </html>

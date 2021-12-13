@@ -39,4 +39,7 @@ public class Section {
     @Min(2021)
     @Max(2100)
     private int year;
+
+    @Column(nullable = false)
+    private boolean disabled = false;
 }
