@@ -97,7 +97,7 @@ public class StudentController {
         return "student/paymentConfirmation";
     }
 
-    @PostMapping("makePayment")
+    @PostMapping(value = "editRegistration", params = "action=save")
     public String proceedToPayment(@RequestParam(name = "sectionId") List<String> sectionIdList,
                                    @RequestParam(name = "total")String total){
         List<Section>sectionList = new ArrayList<>();
@@ -107,12 +107,22 @@ public class StudentController {
         return "makePayment";
     }
 
+    @PostMapping(value = "editRegistration", params = "action=delete")
+    public String deleteRegistrations(@RequestParam(name = "sectionId") List<String> sectionIdList, RedirectAttributes redirect){
+        for(String id: sectionIdList){
+            registrationService.getRegistrationRepo().deleteById(Long.parseLong(id));
+        }
+        redirect.addFlashAttribute("deleteMsg", "Registrations deleted");
+        return "redirect:/student/registeredCourses";
+    }
+
     @GetMapping("registeredCourses")
     public String registeredCourses(Model model, Principal principal){
         HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
         model.addAttribute("registeredCourses", registeredCourses);
         return "student/registeredCourses";
     }
+
 
     @GetMapping("paymentHistory")
     public String paymentHistory(){
