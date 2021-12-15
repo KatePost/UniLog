@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 //@Data
@@ -93,5 +94,21 @@ public class RegisteredCourse {
             return false;
         }
         return dueDate.isBefore(LocalDate.now());
+    }
+
+    public double getFee(){
+        double initialPrice = section.getCourse().getPrice();
+        //if it's paid, return 0
+        if(paymentRecord != null){
+            return 0.00;
+        }
+        //if it's not due yet, return the course price
+        if(!this.isOverDue()){
+            return initialPrice;
+        }
+        // if it's overdue, calculate the interest - 5%/month
+        Period months = Period.between(dueDate, LocalDate.now());
+        int monthsOverdue = months.getMonths();
+        return initialPrice * (1 + (0.05 * (double) monthsOverdue));
     }
 }

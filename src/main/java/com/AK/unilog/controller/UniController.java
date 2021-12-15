@@ -35,6 +35,13 @@ public class UniController {
 
     @GetMapping("/")
     public String home(){
+        Set<String>roles = loginService.getRoles();
+        if(roles.contains("STUDENT")){
+            return "redirect:/student/";
+        }
+        if(roles.contains("ADMIN")){
+            return "redirect:/admin/";
+        }
         return "index";
     }
 
@@ -78,15 +85,8 @@ public class UniController {
         return "redirect:/admin/home";
     }
 
-    @GetMapping("/home")
-    public String getHome(){
-        Set<String>roles = loginService.getRoles();
-        if(roles.contains("STUDENT")){
-            return "redirect:/student/home";
-        }
-        if(roles.contains("ADMIN")){
-            return "redirect:/admin/home";
-        }
-        return "redirect:/";
-    }
+//    @GetMapping("/home")
+//    public String getHome(){
+//        return "redirect:/";
+//    }
 }

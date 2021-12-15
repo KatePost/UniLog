@@ -50,12 +50,17 @@ public class StudentController {
 
 
 
-    @GetMapping("home")
+    @GetMapping("")
     public String home(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
         model.addAttribute("user", student);
         model.addAttribute("unpaidSum", student.getUnpaidSum());
         return "student/home";
+    }
+
+    @GetMapping("/home")
+    public String getHome(){
+        return "redirect:/";
     }
 
     @GetMapping("availableCourses")

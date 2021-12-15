@@ -34,10 +34,14 @@
                 </li>
                 <li class="nav-item"><h4 th:text="${message}"></h4></li>
                 <li><h4 th:text="${#authentication.name}"></h4></li>
-                <li>This is supposed to be a name, but I can't figure out how to get it.</li>
             </ul>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a th:href="@{/student/cart}" class="nav-link">
+                        Course cart
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a th:href="@{/student/availableCourses}" class="nav-link">
                         View all courses
@@ -56,11 +60,6 @@
                 <li>
                     <a th:href="@{/student/registeredCourses}" class="nav-link">
                         Registered courses
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/student/cart}" class="nav-link">
-                        Course cart
                     </a>
                 </li>
             </ul>

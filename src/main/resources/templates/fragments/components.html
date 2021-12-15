@@ -32,8 +32,9 @@
 
             <!-- Home button -->
             <li class="nav-item">
-                <a sec:authorize="isAuthenticated()" th:href="@{/home}" class="nav-link active">Home</a>
-                <a sec:authorize="isAnonymous()" th:href="@{/}" class="nav-link active">Home</a>
+<!--                <a sec:authorize="isAuthenticated()" th:href="@{/home}" class="nav-link active">Home</a>-->
+<!--                <a sec:authorize="isAnonymous()" th:href="@{/}" class="nav-link active">Home</a>-->
+                <a th:href="@{/}" class="nav-link active">Home</a>
             </li>
 
             <!-- Other Nav Items -->

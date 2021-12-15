@@ -228,9 +228,7 @@ public class User implements UserDetails {
     public double getUnpaidSum(){
         double price = 0.00;
         for(RegisteredCourse course : registeredCourses){
-            if(course.getPaymentRecord() == null){
-                price += course.getSection().getCourse().getPrice();
-            }
+                price += course.getFee();
         }
         return price;
     }
