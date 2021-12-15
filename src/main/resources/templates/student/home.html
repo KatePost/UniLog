@@ -7,7 +7,38 @@
 <div class="container">
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
-        <div id="text">Home page</div>
+        <div id="text">
+            <!--
+            What should be on the home page?
+            Student information,
+            Maybe upcoming payments
+            -->
+            <h1 th:text="|${user.firstName} ${user.lastName} Home|"></h1>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>First Name</th>
+                    <td th:text="${user.firstName}"></td>
+                    <th>Last Name</th>
+                    <td th:text="${user.lastName}"></td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td colspan="3" th:text="${user.address}"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td th:text="${user.email}"></td>
+                    <th>Birthdate</th>
+                    <td th:text="${user.birthdate}"></td>
+                </tr>
+                <tr>
+                    <th>Outstanding Fees</th>
+                    <td colspan="3" th:text="|$${unpaidSum}|"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

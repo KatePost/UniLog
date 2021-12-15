@@ -225,6 +225,16 @@ public class User implements UserDetails {
         return false;
     }
 
+    public double getUnpaidSum(){
+        double price = 0.00;
+        for(RegisteredCourse course : registeredCourses){
+            if(course.getPaymentRecord() == null){
+                price += course.getSection().getCourse().getPrice();
+            }
+        }
+        return price;
+    }
+
     public enum Role {
         STUDENT, ADMIN
     }

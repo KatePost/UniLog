@@ -13,9 +13,9 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item" th:each="confirm : ${confMsgs}" th:text="${confirm}"></li>
                     </ul>
-                    <div class="card border-danger">
+                    <div class="card border-danger" th:unless="${errorMsgs.isEmpty()}">
                         <h5 class="text-danger card-header">Conflicts</h5>
-                        <ul class="list-group list-group-flush" th:unless="${errorMsgs.isEmpty()}">
+                        <ul class="list-group list-group-flush">
                             <li class="list-group-item" th:each="error : ${errorMsgs}" th:text="${error}"></li>
                         </ul>
                     </div>

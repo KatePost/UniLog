@@ -51,7 +51,10 @@ public class StudentController {
 
 
     @GetMapping("home")
-    public String home(){
+    public String home(Model model, Principal principal){
+        User student = userService.findByEmail(principal.getName());
+        model.addAttribute("user", student);
+        model.addAttribute("unpaidSum", student.getUnpaidSum());
         return "student/home";
     }
 
@@ -135,7 +138,9 @@ public class StudentController {
 
 
     @GetMapping("paymentHistory")
-    public String paymentHistory(){
+    public String paymentHistory(Model model, Principal principal){
+        User student = userService.findByEmail(principal.getName());
+        model.addAttribute("student", student);
         return "student/paymentHistory";
     }
 
