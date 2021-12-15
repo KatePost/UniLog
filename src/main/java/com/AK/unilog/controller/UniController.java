@@ -33,7 +33,7 @@ public class UniController {
         this.loginService = loginService;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "home"})
     public String home(){
         Set<String>roles = loginService.getRoles();
         if(roles.contains("STUDENT")){

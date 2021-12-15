@@ -32,15 +32,10 @@ public class AdminController {
         this.registrationService = registrationService;
     }
 
-    @GetMapping("")
+    @GetMapping({"", "home"})
     public String home(){
 //        return "admin/home";
         return "redirect:/admin/courses";
-    }
-
-    @GetMapping("/home")
-    public String getHome(){
-        return "redirect:/";
     }
 
 

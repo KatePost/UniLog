@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 
 import java.util.Optional;
@@ -50,17 +51,12 @@ public class StudentController {
 
 
 
-    @GetMapping("")
+    @GetMapping({"", "home"})
     public String home(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
         model.addAttribute("user", student);
         model.addAttribute("unpaidSum", student.getUnpaidSum());
         return "student/home";
-    }
-
-    @GetMapping("/home")
-    public String getHome(){
-        return "redirect:/";
     }
 
     @GetMapping("availableCourses")
@@ -124,13 +120,23 @@ public class StudentController {
             return "redirect:/student/registeredCourses";
         }
         StringBuilder message = new StringBuilder("Course registrations deleted: ");
+        StringBuilder error = new StringBuilder();
         for(Long id: sectionIdList){
             RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
-            message.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
-                    deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
-            registrationService.getRegistrationRepo().deleteById(id);
+            if(deleted.getSection().getStartDate().isBefore(LocalDate.now().minusWeeks(2))){
+                error.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
+                        deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
+            } else {
+                message.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
+                        deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
+                registrationService.getRegistrationRepo().deleteById(id);
+            }
         }
         redirect.addFlashAttribute("deleteMsg", message.toString());
+        if(!error.isEmpty()){
+            error.append("Could not be deleted");
+            redirect.addFlashAttribute("errorMsg", error.toString());
+        }
         return "redirect:/student/registeredCourses";
     }
 

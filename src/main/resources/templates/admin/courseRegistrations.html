@@ -39,10 +39,11 @@
                         <td th:text="${regCourse.section.course.courseNumber}"></td>
                         <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
                         <td th:text="${regCourse.dueDate}"></td>
-                        <td th:if="${regCourse.paymentRecord}" class="text-success">PAID</td>
+                        <td th:if="${regCourse.paymentRecord}" th:text="|PAID ${regCourse.paymentRecord.paymentDate}|" class="text-success">PAID</td>
                         <td th:unless="${regCourse.paymentRecord}">
                             <span th:if="${regCourse.isOverDue()}" class="text-danger">OVERDUE</span>
-                            <span th:unless="${regCourse.isOverDue()}">OUTSTANDING</span></td>
+                            <span th:unless="${regCourse.isOverDue()}">OUTSTANDING</span>
+                        </td>
                         <td class="checkbox">
                             <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
                         </td>

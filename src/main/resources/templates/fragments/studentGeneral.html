@@ -26,9 +26,15 @@
     <aside class="col-3">
         <div class="p-3 bg-light">
             <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <div th:if="${deleteMsg}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <li class="nav-item" th:if="${deleteMsg}">
+                    <div  class="alert alert-warning alert-dismissible fade show" role="alert">
                         <span th:text="${deleteMsg}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </li>
+                <li class="nav-item" th:if="${errorMsg}">
+                    <div  class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMsg}"></span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </li>

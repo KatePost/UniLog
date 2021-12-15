@@ -32,14 +32,14 @@
                     <th scope="col">Description</th>
                     <th scope="col">Semester</th>
                     <th scope="col">Due Date</th>
-                    <th scope="col">Price</th>
+                    <th scope="col">Owing</th>
                     <th scope="col">Payment</th>
                 </tr>
                 </thead>
                 <tbody>
                 <form action="#" th:action="@{/student/editRegistration}" method="post">
                 <tr th:each="regCourse: ${registeredCourses}">
-                    <td th:text="${regCourse.section.course.courseNumber}"></td>
+                    <td th:text="${regCourse.section.course.courseNumber}">label</td>
                     <td th:text="${regCourse.section.course.title}"></td>
                     <td th:text="${regCourse.section.course.description}"></td>
                     <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
@@ -47,20 +47,20 @@
                     <td th:if="${regCourse.paymentRecord}">PAID</td>
                     <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.getFee()}"></span></td>
                     <td>
-                        <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
+                        <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}" th:attr="aria-label=|${regCourse.section.course.courseNumber} ${regCourse.section.semester} ${regCourse.section.year}|">
                         <input type="hidden" th:value="${regCourse.getFee()}">
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Total</th>
-                    <td><span class="text-right">$</span></td>
+                    <td>$</td>
                     <td><input class="form-control-plaintext m-0 p-0" readonly type="text" id="total" name="total"></td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td colspan="2">
-                        <button type="submit" class="btn btn-secondary" name="action" value="save">Proceed to Payment</button>
+                        <button type="submit" class="btn btn-secondary" name="action" value="save">Make Payment</button>
                     </td>
                     <td colspan="2">
                         <button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button>
