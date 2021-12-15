@@ -45,10 +45,10 @@
                     <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
                     <td th:text="${regCourse.dueDate}"></td>
                     <td th:if="${regCourse.paymentRecord}">PAID</td>
-                    <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.section.course.price}"></span></td>
-                    <td th:unless="${regCourse.paymentRecord}">
+                    <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.getFee()}"></span></td>
+                    <td>
                         <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
-                        <input type="hidden" th:value="${regCourse.section.course.price}">
+                        <input type="hidden" th:value="${regCourse.getFee()}">
                     </td>
                 </tr>
                 <tr>

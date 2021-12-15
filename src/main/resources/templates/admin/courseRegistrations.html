@@ -74,7 +74,7 @@
                     <li class="list-group-item">
                         <h6>Payment:</h6>
                         <ul class="list-group">
-                            <li class="list-group-item" th:text="|Price: ${singleCourse.section.course.price}|"></li>
+                            <li class="list-group-item" th:text="|Owing: ${singleCourse.getFee()}|"></li>
                             <li class="list-group-item">Payment: <span th:text="${singleCourse.paymentRecord}? ${singleCourse.paymentRecord.paymentDate} : 'OUTSTANDING'"></span></li>
                             <li class="list-group-item" th:text="|Due: ${singleCourse.dueDate}|"></li>
                         </ul>

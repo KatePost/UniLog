@@ -50,12 +50,17 @@ public class StudentController {
 
 
 
-    @GetMapping("home")
+    @GetMapping("")
     public String home(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
         model.addAttribute("user", student);
         model.addAttribute("unpaidSum", student.getUnpaidSum());
         return "student/home";
+    }
+
+    @GetMapping("/home")
+    public String getHome(){
+        return "redirect:/";
     }
 
     @GetMapping("availableCourses")
@@ -129,6 +134,7 @@ public class StudentController {
         return "redirect:/student/registeredCourses";
     }
 
+    // TODO: check to make sure paid courses show 0 dollars, and that their totals are not added if they're selected
     @GetMapping("registeredCourses")
     public String registeredCourses(Model model, Principal principal){
         HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
