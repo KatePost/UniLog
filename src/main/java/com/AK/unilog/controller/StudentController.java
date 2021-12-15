@@ -98,8 +98,11 @@ public class StudentController {
     }
 
     @PostMapping(value = "editRegistration", params = "action=save")
-    public String proceedToPayment(@RequestParam(name = "sectionId") List<String> sectionIdList,
+    public String proceedToPayment(@RequestParam(name = "sectionId", required = false) List<String> sectionIdList,
                                    @RequestParam(name = "total")String total){
+        if(sectionIdList == null){
+            return "redirect:/student/registeredCourses";
+        }
         List<Section>sectionList = new ArrayList<>();
         for(String id: sectionIdList){
             sectionList.add(sectionsRepository.getById(Long.parseLong(id)));
@@ -108,11 +111,18 @@ public class StudentController {
     }
 
     @PostMapping(value = "editRegistration", params = "action=delete")
-    public String deleteRegistrations(@RequestParam(name = "sectionId") List<String> sectionIdList, RedirectAttributes redirect){
-        for(String id: sectionIdList){
-            registrationService.getRegistrationRepo().deleteById(Long.parseLong(id));
+    public String deleteRegistrations(@RequestParam(name = "sectionId", required = false) List<Long> sectionIdList, RedirectAttributes redirect){
+        if(sectionIdList == null){
+            return "redirect:/student/registeredCourses";
         }
-        redirect.addFlashAttribute("deleteMsg", "Registrations deleted");
+        StringBuilder message = new StringBuilder("Course registrations deleted: ");
+        for(Long id: sectionIdList){
+            RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
+            message.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
+                    deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
+            registrationService.getRegistrationRepo().deleteById(id);
+        }
+        redirect.addFlashAttribute("deleteMsg", message.toString());
         return "redirect:/student/registeredCourses";
     }
 

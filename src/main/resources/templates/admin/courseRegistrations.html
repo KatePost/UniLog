@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{::script})">
+    <title>Admin Home</title>
+    <script>
+        function goToReg(id){
+            window.location = '/admin/courseRegistrations?reg=' + id;
+        }
+        $(document).ready(function(){
+            $(".checkbox").click(function(event){
+                event.stopPropagation();
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <header th:insert="fragments/components :: header"></header>
+    <div th:replace="fragments/adminGeneral.html :: frame(~{:: #text})">
+        <div id="text">
+            <h1>Registrations</h1>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th colspan="2" scope="col">Student</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Due Date</th>
+                    <th colspan="2" scope="col">Payment</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!---->
+                <form action="#" th:action="@{/admin/deleteRegistration}" method="post">
+                    <tr th:each="regCourse: ${registeredCourses}" th:id="|reg${regCourse.id}|" th:onclick="|goToReg(${regCourse.id})|">
+                        <td><span th:text="${regCourse.user.lastName}"></span>, <span th:text="${regCourse.user.firstName}"></span></td>
+                        <td th:text="${regCourse.user.email}"></td>
+                        <td th:text="${regCourse.section.course.courseNumber}"></td>
+                        <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
+                        <td th:text="${regCourse.dueDate}"></td>
+                        <td th:if="${regCourse.paymentRecord}" class="text-success">PAID</td>
+                        <td th:unless="${regCourse.paymentRecord}">
+                            <span th:if="${regCourse.isOverDue()}" class="text-danger">OVERDUE</span>
+                            <span th:unless="${regCourse.isOverDue()}">OUTSTANDING</span></td>
+                        <td class="checkbox">
+                            <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"></td>
+                        <td>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+<!--                            <button type="submit" class="btn btn-secondary" name="action" value="save">Proceed to Payment</button>-->
+                        </td>
+                    </tr>
+                </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:if="${singleCourse}" class="card w-auto position-absolute top-50 start-50 translate-middle">
+            <h4 class="card-header" th:text="|${singleCourse.user.lastName}, ${singleCourse.user.firstName}|"></h4>
+            <div class="card-body">
+                <h5 class="card-title" th:text="|${singleCourse.section.course.courseNumber} - ${singleCourse.section.semester} ${singleCourse.section.year}|"></h5>
+                <h6 class="text-danger card-subtitle" th:if="${singleCourse.isOverDue()}">OVERDUE</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <h6>Student:</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item" th:text="|Email: ${singleCourse.user.email}|"></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item">
+                        <h6>Payment:</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item" th:text="|Price: ${singleCourse.section.course.price}|"></li>
+                            <li class="list-group-item">Payment: <span th:text="${singleCourse.paymentRecord}? ${singleCourse.paymentRecord.paymentDate} : 'OUTSTANDING'"></span></li>
+                            <li class="list-group-item" th:text="|Due: ${singleCourse.dueDate}|"></li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item">
+                        <h6>Course:</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item" th:text="|Title: ${singleCourse.section.course.title}|"></li>
+                            <li class="list-group-item" th:text="|Description: ${singleCourse.section.course.description}|"></li>
+                            <li class="list-group-item">Prerequisite: <span th:text="${singleCourse.section.course.prereq}? ${singleCourse.section.course.prereq.courseNumber} : 'NONE'"></span></li>
+                        </ul>
+                    </li>
+                    <!-- Going to want to add course title, description, prerequisites-->
+                </ul>
+                <a th:href="@{courseRegistrations}" class="btn btn-secondary">Close</a>
+            </div>
+    </div>
+</div>
+</body>
+</html>
+
+

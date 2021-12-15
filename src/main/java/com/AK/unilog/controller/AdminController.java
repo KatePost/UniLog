@@ -1,22 +1,23 @@
 package com.AK.unilog.controller;
 
+import com.AK.unilog.entity.RegisteredCourse;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
 import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
+import jdk.jfr.Registered;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin/*")
@@ -84,9 +85,34 @@ public class AdminController {
         return "admin/newSection";
     }
 
-    @GetMapping("registrations")
-    public String showRegistrations(){
-        return "admin/registrations";
+    @GetMapping("courseRegistrations")
+    public String showRegistrations(Model model, @RequestParam(value = "reg", required = false)Long id){
+        List<RegisteredCourse>registeredCourseList = new ArrayList<>(registrationService.getRegistrationRepo().findAll());
+        model.addAttribute("registeredCourses", registeredCourseList);
+        if(id != null) {
+            RegisteredCourse registeredCourse = registrationService.getRegistrationRepo().getById(id);
+            model.addAttribute("singleCourse", registeredCourse);
+        }
+        for(RegisteredCourse course : registeredCourseList){
+            System.err.println(course.isOverDue());
+        }
+        return "admin/courseRegistrations";
+    }
+
+    @PostMapping("deleteRegistration")
+    public String deleteRegistrations(@RequestParam(name = "sectionId", required = false) List<Long> sectionIdList, RedirectAttributes redirect) {
+        if(sectionIdList == null){
+            return "redirect:/admin/courseRegistrations";
+        }
+        StringBuilder message = new StringBuilder("Course registrations deleted: ");
+        for (Long id : sectionIdList) {
+            RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
+            message.append(String.format("%s - %s %s %s; ", deleted.getUser().getLastName(), deleted.getSection().getCourse().getCourseNumber(),
+                    deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
+            registrationService.getRegistrationRepo().deleteById(id);
+        }
+        redirect.addFlashAttribute("deleteMsg", message.toString());
+        return "redirect:/admin/courseRegistrations";
     }
 
     @GetMapping("register")

@@ -87,4 +87,11 @@ public class RegisteredCourse {
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
+
+    public boolean isOverDue(){
+        if(paymentRecord != null){
+            return false;
+        }
+        return dueDate.isBefore(LocalDate.now());
+    }
 }

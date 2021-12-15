@@ -10,12 +10,15 @@
                 <div id="text">
 
                     <h1>Registration Confirmation</h1>
-                    <ul>
-                        <li th:each="confirm : ${confMsgs}" th:text="${confirm}"></li>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="confirm : ${confMsgs}" th:text="${confirm}"></li>
                     </ul>
-                    <ul th:unless="${errorMsgs.isEmpty()}">
-                        <li th:each="error : ${errorMsgs}" th:text="${error}"></li>
-                    </ul>
+                    <div class="card border-danger">
+                        <h5 class="text-danger card-header">Conflicts</h5>
+                        <ul class="list-group list-group-flush" th:unless="${errorMsgs.isEmpty()}">
+                            <li class="list-group-item" th:each="error : ${errorMsgs}" th:text="${error}"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -26,7 +26,12 @@
     <div class="p-3 bg-light">
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item"><h4 th:text="${message}"></h4></li>
-        <li class="nav-item"></li>
+        <li class="nav-item">
+          <div th:if="${deleteMsg}" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span th:text="${deleteMsg}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </li>
       </ul>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
@@ -46,7 +51,7 @@
           </a>
         </li>
         <li>
-          <a th:href="@{/admin/registrations}" class="nav-link">
+          <a th:href="@{/admin/courseRegistrations}" class="nav-link">
             View Registrations
           </a>
         </li>
