@@ -134,6 +134,7 @@ public class StudentController {
         return "redirect:/student/registeredCourses";
     }
 
+    // TODO: check to make sure paid courses show 0 dollars, and that their totals are not added if they're selected
     @GetMapping("registeredCourses")
     public String registeredCourses(Model model, Principal principal){
         HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
