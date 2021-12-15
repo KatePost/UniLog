@@ -169,4 +169,11 @@ public class StudentController {
         redirectAttributes.addFlashAttribute("message", "Section cannot be added to cart.");
         return "redirect:/student/availableCourses";
     }
+
+    @GetMapping("studentDetails")
+    public String viewDetails(Model model, Principal principal){
+        User student = userService.findByEmail(principal.getName());
+        model.addAttribute("user", student);
+        return "student/studentDetails";
+    }
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+    <title>Payment History</title>
+</head>
+<body>
+<div class="container">
+    <header th:replace="fragments/components :: header"></header>
+    <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
+        <div id="text">
+            <h1>Your Information</h1>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th scope="row">First Name</th>
+                    <td colspan="2"><input type="text" class="form-control-plaintext" readonly th:field="${user.firstName}"></td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                </tr>
+                <tr>
+                    <th scope="row">Last Name</th>
+                    <td colspan="2"><input type="text" class="form-control-plaintext" readonly th:field="${user.lastName}"></td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                </tr>
+                <tr>
+                    <th scope="row">Email</th>
+                    <td colspan="2"><input type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                </tr>
+                <tr>
+                    <th scope="row">Address</th>
+                    <td colspan="2"><input type="text" class="form-control-plaintext" readonly th:field="${user.address}"></td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                </tr>
+                <tr>
+                    <th scope="row">Date of Birth</th>
+                    <td colspan="2"><input type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                </tr>
+                <tr>
+                    <th scope="row">Reset Password</th>
+                    <td><input type="password" class="form-control"></td>
+                    <td><input type="password" class="form-control"></td>
+                    <td><button class="btn btn-secondary">Save</button></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
