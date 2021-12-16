@@ -104,7 +104,8 @@
             <!--      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>-->
             <!--      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>-->
 
-            <a class="btn-secondary btn text-light fw-bold float-end" th:href="@{/student/addToCart/{id}(id=${singleSection.id})}" >Add to Course Cart</a>
+            <a th:if="${available}" class="btn-secondary btn text-light fw-bold float-end" th:href="@{/student/addToCart/{id}(id=${singleSection.id})}" >Add to Course Cart</a>
+            <a th:unless="${available}" class="btn-secondary btn text-light fw-bold float-end disabled" >Cannot add to Cart</a>
         </div>
     </div>
 </div>

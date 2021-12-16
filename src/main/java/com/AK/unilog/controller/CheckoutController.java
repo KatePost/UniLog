@@ -2,14 +2,12 @@ package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.*;
 import com.AK.unilog.service.CheckoutService;
-import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.PaymentItemService;
 import com.AK.unilog.service.UserService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -89,7 +86,7 @@ public class CheckoutController {
         }
     }
 
-    @GetMapping("/student/makePayment")
+    @GetMapping("/payment/makePayment")
     public String makePayment(Model model, Principal principal, RedirectAttributes redirectAttributes){
 
         User student = userService.findByEmail(principal.getName());
