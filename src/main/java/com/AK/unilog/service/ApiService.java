@@ -18,12 +18,12 @@ public class ApiService {
     private final CourseRepository courseRepository;
 
     @Autowired
-    public ApiService(SectionsRepository sectionsRepository, CourseRepository courseRepository){
+    public ApiService(SectionsRepository sectionsRepository, CourseRepository courseRepository) {
         this.sectionsRepository = sectionsRepository;
         this.courseRepository = courseRepository;
     }
 
-    public List<Section> getSections(){
+    public List<Section> getSections() {
         return sectionsRepository.findAll();
     }
 
@@ -31,26 +31,40 @@ public class ApiService {
         return courseRepository.findAll();
     }
 
-    public Course getCourseByNumber(String courseNumber){
+    public Course getCourseByNumber(String courseNumber) {
         return courseRepository.findByCourseNumber(courseNumber).get();
     }
 
-    public List<Course> getCourseByNumberRegex(String regex){
+    public List<Course> getCourseByNumberRegex(String regex) {
         List<Course> courseList = courseRepository.findAll();
         ArrayList<Course> matchingCourses = new ArrayList<>();
-        for(Course course : courseList){
-            if(course.getCourseNumber().matches(regex)){
+        for (Course course : courseList) {
+            if (course.getCourseNumber().matches(regex)) {
                 matchingCourses.add(course);
             }
         }
         return matchingCourses;
     }
 
-    public List<Section> getSectionByNumberRegex(String regex){
+    public List<Course> getAvailableCourseByNumberRegex(String regex) {
+        Optional<List<Course>> courseListOptional = courseRepository.findByDisabledFalse();
+        ArrayList<Course> matchingCourses = new ArrayList<>();
+        if (courseListOptional.isPresent()) {
+            List<Course> courseList = courseListOptional.get();
+            for (Course course : courseList) {
+                if (course.getCourseNumber().matches(regex)) {
+                    matchingCourses.add(course);
+                }
+            }
+        }
+        return matchingCourses;
+    }
+
+    public List<Section> getSectionByNumberRegex(String regex) {
         List<Section> sectionList = sectionsRepository.findByDisabledFalse().get();
         ArrayList<Section> matchingSections = new ArrayList<>();
-        for(Section section : sectionList){
-            if(section.getCourse().getCourseNumber().matches(regex)){
+        for (Section section : sectionList) {
+            if (section.getCourse().getCourseNumber().matches(regex)) {
                 matchingSections.add(section);
             }
         }
@@ -58,29 +72,39 @@ public class ApiService {
     }
 
     public void toggleDisableCourse(String courseNumber) {
-        Optional<Course> course =  courseRepository.findByCourseNumber(courseNumber);
-        if(course.isPresent()){
+        Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
+        if (course.isPresent()) {
+
             Course courseObj = course.get();
+
+            Optional<List<Section>> optionalSectionList = sectionsRepository.findByCourse(courseObj);
+            if(optionalSectionList.isPresent()){
+                List<Section> sectionList = optionalSectionList.get();
+                for(Section section : sectionList){
+                    section.setDisabled(!section.isDisabled());
+                    sectionsRepository.save(section);
+                }
+            }
+
             courseObj.setDisabled(!courseObj.isDisabled());
-            System.out.println(courseObj);
             courseRepository.save(courseObj);
         }
     }
 
     public void toggleDisableSection(Long id) {
         Optional<Section> section = sectionsRepository.findById(id);
-        if(section.isPresent()){
+        if (section.isPresent()) {
             Section sectionObj = section.get();
             sectionObj.setDisabled(!sectionObj.isDisabled());
             sectionsRepository.save(sectionObj);
         }
     }
 
-    public List<Section> getAvailableSectionsByCourse(String courseNumber){
+    public List<Section> getAvailableSectionsByCourse(String courseNumber) {
         Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
-        if(course.isPresent()){
-            Optional<List<Section>> listOfSections =  sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
-            if(listOfSections.isPresent()){
+        if (course.isPresent()) {
+            Optional<List<Section>> listOfSections = sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
+            if (listOfSections.isPresent()) {
                 System.out.println("list of sections by course number" + listOfSections.get());
                 return listOfSections.get();
             }
@@ -89,12 +113,12 @@ public class ApiService {
         return null;
     }
 
-    public List<Section> getAvailableSections(){
+    public List<Section> getAvailableSections() {
         Optional<List<Section>> listOfSections = sectionsRepository.findByDisabledFalse();
         return listOfSections.orElse(null);
     }
 
-    public List<Course> getAvailableCourses(){
+    public List<Course> getAvailableCourses() {
         Optional<List<Course>> listOfCourses = courseRepository.findByDisabledFalse();
         return listOfCourses.orElse(null);
     }

@@ -7,7 +7,6 @@ import com.AK.unilog.model.SectionFormModel;
 import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
-import jdk.jfr.Registered;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

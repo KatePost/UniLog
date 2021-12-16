@@ -3,7 +3,6 @@ package com.AK.unilog.service;
 import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.PaymentItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +19,7 @@ public class PaymentItemService {
     }
 
     public void verifyPaymentItems(List<RegisteredCourse> registeredList, User student) {
+        clearCart(student);
         for(RegisteredCourse course : registeredList){
             Optional<PaymentItem> registeredCourse = paymentItemRepository.findByRegisteredCourseAndStudent(course, student);
             if(registeredCourse.isPresent()){

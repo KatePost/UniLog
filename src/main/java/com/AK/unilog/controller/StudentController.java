@@ -170,12 +170,12 @@ public class StudentController {
             CartItem cartItem = cartItemService.verifyCartItem(section, user);
             if(cartItem != null){
                 redirectAttributes.addFlashAttribute("message", "Section added to course cart successfully.");
-                return "redirect:/student/home";
+                return "redirect:/student/";
             }
-            redirectAttributes.addFlashAttribute("message", "Section cannot be added to cart.");
-            return "redirect:/student/sections/" + section.getCourse().getCourseNumber();
+//            redirectAttributes.addFlashAttribute("dangerMessage", "Section cannot be added to cart.");
+//            return "redirect:/student/sections/" + section.getCourse().getCourseNumber();
         }
-        redirectAttributes.addFlashAttribute("message", "Section cannot be added to cart.");
+        redirectAttributes.addFlashAttribute("dangerMessage", "Section cannot be added to cart.");
         return "redirect:/student/availableCourses";
     }
 

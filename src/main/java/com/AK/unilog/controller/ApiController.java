@@ -67,6 +67,17 @@ public class ApiController {
         return "fragments/components :: resultsList";
     }
 
+    @GetMapping("/availableCourses/{courseNumber}")
+    public String findAvailableCourses(Model model, @PathVariable String courseNumber) {
+        if (courseNumber.equals("")) {
+            model.addAttribute("listCourses", apiService.getAvailableCourses());
+        } else {
+            courseNumber = "^[A-Z0-9]*" + courseNumber + "[A-Z0-9]*$";
+            model.addAttribute("listCourses", apiService.getAvailableCourseByNumberRegex(courseNumber));
+        }
+        return "fragments/components :: resultsList";
+    }
+
     @GetMapping("/student/singleCourse/{courseNumber}")
     public String singleCourseStudent(Model model, @PathVariable String courseNumber) {
         model.addAttribute("singleCourse", apiService.getCourseByNumber(courseNumber));
