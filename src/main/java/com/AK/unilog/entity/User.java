@@ -1,9 +1,6 @@
 package com.AK.unilog.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,6 +50,9 @@ public class User implements UserDetails {
     @Email(message = "Please enter a valid email")
     private String email;
 
+    @Column(length = 150, unique = true)
+    private String stripeId;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -64,10 +62,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<RegisteredCourse> registeredCourses;
 
-    public User() {
-    }
-
-    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses) {
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,9 +71,14 @@ public class User implements UserDetails {
         this.password = password;
         this.passwordMatch = passwordMatch;
         this.email = email;
+        this.stripeId = stripeId;
         this.role = role;
         this.cart = cart;
         this.registeredCourses = registeredCourses;
+    }
+
+    public User() {
+
     }
 
     public Long getId() {
@@ -119,6 +119,14 @@ public class User implements UserDetails {
 
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public String getStripeId() {
+        return stripeId;
+    }
+
+    public void setStripeId(String stripeId) {
+        this.stripeId = stripeId;
     }
 
     @Override
@@ -168,6 +176,16 @@ public class User implements UserDetails {
 
     public void setRegisteredCourses(Set<RegisteredCourse> registeredCourses) {
         this.registeredCourses = registeredCourses;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     @Override

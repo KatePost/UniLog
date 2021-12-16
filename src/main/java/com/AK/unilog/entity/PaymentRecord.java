@@ -1,14 +1,10 @@
 package com.AK.unilog.entity;
 
-import com.AK.unilog.service.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -25,7 +21,6 @@ public class PaymentRecord {
     private Long id;
 
     @Column(columnDefinition ="decimal(8,2)", nullable = false)
-    @NotEmpty
     @NotNull
     private double totalPayment;
 
@@ -37,10 +32,6 @@ public class PaymentRecord {
     private LocalDate paymentDate;
 
     @NotNull
-    private Semester semester;
+    private String stripePaymentId;
 
-    @Column(nullable = false)
-    @Min(2021)
-    @Max(2100)
-    private int year;
 }

@@ -30,6 +30,9 @@ public class RegistrationService {
         return registrationRepo;
     }
 
+    public RegisteredCourse getById(Long id){
+        return registrationRepo.getById(id);
+    }
 
     /**
      * This method registers all courses in the cart (set of cartItems)
