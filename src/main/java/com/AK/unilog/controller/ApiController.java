@@ -1,7 +1,11 @@
 package com.AK.unilog.controller;
 
+import com.AK.unilog.entity.Section;
+import com.AK.unilog.entity.User;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.service.ApiService;
+import com.AK.unilog.service.CartItemService;
+import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -9,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -16,10 +21,14 @@ import java.util.Map;
 public class ApiController {
 
     private final ApiService apiService;
+    private final CartItemService cartItemService;
+    private final UserService userService;
 
     @Autowired
-    public ApiController(ApiService apiService) {
+    public ApiController(ApiService apiService, CartItemService cartItemService, UserService userService) {
         this.apiService = apiService;
+        this.cartItemService = cartItemService;
+        this.userService = userService;
     }
 
     @GetMapping("/allCourses/{courseNumber}")
@@ -123,9 +132,18 @@ public class ApiController {
     }
 
     @GetMapping("/student/singleSection/{id}")
-    public String singleSectionStudent(Model model, @PathVariable Long id) {
-        model.addAttribute("singleSection", apiService.getSectionById(id));
-        System.out.println(apiService.getSectionById(id));
+    public String singleSectionStudent(Model model, @PathVariable Long id, Principal principal) {
+        Section section = apiService.getSectionById(id);
+        User student = userService.findByEmail(principal.getName());
+
+        if(cartItemService.verifyCartItem(section, student)){
+            model.addAttribute("available", true);
+        }else{
+            model.addAttribute("available", false);
+        }
+
+        model.addAttribute("singleSection", section);
+
         return "fragments/studentGeneral :: singleSection";
     }
 }

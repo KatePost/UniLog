@@ -23,20 +23,24 @@ public class CartItemService {
         this.registrationRepo = registrationRepo;
     }
 
-    public CartItem verifyCartItem(Section section, User user) {
+    public boolean verifyCartItem(Section section, User user) {
         Optional<CartItem> cartItemOptional = cartItemRepository.findBySectionAndStudent(section, user);
         if(cartItemOptional.isPresent()){
-            return null;
+            return false;
         }
 
         Optional<RegisteredCourse> registeredCourseOptional = registrationRepo.findBySectionAndUser(section, user);
         if(registeredCourseOptional.isPresent()){
-            return null;
+            return false;
         }
 
+        return true;
+    }
+
+    public CartItem saveCartItem(Section section, User student){
         CartItem cartItem = new CartItem();
         cartItem.setSection(section);
-        cartItem.setStudent(user);
+        cartItem.setStudent(student);
         return cartItemRepository.save(cartItem);
     }
 }

@@ -118,7 +118,7 @@ public class StudentController {
         }
         User student = userService.findByEmail(principal.getName());
         paymentItemService.verifyPaymentItems(registeredList, student);
-        return "redirect:/student/makePayment";
+        return "redirect:/payment/makePayment";
     }
 
     @PostMapping(value = "editRegistration", params = "action=delete")
@@ -177,13 +177,14 @@ public class StudentController {
         Section section = courseService.getSectionById(id);
         User user = userService.findByEmail(principal.getName());
         if(section != null && user != null){
-            CartItem cartItem = cartItemService.verifyCartItem(section, user);
-            if(cartItem != null){
+            boolean verifiedCartItem = cartItemService.verifyCartItem(section, user);
+            if(verifiedCartItem){
+                cartItemService.saveCartItem(section, user);
                 redirectAttributes.addFlashAttribute("message", "Section added to course cart successfully.");
-                return "redirect:/student/";
+                return "redirect:/student/cart";
             }
-//            redirectAttributes.addFlashAttribute("dangerMessage", "Section cannot be added to cart.");
-//            return "redirect:/student/sections/" + section.getCourse().getCourseNumber();
+            redirectAttributes.addFlashAttribute("dangerMessage", "Cannot be added to Cart: This section is either in your Cart, or in your registered courses");
+            return "redirect:/student/sections/" + section.getCourse().getCourseNumber();
         }
         redirectAttributes.addFlashAttribute("dangerMessage", "Section cannot be added to cart.");
         return "redirect:/student/availableCourses";
