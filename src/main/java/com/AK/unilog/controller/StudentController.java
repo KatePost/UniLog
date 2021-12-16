@@ -2,12 +2,11 @@ package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.CartItemRepository;
+import com.AK.unilog.repository.PaymentItemRepository;
+import com.AK.unilog.repository.RegistrationRepo;
 import com.AK.unilog.repository.SectionsRepository;
-import com.AK.unilog.service.CartItemService;
-import com.AK.unilog.service.CourseService;
+import com.AK.unilog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.AK.unilog.service.RegistrationService;
-import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,16 +35,18 @@ public class StudentController {
     private final CourseService courseService;
     private final CartItemService cartItemService;
     private SectionsRepository sectionsRepository;
+    private final PaymentItemService paymentItemService;
 
 
     @Autowired
     public StudentController(UserService userService, RegistrationService registrationService,
-                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository) {
+                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository, PaymentItemService paymentItemService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.courseService = courseService;
         this.cartItemService = cartItemService;
         this.sectionsRepository = sectionsRepository;
+        this.paymentItemService = paymentItemService;
     }
 
 
@@ -106,25 +107,27 @@ public class StudentController {
     }
 
     @PostMapping(value = "editRegistration", params = "action=save")
-    public String proceedToPayment(@RequestParam(name = "sectionId", required = false) List<String> sectionIdList,
-                                   @RequestParam(name = "total")String total){
-        if(sectionIdList == null){
+    public String proceedToPayment(@RequestParam(name = "sectionId", required = false) List<Long> registeredIdList,
+                                   @RequestParam(name = "total")String total, Principal principal){
+        if(registeredIdList == null){
             return "redirect:/student/registeredCourses";
         }
-        List<Section>sectionList = new ArrayList<>();
-        for(String id: sectionIdList){
-            sectionList.add(sectionsRepository.getById(Long.parseLong(id)));
+        List<RegisteredCourse>registeredList = new ArrayList<>();
+        for(Long id: registeredIdList){
+            registeredList.add(registrationService.getById(id));
         }
-        return "makePayment";
+        User student = userService.findByEmail(principal.getName());
+        paymentItemService.verifyPaymentItems(registeredList, student);
+        return "redirect:/student/makePayment";
     }
 
     @PostMapping(value = "editRegistration", params = "action=delete")
-    public String deleteRegistrations(@RequestParam(name = "sectionId", required = false) List<Long> sectionIdList, RedirectAttributes redirect){
-        if(sectionIdList == null){
+    public String deleteRegistrations(@RequestParam(name = "sectionId", required = false) List<Long> registeredIdList, RedirectAttributes redirect){
+        if(registeredIdList == null){
             return "redirect:/student/registeredCourses";
         }
         StringBuilder message = new StringBuilder("Course registrations deleted: ");
-        for(Long id: sectionIdList){
+        for(Long id: registeredIdList){
             RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
             message.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
                     deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
@@ -167,7 +170,7 @@ public class StudentController {
             CartItem cartItem = cartItemService.verifyCartItem(section, user);
             if(cartItem != null){
                 redirectAttributes.addFlashAttribute("message", "Section added to course cart successfully.");
-                return "redirect:/home";
+                return "redirect:/student/home";
             }
             redirectAttributes.addFlashAttribute("message", "Section cannot be added to cart.");
             return "redirect:/student/sections/" + section.getCourse().getCourseNumber();
