@@ -3,7 +3,51 @@
 <head th:replace="fragments/components :: head(~{::title}, ~{}, ~{::script})">
     <title>Payment History</title>
     <script>
+        $.ajaxSetup ({
+            // Disable caching of AJAX responses
+            cache: false
+        });
+        $(document).ready(function(){
+            $(".saveBtn").hide();
+            $(".editBtn").click(function(){
+                let inputId = "#" + $(this).val();
+                $(inputId).prop("readonly", false);
+                $(inputId).focus();
+                $(this).hide();
+                $(this).siblings(".saveBtn").show();
+                });
 
+                $(".saveBtn").click(function(){
+                    let inputId = $(this).val();
+                    $.post("studentDetails", {
+                        field: inputId,
+                        value: $("#" + inputId).val()
+                    }).done(function(data){
+                        if(data.success){
+                            $("#jqueryAlert").html(
+                                "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                                "<span>" + data.message + "</span>\n" +
+                                "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                                "</div>\n"
+                            );
+                        } else {
+                            $("#jqueryAlert").html(
+                                "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                                "<span>" + data.message + "</span>\n" +
+                                "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                                "</div>\n"
+                            );
+                        }
+                        $("#" + inputId).parent().load(window.location + " #" + inputId);
+                    });
+                    $("#" + inputId).parent().load(window.location + " #" + inputId);
+
+                    $("#" + inputId).prop("readonly", true);
+                    $(this).hide();
+                    $(this).siblings(".editBtn").show();
+
+                });
+        });
     </script>
 </head>
 <body>
@@ -14,36 +58,54 @@
             <h1>Your Information</h1>
             <table class="table">
                 <tbody>
-                <tr>
+                <tr id="firstNameRow">
                     <th scope="row"><label for="firstName">First Name</label></th>
                     <td colspan="2"><input id="firstName" name="firstName" type="text" class="form-control-plaintext" readonly th:field="${user.firstName}"></td>
-                    <td><button class="btn btn-secondary" value="firstName">Edit</button></td>
+                    <td>
+                        <button class="btn btn-secondary editBtn" value="firstName">Edit</button>
+                        <button class="btn btn-secondary saveBtn" value="firstName">Save</button>
+                    </td>
                 </tr>
-                <tr>
+                <tr id="lastNameRow">
                     <th scope="row"><label for="lastName">Last Name</label></th>
                     <td colspan="2"><input id="lastName" name="lastName" type="text" class="form-control-plaintext" readonly th:field="${user.lastName}"></td>
-                    <td><button class="btn btn-secondary" value="lastName">Edit</button></td>
+                    <td>
+                        <button class="btn btn-secondary editBtn" value="lastName">Edit</button>
+                        <button class="btn btn-secondary saveBtn" value="lastName">Save</button>
+                    </td>
                 </tr>
-                <tr>
+                <tr id="emailRow">
                     <th scope="row"><label for="email">Email</label></th>
                     <td colspan="2"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
-                    <td><button class="btn btn-secondary" value="email">Edit</button></td>
+                    <td>
+                        <button class="btn btn-secondary editBtn" value="email">Edit</button>
+                        <button class="btn btn-secondary saveBtn" value="email">Save</button>
+                    </td>
                 </tr>
-                <tr>
+                <tr id="addressRow">
                     <th scope="row"><label for="address">Address </label></th>
                     <td colspan="2"><input id="address" name="address" type="text" class="form-control-plaintext" readonly th:field="${user.address}"></td>
-                    <td><button class="btn btn-secondary" value="address">Edit</button></td>
+                    <td>
+                        <button class="btn btn-secondary editBtn" value="address">Edit</button>
+                        <button class="btn btn-secondary saveBtn" value="address">Save</button>
+                    </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="dob">Date of Birth </label></th>
-                    <td colspan="2"><input id="dob" name="dob" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
-                    <td><button class="btn btn-secondary" value="birthdate">Edit</button></td>
+                    <th scope="row"><label for="birthdate">Date of Birth </label></th>
+                    <td colspan="2"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
+                    <td>
+<!--                        <button class="btn btn-secondary editBtn" value="birthdate">Edit</button>-->
+<!--                        <button class="btn btn-secondary saveBtn" value="birthdate">Save</button>-->
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row">Reset Password</th>
-                    <td><input type="password" class="form-control" placeholder="New password" aria-label="new password"></td>
-                    <td><input type="password" class="form-control" placeholder="Confirm new password" aria-label="confirm password"></td>
-                    <td><button class="btn btn-secondary" value="password">Save</button></td>
+                    <td><input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New password" form="passwordForm" aria-label="new password"></td>
+                    <td><input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm new password" form="passwordForm" aria-label="confirm password"></td>
+                    <td>
+                        <button class="btn btn-secondary" value="password" form="passwordForm">Save</button>
+                        <form id="passwordForm" action="#" method="post" th:action="@{/student/changePassword}"></form>
+                    </td>
                 </tr>
                 </tbody>
             </table>

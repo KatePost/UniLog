@@ -47,7 +47,7 @@
                     <td th:if="${regCourse.paymentRecord}">PAID</td>
                     <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.getFee()}"></span></td>
                     <td>
-                        <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}" th:attr="aria-label=|${regCourse.section.course.courseNumber} ${regCourse.section.semester} ${regCourse.section.year}|">
+                        <input th:unless="${regCourse.paymentRecord}" type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}" th:attr="aria-label=|${regCourse.section.course.courseNumber} ${regCourse.section.semester} ${regCourse.section.year}|">
                         <input type="hidden" th:value="${regCourse.getFee()}">
                     </td>
                 </tr>

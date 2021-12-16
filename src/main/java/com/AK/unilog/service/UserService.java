@@ -37,6 +37,10 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    public User saveUser(User user){
+        return userRepo.save(user);
+    }
+
     public void validateRegistration(BindingResult bindingResult, User user) {
         LocalDate date = LocalDate.now().minusYears(18);
         if(user.getBirthdate().isAfter(date)){

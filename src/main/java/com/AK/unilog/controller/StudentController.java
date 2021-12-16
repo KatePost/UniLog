@@ -8,12 +8,16 @@ import com.AK.unilog.repository.SectionsRepository;
 import com.AK.unilog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -190,5 +194,92 @@ public class StudentController {
         User student = userService.findByEmail(principal.getName());
         model.addAttribute("user", student);
         return "student/studentDetails";
+    }
+
+    @PostMapping(value = "studentDetails", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody() String editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
+            User user = userService.findByEmail(principal.getName());
+            switch (field) {
+                case "firstName":
+                    try {
+                        user.setFirstName(value);
+                        userService.saveUser(user);
+                    } catch (TransactionSystemException e) {
+                        return """
+                                {
+                                    "success" : false,
+                                    "message" : "First name invalid"
+                                }""";
+                    }
+                    break;
+                case "lastName":
+                    try {
+                        user.setLastName(value);
+                        userService.saveUser(user);
+                    } catch(TransactionSystemException e){
+                        return """
+                                {
+                                    "success" : false,
+                                    "message" : "Last name invalid"
+                                }""";
+                    }
+                    break;
+                case "email":
+                    if(userService.findByEmail(value) != null){
+                        return """
+                                {
+                                    "success" : false,
+                                    "message" : "Email in use"
+                                }""";
+                    }
+                    try {
+                        user.setEmail(value);
+                        userService.saveUser(user);
+                    } catch(TransactionSystemException e){
+                        return """
+                                {
+                                    "success" : false,
+                                    "message" : "Email invalid"
+                                }""";
+                    }
+                    break;
+                case "address":
+                    try {
+                        user.setAddress(value);
+                        userService.saveUser(user);
+                    } catch(TransactionSystemException e){
+                        return """
+                                {
+                                    "success" : false,
+                                    "message" : "Address invalid"
+                                }""";
+                    }
+                    break;
+            }
+
+        return """
+                                {
+                                    "success" : true,
+                                    "message" : "Field successfully changed"
+                                }""";
+    }
+
+    @PostMapping("changePassword")
+    public String changePassword(RedirectAttributes redirect, @RequestParam("newPassword")String newPassword, @RequestParam("confirmPassword")String confirmPassword, Principal principal){
+        if(!newPassword.equals(confirmPassword)){
+            redirect.addFlashAttribute("errorMsg", "Passwords do not match");
+            return "redirect:/student/studentDetails";
+        }
+        User user = userService.findByEmail(principal.getName());
+        try{
+            user.setPassword(newPassword);
+            user.setPasswordMatch(confirmPassword);
+            userService.saveUser(user, user.getRole());
+        } catch (TransactionSystemException e){
+            redirect.addFlashAttribute("errorMsg", "Password could not be validated. No change was made");
+            return "redirect:/student/studentDetails";
+        }
+        redirect.addFlashAttribute("message", "New password saved");
+        return "redirect:/student/studentDetails";
     }
 }
