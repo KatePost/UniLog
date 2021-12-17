@@ -33,7 +33,6 @@ public class AdminController {
 
     @GetMapping({"", "home"})
     public String home(){
-//        return "admin/home";
         return "redirect:/admin/courses";
     }
 
@@ -52,9 +51,6 @@ public class AdminController {
 
     @GetMapping("/updateCourse/{courseNumber}")
     public String updateCourse(Model model, @PathVariable String courseNumber){
-        if(courseService.getCourseByNumber(courseNumber) == null){
-//            return error page TODO
-        }
         model.addAttribute("singleCourse", courseService.getCourseByNumber(courseNumber));
         CourseUpdateFormModel courseUpdateFormModel = new CourseUpdateFormModel();
         courseUpdateFormModel.setCourseNumber(courseNumber);
@@ -64,9 +60,6 @@ public class AdminController {
 
     @GetMapping("/updateSection/{id}")
     public String updateSection(Model model, @PathVariable Long id){
-        if(courseService.getSectionById(id) == null){
-//            return error page TODO
-        }
         model.addAttribute("singleSection", courseService.getSectionById(id));
         SectionUpdateFormModel sectionUpdateFormModel = new SectionUpdateFormModel();
         sectionUpdateFormModel.setId(id);
@@ -137,7 +130,6 @@ public class AdminController {
 
     @GetMapping("/singleSection/{id}")
     public String singleSectionAdmin(Model model, @PathVariable Long id) {
-        System.out.println("inside singlesection controller");
         model.addAttribute("singleSection", courseService.getSectionById(id));
         model.addAttribute("sectionUpdateFormModel", new SectionUpdateFormModel());
         return "fragments/adminGeneral :: singleSection";
