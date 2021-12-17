@@ -33,17 +33,19 @@ public class StudentController {
     private final CartItemService cartItemService;
     private final PaymentItemService paymentItemService;
     private final PaymentRecordService paymentRecordService;
+    private final SendGridEmailService sendGridEmailService;
 
     @Autowired
     public StudentController(UserService userService, RegistrationService registrationService,
                              CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository, PaymentItemService paymentItemService,
-                             PaymentRecordService paymentRecordService) {
+                             PaymentRecordService paymentRecordService, SendGridEmailService sendGridEmailService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.courseService = courseService;
         this.cartItemService = cartItemService;
         this.paymentItemService = paymentItemService;
         this.paymentRecordService = paymentRecordService;
+        this.sendGridEmailService = sendGridEmailService;
     }
 
     @GetMapping({"", "home"})
@@ -295,4 +297,11 @@ public class StudentController {
         redirect.addFlashAttribute("message", "New password saved");
         return "redirect:/student/studentDetails";
     }
+
+//    @GetMapping("/emailTest")
+//    public String emailTest(){
+//        System.out.println("Email test");
+//        sendGridEmailService.sendMail();
+//        return "index";
+//    }
 }
