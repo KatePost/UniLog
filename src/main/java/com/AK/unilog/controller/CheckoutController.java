@@ -65,8 +65,6 @@ public class CheckoutController {
         try {
             Charge charge = Charge.create(params);
 
-            System.out.println("after charge");
-
             //save chargeId and create paymentRecord
             PaymentRecord paymentRecord = checkoutService.saveCharge(charge, student, total);
 
@@ -76,7 +74,7 @@ public class CheckoutController {
             //remove items from cart
             paymentItemService.clearCart(student);
 
-            redirectAttributes.addFlashAttribute("message", "token success");
+            redirectAttributes.addFlashAttribute("message", "Payment of $" + total + " successful");
             return "redirect:/student/home";
         }catch(StripeException ex){
             ex.printStackTrace();

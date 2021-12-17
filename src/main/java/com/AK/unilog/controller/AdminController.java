@@ -83,6 +83,7 @@ public class AdminController {
     @GetMapping("newSection")
     public String newSectionPage(Model model){
         model.addAttribute("sectionFormModel", new SectionFormModel());
+        model.addAttribute("courses", courseService.getAllCourses());
         return "admin/newSection";
     }
 

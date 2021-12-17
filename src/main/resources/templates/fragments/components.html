@@ -87,7 +87,7 @@
                     <p class="mb-1" th:text="${section.course.title}"></p>
                     <p class="mb-1" >Seats Available: <span th:text="${section.seatsAvailable}"></span></p>
                     <p class="mb-1">Semester: <span th:text="${section.semester}"></span> <span th:text="${section.year}"></span></p>
-                                    <small>$<span th:text="${section.course.price}"></span></small>
+                    <small>$<span th:text="${section.course.price}"></span></small>
                     <div sec:authorize="hasAuthority('ADMIN')">
                         <p>Disabled Status: <span class="mb-1" th:text="${section.disabled}"></span></p>
                     </div>
