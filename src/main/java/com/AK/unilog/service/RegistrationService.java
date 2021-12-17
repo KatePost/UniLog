@@ -1,18 +1,13 @@
 package com.AK.unilog.service;
 
-import com.AK.unilog.entity.CartItem;
-import com.AK.unilog.entity.RegisteredCourse;
-import com.AK.unilog.entity.Section;
-import com.AK.unilog.entity.User;
+import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.CartItemRepo;
 import com.AK.unilog.repository.RegistrationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RegistrationService {
@@ -84,5 +79,9 @@ public class RegistrationService {
         return messages;
     }
 
+    public List<RegisteredCourse> getRegisteredCourseByPaymentRecord(PaymentRecord paymentRecord) {
+        Optional<List<RegisteredCourse>> registeredCourseList = registrationRepo.findByPaymentRecord(paymentRecord);
+        return registeredCourseList.orElse(null);
+    }
 
 }
