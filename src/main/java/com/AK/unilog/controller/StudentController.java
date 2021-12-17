@@ -147,10 +147,31 @@ public class StudentController {
         return "redirect:/student/registeredCourses";
     }
 
-    // TODO: check to make sure paid courses show 0 dollars, and that their totals are not added if they're selected
     @GetMapping("registeredCourses")
-    public String registeredCourses(Model model, Principal principal){
-        HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
+    public String registeredCourses(Model model, Principal principal,
+                                    @RequestParam(value = "sortBy", required = false)String sortBy,
+                                    @RequestParam(value = "filter", required = false)String filter){
+
+        List<RegisteredCourse>registeredCourses = new ArrayList<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
+        if(sortBy != null) {
+            switch (sortBy) {
+                case "startDate" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getStartDate()));
+                case "dueDate" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate));
+                case "datePaid" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate)
+                        .thenComparing(RegisteredCourse::getPaymentRecord, Comparator.nullsLast(Comparator.comparing(PaymentRecord::getPaymentDate))));
+
+                case "courseCode" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getCourseNumber()));
+                case "title" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getTitle()));
+                case "owing" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getPaymentRecord,
+                        Comparator.nullsFirst(Comparator.comparing(PaymentRecord::getTotalPayment)))
+                        .thenComparing(RegisteredCourse::getFee)
+                        .thenComparing(RegisteredCourse::getDueDate));
+
+            }
+        }
+
+
+//        HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
         model.addAttribute("registeredCourses", registeredCourses);
         return "student/registeredCourses";
     }

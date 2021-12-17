@@ -10,6 +10,11 @@
                     sum += parseFloat($(this).siblings("input").val())
                 });
                 $("#total").val(sum);
+                if(sum == 0){
+                    $("#totalBtn").text("Pay");
+                } else {
+                    $("#totalBtn").text("Pay $" + sum);
+                }
             });
         });
     </script>
@@ -32,44 +37,45 @@
                     <th scope="col">Description</th>
                     <th scope="col">Semester</th>
                     <th scope="col">Due Date</th>
-                    <th scope="col">Owing</th>
-                    <th scope="col">Payment</th>
+                    <th scope="col" colspan="2">Owing</th>
                 </tr>
                 </thead>
                 <tbody>
-                <form action="#" th:action="@{/student/editRegistration}" method="post">
+                <form action="#" th:action="@{/student/editRegistration}" method="post" id="payForm">
                 <tr th:each="regCourse: ${registeredCourses}">
                     <td th:text="${regCourse.section.course.courseNumber}">label</td>
                     <td th:text="${regCourse.section.course.title}"></td>
                     <td th:text="${regCourse.section.course.description}"></td>
                     <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
                     <td th:text="${regCourse.dueDate}"></td>
-                    <td th:if="${regCourse.paymentRecord}">PAID</td>
-                    <td th:unless="${regCourse.paymentRecord}">$<span th:text="${regCourse.getFee()}"></span></td>
+                    <td th:if="${regCourse.paymentRecord}" class="text-success">PAID</td>
+                    <td th:unless="${regCourse.paymentRecord}" th:class="${regCourse.isOverDue()}? 'text-danger' : ''" th:text="|$${regCourse.getFee()}|"></td>
                     <td>
                         <input th:unless="${regCourse.paymentRecord}" type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}" th:attr="aria-label=|${regCourse.section.course.courseNumber} ${regCourse.section.semester} ${regCourse.section.year}|">
                         <input type="hidden" th:value="${regCourse.getFee()}">
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="4"></td>
-                    <th scope="row" class="text-right">Total</th>
-                    <td>$</td>
-                    <td><input class="form-control-plaintext m-0 p-0" readonly type="text" id="total" name="total"></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td colspan="2">
-                        <button type="submit" class="btn btn-secondary" name="action" value="save">Make Payment</button>
-                    </td>
-                    <td colspan="2">
-                        <button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button>
-                    </td>
-                </tr>
+<!--                <tr>-->
+<!--                    <td colspan="4"></td>-->
+<!--                    <th scope="row" class="text-right">Total</th>-->
+<!--                    <td>$</td>-->
+<!--                    <td></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td colspan="3"></td>-->
+<!--                    <td colspan="2">-->
+<!--                    </td>-->
+<!--                    <td colspan="2">-->
+<!--                    </td>-->
+<!--                </tr>-->
                 </form>
                 </tbody>
             </table>
-
+            <div class="hstack gap-2 justify-content-end">
+                <button type="submit" class="btn btn-danger" name="action" value="delete" form="payForm">Delete</button>
+                <input class="form-control-plaintext m-0 p-0" hidden id="total" name="total" form="payForm">
+                <button type="submit" class="btn btn-secondary" id="totalBtn" name="action" value="save" form="payForm">Pay</button>
+            </div>
         </div>
     </div>
 </div>
