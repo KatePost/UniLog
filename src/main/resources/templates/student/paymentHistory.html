@@ -8,17 +8,41 @@
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
         <div id="text">
-            <table>
-                <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Date of payment</th>
-
-                </tr>
-                </thead>
-            </table>
+            <div class="container">
+                <h2>Payments</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date Paid</th>
+                        <th scope="col">Sections</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item: ${paymentRecords}">
+                        <td>$<span th:text="${item.totalPayment}"></span></td>
+                        <td th:text="${item.paymentDate}"></td>
+                        <td>
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm dropdown-toggle btn-outline-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" th:attr="onclick=|loadSections('${item.id}')|">
+                                Sections Paid
+                            </button>
+                            <div  class="dropdown-menu" th:id="'dropdown' + ${item.id}" >
+                            </div>
+                        </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    function loadSections(paymentId) {
+        let url = '/api/paidSections/' + paymentId;
+        $("#dropdown"+paymentId).load(url);
+    }
+</script>
 </body>
 </html>

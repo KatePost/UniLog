@@ -60,6 +60,7 @@ public class ApiService {
         return matchingCourses;
     }
 
+    //FIXME this needs to be like in the repo
     public List<Section> getSectionByNumberRegex(String regex) {
         List<Section> sectionList = sectionsRepository.findByDisabledFalse().get();
         ArrayList<Section> matchingSections = new ArrayList<>();
@@ -127,6 +128,4 @@ public class ApiService {
         Optional<Section> section = sectionsRepository.findById(id);
         return section.orElse(null);
     }
-
-
 }

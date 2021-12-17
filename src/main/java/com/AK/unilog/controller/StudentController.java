@@ -1,24 +1,16 @@
 package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.*;
-import com.AK.unilog.repository.CartItemRepository;
-import com.AK.unilog.repository.PaymentItemRepository;
-import com.AK.unilog.repository.RegistrationRepo;
 import com.AK.unilog.repository.SectionsRepository;
 import com.AK.unilog.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
@@ -39,22 +31,20 @@ public class StudentController {
     private final RegistrationService registrationService;
     private final CourseService courseService;
     private final CartItemService cartItemService;
-    private SectionsRepository sectionsRepository;
     private final PaymentItemService paymentItemService;
-
+    private final PaymentRecordService paymentRecordService;
 
     @Autowired
     public StudentController(UserService userService, RegistrationService registrationService,
-                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository, PaymentItemService paymentItemService) {
+                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository, PaymentItemService paymentItemService,
+                             PaymentRecordService paymentRecordService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.courseService = courseService;
         this.cartItemService = cartItemService;
-        this.sectionsRepository = sectionsRepository;
         this.paymentItemService = paymentItemService;
+        this.paymentRecordService = paymentRecordService;
     }
-
-
 
     @GetMapping({"", "home"})
     public String home(Model model, Principal principal){
@@ -180,7 +170,8 @@ public class StudentController {
     @GetMapping("paymentHistory")
     public String paymentHistory(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
-        model.addAttribute("student", student);
+        List<PaymentRecord> paymentRecords = paymentRecordService.findRecordsByStudent(student);
+        model.addAttribute("paymentRecords", paymentRecords);
         return "student/paymentHistory";
     }
 

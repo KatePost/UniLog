@@ -154,3 +154,22 @@ Aly
 -sorting and filtering reg course list
 3. Where do I need assistance? What do I need to figure out?
 -?
+
+12/17/2021
+Kate
+1. What I have done / not done since last Scrum?
+-show student payments
+-bug fixes
+2. What I plan to do from this scrum to next? (next 24 hours)
+-fixes in the back end
+3. Where do I need assistance? What do I need to figure out?
+-?
+
+Aly
+1. What I have done / not done since last Scrum?
+-student edit
+-started sorting and filtering
+2. What I plan to do from this scrum to next? (next 24 hours)
+-sorting and filtering
+3. Where do I need assistance? What do I need to figure out?
+-?

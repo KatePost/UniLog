@@ -1,20 +1,16 @@
 package com.AK.unilog.controller;
 
-import com.AK.unilog.entity.Section;
-import com.AK.unilog.entity.User;
-import com.AK.unilog.model.CourseUpdateFormModel;
-import com.AK.unilog.service.ApiService;
-import com.AK.unilog.service.CartItemService;
-import com.AK.unilog.service.UserService;
+import com.AK.unilog.entity.*;
+import com.AK.unilog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/api/*")
@@ -23,12 +19,18 @@ public class ApiController {
     private final ApiService apiService;
     private final CartItemService cartItemService;
     private final UserService userService;
+    private final PaymentRecordService paymentRecordService;
+    private final RegistrationService registrationService;
+    private final CourseService courseService;
 
     @Autowired
-    public ApiController(ApiService apiService, CartItemService cartItemService, UserService userService) {
+    public ApiController(ApiService apiService, CartItemService cartItemService, UserService userService,  PaymentRecordService paymentRecordService, RegistrationService registrationService, CourseService courseService) {
         this.apiService = apiService;
         this.cartItemService = cartItemService;
         this.userService = userService;
+        this.paymentRecordService = paymentRecordService;
+        this.registrationService = registrationService;
+        this.courseService = courseService;
     }
 
     @GetMapping("/allCourses/{courseNumber}")
@@ -145,5 +147,17 @@ public class ApiController {
         model.addAttribute("singleSection", section);
 
         return "fragments/studentGeneral :: singleSection";
+    }
+
+    @GetMapping("/paidSections/{paymentId}")
+    public String paidSectionsList(@PathVariable Long paymentId, Model model) {
+        PaymentRecord paymentRecord = paymentRecordService.findById(paymentId);
+        List<RegisteredCourse> registeredCourseList = registrationService.getRegisteredCourseByPaymentRecord(paymentRecord);
+        List<Section> sectionList = new ArrayList<>();
+        for(RegisteredCourse registeredCourse : registeredCourseList){
+            sectionList.add(registeredCourse.getSection());
+        }
+        model.addAttribute("sectionList", sectionList);
+        return "fragments/studentGeneral :: sectionList";
     }
 }

@@ -119,5 +119,11 @@
     </div>
 </div>
 
+
+<div th:fragment="sectionList">
+<ul th:each="section: ${sectionList}" class="list-group">
+    <li class="list-group-item m-1"><span th:text="${section.course.courseNumber}"></span> <span th:text="${section.semester}"></span> <span th:text="${section.year}"></span> </li>
+</ul>
+</div>
 </body>
 </html>
