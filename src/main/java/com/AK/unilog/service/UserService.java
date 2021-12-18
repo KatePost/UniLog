@@ -69,4 +69,8 @@ public class UserService {
     public List<User> findAll(Sort sort){
         return userRepo.findAll(sort);
     }
+
+    public User getById(Long id) {
+        return userRepo.getById(id);
+    }
 }

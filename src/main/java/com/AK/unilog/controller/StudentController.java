@@ -15,6 +15,8 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 
+import static com.AK.unilog.utils.Users.getStringObjectMap;
+
 
 /*
 Note* Must determine a way to specify that all of these urls as /student/{url}
@@ -223,65 +225,7 @@ public class StudentController {
 
     @PostMapping("studentDetails")
     public @ResponseBody() Map<String, Object> editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
-        User user = userService.findByEmail(principal.getName());
-        Map<String, Object> data = new HashMap<>();
-        String fieldMsg = "";
-
-        switch (field) {
-            case "firstName":
-                try {
-                    user.setFirstName(value);
-                    userService.saveUser(user);
-                } catch (TransactionSystemException e) {
-                    data.put("success", false);
-                    data.put("message", "First name must be between 2 and 200 characters");
-                    return data;
-                }
-                fieldMsg = "First name";
-                break;
-            case "lastName":
-                try {
-                    user.setLastName(value);
-                    userService.saveUser(user);
-                } catch(TransactionSystemException e){
-                    data.put("success", false);
-                    data.put("message", "Last name must be between 2 and 200 characters");
-                    return data;
-                }
-                fieldMsg = "Last name";
-                break;
-//            case "email":
-//                if(userService.findByEmail(value) != null){
-//                    data.put("success", false);
-//                    data.put("message", "Email address is already in use");
-//                    return data;
-//                }
-//                try {
-//                    user.setEmail(value);
-//                    userService.saveUser(user);
-//                } catch(TransactionSystemException e){
-//                    data.put("success", false);
-//                    data.put("message", "Email must be a valid email address format of no more than 150 characters");
-//                    return data;
-//                }
-//                fieldMsg = "Email address";
-//                break;
-            case "address":
-                try {
-                    user.setAddress(value);
-                    userService.saveUser(user);
-                } catch(TransactionSystemException e){
-                    data.put("success", false);
-                    data.put("message", "Address must be a valid address format");
-                    return data;
-                }
-                fieldMsg = "Address";
-                break;
-        }
-
-        data.put("success", true);
-        data.put("message", fieldMsg + " successfully changed");
-        return data;
+        return getStringObjectMap(field, value, principal.getName(), true);
     }
 
 
@@ -311,3 +255,4 @@ public class StudentController {
 //        return "index";
 //    }
 }
+
