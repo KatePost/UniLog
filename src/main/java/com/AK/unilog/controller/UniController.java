@@ -120,7 +120,7 @@ public class UniController {
             model.addAttribute("form", recoverPasswordForm );
             return "recoverPasswordForm";
         }
-        redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect." + resetToken + "  "  + user.getEmail());
+        redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect." + resetToken);
         return "redirect:/login";
     }
 
