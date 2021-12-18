@@ -1,36 +1,41 @@
 package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.User;
+import com.AK.unilog.model.RecoverPasswordForm;
 import com.AK.unilog.service.LoginService;
+import com.AK.unilog.service.PasswordRecoveryService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 public class UniController {
 
-    private UserService userService;
-    private LoginService loginService;
+    private final UserService userService;
+    private final LoginService loginService;
+    private final PasswordRecoveryService passwordRecoveryService;
 
     @Autowired
-    public UniController(UserService userService, LoginService loginService){
+    public UniController(UserService userService, LoginService loginService, PasswordRecoveryService passwordRecoveryService){
         this.userService = userService;
         this.loginService = loginService;
+        this.passwordRecoveryService = passwordRecoveryService;
     }
 
     @GetMapping({"/", "home"})
@@ -90,8 +95,49 @@ public class UniController {
         return "recoverPassword";
     }
 
-//    @GetMapping("/home")
-//    public String getHome(){
-//        return "redirect:/";
-//    }
+    @PostMapping("/recoverPassword")
+    public String recoverPassword(@RequestParam("email") String email, Model model){
+       User user = userService.findByEmail(email);
+       if(user != null){
+           System.out.println("calling recoverPassword");
+           passwordRecoveryService.recoverPassword(user);
+       }
+       model.addAttribute("message", "If an account matching that email is found, it will be emailed the next steps for password recovery");
+        return "recoverPassword";
+    }
+
+    @GetMapping("/passwordReset/{resetToken}")
+    public String passwordReset(@PathVariable("resetToken") String resetToken, Model model, RedirectAttributes redirectAttributes){
+        User user = userService.findByUuid(resetToken);
+        if(user != null){
+            if(user.getRecoveryExpiration().isBefore(LocalDateTime.now())){
+                redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect.");
+                return "redirect:/login";
+            }
+            RecoverPasswordForm recoverPasswordForm = new RecoverPasswordForm();
+            recoverPasswordForm.setUuid(resetToken);
+            recoverPasswordForm.setEmail(user.getEmail());
+            model.addAttribute("form", recoverPasswordForm );
+            return "recoverPasswordForm";
+        }
+        redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect." + resetToken);
+        return "redirect:/login";
+    }
+
+    @PostMapping("/passwordReset")
+    public String passwordReset(RecoverPasswordForm recoverPasswordForm, RedirectAttributes redirectAttributes){
+        User user = userService.findByUuid(recoverPasswordForm.getUuid());
+
+        //check that the user hasn't messed with the form inputs
+        if(user.getEmail().equals(recoverPasswordForm.getEmail())){
+            System.out.println("user email matches token");
+            if (passwordRecoveryService.validateNewPassword(user, recoverPasswordForm)){
+                userService.saveUser(user);
+                redirectAttributes.addFlashAttribute("messageSuccess", "Password updated successfully");
+                return "redirect:/login";
+            }
+        }
+        redirectAttributes.addFlashAttribute("messageDanger", "Could not authenticate credentials.");
+        return "redirect:/login";
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,4 +55,8 @@ public class UserService {
         }
     }
 
+    public User findByUuid(String resetToken) {
+        Optional<User> userOptional = userRepo.findByRecoveryUuid(resetToken);
+        return userOptional.orElse(null);
+    }
 }

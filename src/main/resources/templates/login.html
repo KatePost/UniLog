@@ -7,6 +7,14 @@
 <div class="container">
 <header th:insert="fragments/components.html :: header"></header>
 <div class="container p-4">
+    <div th:if="${messageSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${messageSuccess}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div th:if="${param.error}">Invalid username and password</div>
     <form method="post" action="#" th:action="@{/login}" class="form">
 
