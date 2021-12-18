@@ -11,6 +11,7 @@ import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
@@ -106,8 +107,9 @@ public class AdminController {
             switch (sortBy) {
                 case "startDate" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getStartDate()));
                 case "dueDate" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate));
-                case "datePaid" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate)
-                        .thenComparing(RegisteredCourse::getPaymentRecord, Comparator.nullsLast(Comparator.comparing(PaymentRecord::getPaymentDate))));
+                case "datePaid" -> registeredCourses.sort(
+                        Comparator.comparing(RegisteredCourse::getPaymentRecord, Comparator.nullsLast(Comparator.comparing(PaymentRecord::getPaymentDate)))
+                                .thenComparing(RegisteredCourse::getDueDate));
                 case "courseCode" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getCourseNumber()));
                 case "title" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getTitle()));
                 case "owing" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getPaymentRecord,
@@ -298,4 +300,9 @@ public class AdminController {
         return "redirect:/admin/adminDetails";
     }
 
+    @GetMapping("userList")
+    public String viewUsers(Model model){
+        model.addAttribute("userList", userService.findAll(Sort.by("id")));
+        return "admin/userList";
+    }
 }
