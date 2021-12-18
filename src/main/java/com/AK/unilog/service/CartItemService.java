@@ -9,6 +9,8 @@ import com.AK.unilog.repository.RegistrationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,5 +44,9 @@ public class CartItemService {
         cartItem.setSection(section);
         cartItem.setStudent(student);
         return cartItemRepository.save(cartItem);
+    }
+
+    public List<CartItem> findAllByStudent(User student) {
+        return cartItemRepository.findAllByStudent(student).orElse(new ArrayList<>());
     }
 }

@@ -3,8 +3,8 @@ package com.AK.unilog.controller;
 import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.SectionsRepository;
 import com.AK.unilog.service.*;
+import com.AK.unilog.utils.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
@@ -14,8 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
-
-import java.util.Optional;
 
 
 /*
@@ -50,7 +48,8 @@ public class StudentController {
     public String home(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
         model.addAttribute("user", student);
-        model.addAttribute("unpaidSum", student.getUnpaidSum());
+        model.addAttribute("unpaidSum", Users.getUnpaidSum(student));
+//        model.addAttribute("unpaidSum", student.getUnpaidSum());
         return "student/home";
     }
 
@@ -66,9 +65,11 @@ public class StudentController {
 
     @GetMapping("cart")
     public String showCart(Model model, Principal principal){
+
         User student = userService.findByEmail(principal.getName());
-        Set<CartItem>cart = new HashSet<>(student.getCart());
+        Set<CartItem>cart = new HashSet<>(cartItemService.findAllByStudent(student));//student.getCart()
         model.addAttribute("cart", cart);
+
         //get the subtotal of all the cart items
         double total = 0;
         for(CartItem item : cart){
@@ -85,7 +86,7 @@ public class StudentController {
     public String checkout(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
 
-        HashMap<String, ArrayList<String>> messages = registrationService.registerCart(student.getCart());
+        HashMap<String, ArrayList<String>> messages = registrationService.registerCart(cartItemService.findAllByStudent(student));//student.getCart()
         model.addAttribute("errorMsgs", messages.get("errors"));
         model.addAttribute("confMsgs", messages.get("confirmations"));
         return "student/checkout";
@@ -119,14 +120,14 @@ public class StudentController {
         StringBuilder message = new StringBuilder("Course registrations deleted: ");
         StringBuilder error = new StringBuilder();
         for(Long id: registeredIdList){
-            RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
+            RegisteredCourse deleted = registrationService.getById(id);
             if(deleted.getSection().getStartDate().isBefore(LocalDate.now().minusWeeks(2))){
                 error.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
                         deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
             } else {
                 message.append(String.format("%s %s %s; ", deleted.getSection().getCourse().getCourseNumber(),
                         deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
-                registrationService.getRegistrationRepo().deleteById(id);
+                registrationService.deleteById(id);
             }
         }
         redirect.addFlashAttribute("deleteMsg", message.toString());
@@ -137,28 +138,37 @@ public class StudentController {
         return "redirect:/student/registeredCourses";
     }
 
-    @GetMapping("registeredCourses")
+    @GetMapping({"registeredCourses", "registeredCourses/{filter}"})
     public String registeredCourses(Model model, Principal principal,
                                     @RequestParam(value = "sortBy", required = false)String sortBy,
-                                    @RequestParam(value = "filter", required = false)String filter){
+                                    @PathVariable(value = "filter", required = false)String filter){
+        if(filter == null){
+            filter = "all";
+        }
+        List<RegisteredCourse>registeredCourses = switch (filter){
+            case "unpaid" -> new ArrayList<>(registrationService.findUnpaidByUser(userService.findByEmail(principal.getName())));
+            case "paid" -> new ArrayList<>(registrationService.findPaidByUser(userService.findByEmail(principal.getName())));
+            case "past" -> new ArrayList<>(registrationService.findPastByUser(userService.findByEmail(principal.getName())));
+            case "upcoming" -> new ArrayList<>(registrationService.findUpcomingByUser(userService.findByEmail(principal.getName())));
+            default -> new ArrayList<>(registrationService.findByUser(userService.findByEmail(principal.getName())));
+        };
 
-        List<RegisteredCourse>registeredCourses = new ArrayList<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
         if(sortBy != null) {
             switch (sortBy) {
                 case "startDate" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getStartDate()));
                 case "dueDate" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate));
                 case "datePaid" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate)
                         .thenComparing(RegisteredCourse::getPaymentRecord, Comparator.nullsLast(Comparator.comparing(PaymentRecord::getPaymentDate))));
-
                 case "courseCode" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getCourseNumber()));
                 case "title" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getTitle()));
                 case "owing" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getPaymentRecord,
                         Comparator.nullsFirst(Comparator.comparing(PaymentRecord::getTotalPayment)))
-                        .thenComparing(RegisteredCourse::getFee)
+                        .thenComparing(RegisteredCourse::getFee, Comparator.reverseOrder())
                         .thenComparing(RegisteredCourse::getDueDate));
-
+                default -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getId));
             }
         }
+
 
 
 //        HashSet<RegisteredCourse> registeredCourses = new HashSet<>(userService.findByEmail(principal.getName()).getRegisteredCourses());
@@ -209,73 +219,69 @@ public class StudentController {
         return "student/studentDetails";
     }
 
-    @PostMapping(value = "studentDetails", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody() String editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
-            User user = userService.findByEmail(principal.getName());
-            switch (field) {
-                case "firstName":
-                    try {
-                        user.setFirstName(value);
-                        userService.saveUser(user);
-                    } catch (TransactionSystemException e) {
-                        return """
-                                {
-                                    "success" : false,
-                                    "message" : "First name invalid"
-                                }""";
-                    }
-                    break;
-                case "lastName":
-                    try {
-                        user.setLastName(value);
-                        userService.saveUser(user);
-                    } catch(TransactionSystemException e){
-                        return """
-                                {
-                                    "success" : false,
-                                    "message" : "Last name invalid"
-                                }""";
-                    }
-                    break;
-                case "email":
-                    if(userService.findByEmail(value) != null){
-                        return """
-                                {
-                                    "success" : false,
-                                    "message" : "Email in use"
-                                }""";
-                    }
-                    try {
-                        user.setEmail(value);
-                        userService.saveUser(user);
-                    } catch(TransactionSystemException e){
-                        return """
-                                {
-                                    "success" : false,
-                                    "message" : "Email invalid"
-                                }""";
-                    }
-                    break;
-                case "address":
-                    try {
-                        user.setAddress(value);
-                        userService.saveUser(user);
-                    } catch(TransactionSystemException e){
-                        return """
-                                {
-                                    "success" : false,
-                                    "message" : "Address invalid"
-                                }""";
-                    }
-                    break;
-            }
+    @PostMapping("studentDetails")
+    public @ResponseBody() Map<String, Object> editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
+        User user = userService.findByEmail(principal.getName());
+        Map<String, Object> data = new HashMap<>();
+        String fieldMsg = "";
 
-        return """
-                                {
-                                    "success" : true,
-                                    "message" : "Field successfully changed"
-                                }""";
+        switch (field) {
+            case "firstName":
+                try {
+                    user.setFirstName(value);
+                    userService.saveUser(user);
+                } catch (TransactionSystemException e) {
+                    data.put("success", false);
+                    data.put("message", "First name must be between 2 and 200 characters");
+                    return data;
+                }
+                fieldMsg = "First name";
+                break;
+            case "lastName":
+                try {
+                    user.setLastName(value);
+                    userService.saveUser(user);
+                } catch(TransactionSystemException e){
+                    data.put("success", false);
+                    data.put("message", "Last name must be between 2 and 200 characters");
+                    return data;
+                }
+                fieldMsg = "Last name";
+                break;
+//            case "email":
+//                if(userService.findByEmail(value) != null){
+//                    data.put("success", false);
+//                    data.put("message", "Email address is already in use");
+//                    return data;
+//                }
+//                try {
+//                    user.setEmail(value);
+//                    userService.saveUser(user);
+//                } catch(TransactionSystemException e){
+//                    data.put("success", false);
+//                    data.put("message", "Email must be a valid email address format of no more than 150 characters");
+//                    return data;
+//                }
+//                fieldMsg = "Email address";
+//                break;
+            case "address":
+                try {
+                    user.setAddress(value);
+                    userService.saveUser(user);
+                } catch(TransactionSystemException e){
+                    data.put("success", false);
+                    data.put("message", "Address must be a valid address format");
+                    return data;
+                }
+                fieldMsg = "Address";
+                break;
+        }
+
+        data.put("success", true);
+        data.put("message", fieldMsg + " successfully changed");
+        return data;
     }
+
 
     @PostMapping("changePassword")
     public String changePassword(RedirectAttributes redirect, @RequestParam("newPassword")String newPassword, @RequestParam("confirmPassword")String confirmPassword, Principal principal){

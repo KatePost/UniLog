@@ -1,6 +1,8 @@
 package com.AK.unilog.entity;
 
 
+import com.AK.unilog.service.RegistrationService;
+import com.AK.unilog.utils.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -56,13 +59,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private Set<CartItem> cart;
+//    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+//    private Set<CartItem> cart;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<RegisteredCourse> registeredCourses;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private Set<RegisteredCourse> registeredCourses;
 
-    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses) {
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role) {//, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,8 +76,8 @@ public class User implements UserDetails {
         this.email = email;
         this.stripeId = stripeId;
         this.role = role;
-        this.cart = cart;
-        this.registeredCourses = registeredCourses;
+//        this.cart = cart;
+//        this.registeredCourses = registeredCourses;
     }
 
     public User() {
@@ -162,6 +165,7 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+/*
     public Set<CartItem> getCart() {
         return cart;
     }
@@ -169,7 +173,9 @@ public class User implements UserDetails {
     public void setCart(Set<CartItem> cart) {
         this.cart = cart;
     }
+*/
 
+/*
     public Set<RegisteredCourse> getRegisteredCourses() {
         return registeredCourses;
     }
@@ -177,6 +183,7 @@ public class User implements UserDetails {
     public void setRegisteredCourses(Set<RegisteredCourse> registeredCourses) {
         this.registeredCourses = registeredCourses;
     }
+*/
 
     @Override
     public String toString() {
@@ -220,36 +227,43 @@ public class User implements UserDetails {
         return true;
     }
 
+    /**
+     *
+     * check the student's registered courses against the section they're trying to get into
+     * loop through the student's registered courses. for each registered course, check if it matches the prerequisite.
+     * if it does, check that this prerequisite is scheduled on the same date or before the section being passed.
+     * since a student may take a course more than once, we must continue checking entries if the prerequisite is found
+     * but starts after the passed section
+     *
+     * @param section
+     * @return
+     */
     public boolean hasPrerequisite(Section section){
-        /*
-        check the student's registered courses against the section they're trying to get into
-        loop through the student's registered courses. for each registered course, check if it matches the prerequisite.
-        if it does, check that this prerequisite is scheduled on the same date or before the section being passed.
-        since a student may take a course more than once, we must continue checking entries if the prerequisite is found
-        but starts after the passed section
-         */
-        Course prerequisite = section.getCourse().getPrereq();
-        if(prerequisite == null){
-            return true;
-        }
-        for(RegisteredCourse registeredCourse : registeredCourses){
-            if(registeredCourse.getSection().getCourse().getId() == prerequisite.getId()){
-                if(!registeredCourse.getSection().getStartDate().isAfter(section.getStartDate())){
-                    return true;
-                }
-            }
-        }
-        //check if section start date is at least after registered course start date
-        return false;
-    }
 
-    public double getUnpaidSum(){
-        double price = 0.00;
-        for(RegisteredCourse course : registeredCourses){
-                price += course.getFee();
-        }
-        return price;
+//        Course prerequisite = section.getCourse().getPrereq();
+//        if(prerequisite == null){
+//            return true;
+//        }
+//        for(RegisteredCourse registeredCourse : registeredCourses){
+//            if(registeredCourse.getSection().getCourse().getId() == prerequisite.getId()){
+//                if(!registeredCourse.getSection().getStartDate().isAfter(section.getStartDate())){
+//                    return true;
+//                }
+//            }
+//        }
+//        //check if section start date is at least after registered course start date
+//        return false;
+        return Users.hasPrerequisite(this, section);
+
     }
+//
+//    public double getUnpaidSum(){
+//        double price = 0.00;
+//        for(RegisteredCourse course : registeredCourses){
+//                price += course.getFee();
+//        }
+//        return price;
+//    }
 
     public enum Role {
         STUDENT, ADMIN
