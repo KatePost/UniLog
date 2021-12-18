@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,6 +54,10 @@ public class User implements UserDetails {
     @Column(length = 150, unique = true)
     private String stripeId;
 
+    private LocalDateTime recoveryExpiration = null;
+
+    private String recoveryUuid = null;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -62,7 +67,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<RegisteredCourse> registeredCourses;
 
-    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses) {
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses, LocalDateTime recoveryExpiration, String recoveryUuid) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,6 +80,8 @@ public class User implements UserDetails {
         this.role = role;
         this.cart = cart;
         this.registeredCourses = registeredCourses;
+        this.recoveryExpiration = recoveryExpiration;
+        this.recoveryUuid = recoveryUuid;
     }
 
     public User() {
@@ -127,6 +134,22 @@ public class User implements UserDetails {
 
     public void setStripeId(String stripeId) {
         this.stripeId = stripeId;
+    }
+
+    public LocalDateTime getRecoveryExpiration() {
+        return recoveryExpiration;
+    }
+
+    public void setRecoveryExpiration(LocalDateTime recoveryExpiration) {
+        this.recoveryExpiration = recoveryExpiration;
+    }
+
+    public String getRecoveryUuid() {
+        return recoveryUuid;
+    }
+
+    public void setRecoveryUuid(String recoveryUuid) {
+        this.recoveryUuid = recoveryUuid;
     }
 
     @Override
