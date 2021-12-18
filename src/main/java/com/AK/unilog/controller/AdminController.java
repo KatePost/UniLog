@@ -301,8 +301,11 @@ public class AdminController {
     }
 
     @GetMapping("userList")
-    public String viewUsers(Model model){
-        model.addAttribute("userList", userService.findAll(Sort.by("id")));
+    public String viewUsers(Model model, @RequestParam(value = "sortBy", required = false)String sortBy){
+        if(sortBy == null){
+            sortBy = "id";
+        }
+        model.addAttribute("userList", userService.findAll(Sort.by(sortBy)));
         return "admin/userList";
     }
 }

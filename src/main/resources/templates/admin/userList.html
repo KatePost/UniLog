@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{})">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{::script})">
   <title>Admin Home</title>
+  <script>
+    $(document).ready(function (){
+      let params = new URLSearchParams(location.search);
+      $("#" + params.get("sortBy")).parent().addClass("table-active");
+    });
+  </script>
 </head>
 <body>
 <div class="container">
@@ -10,15 +16,15 @@
     <div id="text">
       <h1>All Users</h1>
       <table class="table">
-        <thead>
+        <thead class="table-light">
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Address</th>
-          <th scope="col">Date of Birth</th>
-          <th scope="col">Role</th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=id" id="id" class="nav-link">ID</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=firstName" id="firstName" class="nav-link text-nowrap">First Name</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=lastName" id="lastName" class="nav-link text-nowrap">Last Name</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=email" id="email" class="nav-link">Email</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=address" id="address" class="nav-link">Address</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=birthdate" id="birthdate" class="nav-link text-nowrap">Date of Birth</a></th>
+          <th scope="col" class="nav-item p-0"><a href="?sortBy=role" id="role" class="nav-link">Role</a></th>
         </tr>
         </thead>
         <tbody>
