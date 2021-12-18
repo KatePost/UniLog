@@ -17,6 +17,7 @@ public interface RegistrationRepo extends JpaRepository<RegisteredCourse, Long> 
     Optional<RegisteredCourse> findBySectionAndUser(Section section, User user);
     Optional<List<RegisteredCourse>> findByPaymentRecord(PaymentRecord paymentRecord);
     Optional<List<RegisteredCourse>> findByUser(User user);
+    Optional<List<RegisteredCourse>> findBySection(Section section);
 
     @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.paymentRecord IS NULL and r.user = ?1")
     Optional<List<RegisteredCourse>> findUnpaidByUser(User user);

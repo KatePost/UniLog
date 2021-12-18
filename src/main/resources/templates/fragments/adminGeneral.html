@@ -112,8 +112,26 @@
       <h4 class="text-center text-primary" th:text="${singleSection.course.courseNumber}"></h4>
       <p class="fw-bold text-center text-primary" th:text="${singleSection.course.title}"></p>
       <p>Semester: <span th:text="${singleSection.semester}"></span> <span th:text="${singleSection.year}"></span></p>
+      <p>Students Registered: <span th:text="${seatsTaken}"></span>/<span th:text="${singleSection.seatsAvailable}"></span></p>
 <!--      <p>Price: $<span th:text="${singleCourse.price}"></span> </p>-->
 <!--      <p th:if="${singleCourse.prereq}">Prerequisite Course: <span  th:text="${singleCourse.prereq.courseNumber}"></span> </p>-->
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Students registered for this section
+            </button>
+          </h2>
+          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <ul class="list-group list-group-flush">
+<!--                <tr th:each="item: ${paymentItemList}">-->
+                <li class="list-group-item" th:each="item: ${studentsRegistered}" ><span th:text="${item.user.firstName} + ' ' + ${item.user.lastName}"></span> <span class="float-end text-success" th:if="${item.paymentRecord}" th:text="Paid"></span> <span class="float-end text-danger" th:unless="${item.paymentRecord}" th:text="Unpaid"> </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <a class="btn-secondary btn text-light fw-bold float-end m-3" id="edit" th:href="@{/admin/updateSection/{id}(id=${singleSection.id})}">Edit Section</a>
     </div>

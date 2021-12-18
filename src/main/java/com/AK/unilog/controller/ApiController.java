@@ -84,9 +84,7 @@ public class ApiController {
     //show admin all sections
     @GetMapping("allSections/")
     public String getAllSections(Model model) {
-        System.out.println("in all sections");
         model.addAttribute("listSections", apiService.getSections());
-        System.out.println(apiService.getSections());
         return "fragments/components :: sectionsList";
     }
 

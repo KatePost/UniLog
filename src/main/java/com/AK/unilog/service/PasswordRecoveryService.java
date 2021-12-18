@@ -31,7 +31,6 @@ public class PasswordRecoveryService {
         userRepo.save(user);
 
         String link = "https://uni-log.herokuapp.com/passwordReset/" + user.getRecoveryUuid();
-        System.out.println("sending email");
         sendGridEmailService.sendRecoveryMail(user, link);
     }
 
