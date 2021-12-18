@@ -1,5 +1,6 @@
 package com.AK.unilog.controller;
 
+import com.AK.unilog.entity.PaymentRecord;
 import com.AK.unilog.entity.RegisteredCourse;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -80,16 +82,43 @@ public class AdminController {
         return "admin/newSection";
     }
 
-    @GetMapping("courseRegistrations")
-    public String showRegistrations(Model model, @RequestParam(value = "reg", required = false)Long id){
-        List<RegisteredCourse>registeredCourseList = new ArrayList<>(registrationService.findAll());
-        model.addAttribute("registeredCourses", registeredCourseList);
+    @GetMapping({"courseRegistrations/{filter}","courseRegistrations"})
+    public String showRegistrations(Model model,
+                                    @RequestParam(value = "reg", required = false)Long id,
+                                    @PathVariable(value = "filter", required = false)String filter,
+                                    @RequestParam(value = "sortBy", required = false)String sortBy){
+        if(filter == null){
+            filter = "all";
+        }
+        List<RegisteredCourse>registeredCourses = switch(filter){
+            case "unpaid" -> new ArrayList<>(registrationService.findUnpaid());
+            case "paid" -> new ArrayList<>(registrationService.findPaid());
+            case "past" -> new ArrayList<>(registrationService.findPast());
+            case "upcoming" -> new ArrayList<>(registrationService.findUpcoming());
+            default -> new ArrayList<>(registrationService.findAll());
+        };
+
+        if(sortBy!=null) {
+            switch (sortBy) {
+                case "startDate" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getStartDate()));
+                case "dueDate" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate));
+                case "datePaid" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getDueDate)
+                        .thenComparing(RegisteredCourse::getPaymentRecord, Comparator.nullsLast(Comparator.comparing(PaymentRecord::getPaymentDate))));
+                case "courseCode" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getCourseNumber()));
+                case "title" -> registeredCourses.sort(Comparator.comparing(r -> r.getSection().getCourse().getTitle()));
+                case "owing" -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getPaymentRecord,
+                                Comparator.nullsFirst(Comparator.comparing(PaymentRecord::getTotalPayment)))
+                        .thenComparing(RegisteredCourse::getFee, Comparator.reverseOrder())
+                        .thenComparing(RegisteredCourse::getDueDate));
+                case "student" -> registeredCourses.sort(Comparator.comparing(r -> r.getUser().getLastName()));
+                default -> registeredCourses.sort(Comparator.comparing(RegisteredCourse::getId));
+
+            }
+        }
+        model.addAttribute("registeredCourses", registeredCourses);
         if(id != null) {
             RegisteredCourse registeredCourse = registrationService.getById(id);
             model.addAttribute("singleCourse", registeredCourse);
-        }
-        for(RegisteredCourse course : registeredCourseList){
-            System.err.println(course.isOverDue());
         }
         return "admin/courseRegistrations";
     }

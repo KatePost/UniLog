@@ -96,6 +96,24 @@ public class RegistrationService {
         return registrationRepo.findUpcomingByUser(user).orElse(new ArrayList<>());
     }
 
+    public List<RegisteredCourse> findUnpaid() {
+        return registrationRepo.findUnpaid().orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> findPaid() {
+        return registrationRepo.findPaid().orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> findPast() {
+        return registrationRepo.findPast().orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> findUpcoming() {
+        return registrationRepo.findUpcoming().orElse(new ArrayList<>());
+    }
+
+
+
     /**
      * This method registers all courses in the cart (set of cartItems)
      * @param cart The user's cart - a list of courses the student wishes to register for

@@ -29,4 +29,18 @@ public interface RegistrationRepo extends JpaRepository<RegisteredCourse, Long> 
 
     @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.dueDate > CURRENT_DATE and r.user = ?1")
     Optional<List<RegisteredCourse>> findUpcomingByUser(User user);
+
+    @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.paymentRecord IS NULL")
+    Optional<List<RegisteredCourse>> findUnpaid();
+
+    @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.paymentRecord IS NOT NULL")
+    Optional<List<RegisteredCourse>> findPaid();
+
+    @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.dueDate < CURRENT_DATE")
+    Optional<List<RegisteredCourse>> findPast();
+
+    @Query(value = "SELECT r FROM RegisteredCourse r WHERE r.dueDate > CURRENT_DATE")
+    Optional<List<RegisteredCourse>> findUpcoming();
+
+
 }

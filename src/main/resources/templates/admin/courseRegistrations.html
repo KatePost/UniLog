@@ -4,13 +4,18 @@
     <title>Admin Home</title>
     <script>
         function goToReg(id){
-            window.location = '/admin/courseRegistrations?reg=' + id;
+            window.location = location.pathname + '?reg=' + id;
         }
         $(document).ready(function(){
             $(".checkbox").click(function(event){
                 event.stopPropagation();
-            })
-        })
+            });
+
+            $("#filter").change(function(){
+                window.location = "/admin/courseRegistrations/" + $(this).val();
+            });
+
+        });
     </script>
 </head>
 <body>
@@ -20,14 +25,25 @@
         <div id="text">
             <h1>Registrations</h1>
 
+            <div class="dropdown hstack justify-content-end">
+                <select name="filter" id="filter" class="btn btn-primary dropdown-toggle mb-3">
+                    <option disabled selected>Filter by</option>
+                    <option value="all">All</option>
+                    <option value="unpaid">Unpaid</option>
+                    <option value="paid">Paid</option>
+                    <option value="upcoming">Upcoming / In progress</option>
+                    <option value="past">Past</option>
+                </select>
+            </div>
+
             <table class="table table-hover">
-                <thead>
+                <thead class="table-light">
                 <tr>
-                    <th colspan="2" scope="col">Student</th>
-                    <th scope="col">Course Code</th>
-                    <th scope="col">Semester</th>
-                    <th scope="col">Due Date</th>
-                    <th colspan="2" scope="col">Payment</th>
+                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=student">Student</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=courseCode">Course Code</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=startDate">Semester</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=dueDate">Due Date</a></th>
+                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=datePaid">Payment</a></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -90,7 +106,8 @@
                     </li>
                     <!-- Going to want to add course title, description, prerequisites-->
                 </ul>
-                <a th:href="@{courseRegistrations}" class="btn btn-secondary">Close</a>
+<!--                <a th:href="@{courseRegistrations}" class="btn btn-secondary">Close</a>-->
+                <a href="javascript:window.location=location.pathname" class="btn btn-secondary">Close</a>
             </div>
     </div>
 </div>
