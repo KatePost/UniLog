@@ -2,23 +2,25 @@ package com.AK.unilog.controller;
 
 import com.AK.unilog.entity.PaymentRecord;
 import com.AK.unilog.entity.RegisteredCourse;
+import com.AK.unilog.entity.User;
 import com.AK.unilog.model.CourseFormModel;
 import com.AK.unilog.model.CourseUpdateFormModel;
 import com.AK.unilog.model.SectionFormModel;
 import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
+import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.security.Principal;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin/*")
@@ -26,11 +28,13 @@ public class AdminController {
 
     private final CourseService courseService;
     private final RegistrationService registrationService;
+    private final UserService userService;
 
     @Autowired
-    public AdminController(CourseService courseService, RegistrationService registrationService){
+    public AdminController(CourseService courseService, RegistrationService registrationService, UserService userService){
         this.courseService = courseService;
         this.registrationService = registrationService;
+        this.userService = userService;
     }
 
     @GetMapping({"", "home"})
@@ -216,6 +220,82 @@ public class AdminController {
         model.addAttribute(courseService.saveSection(sectionUpdateFormModel));
         redirectAttributes.addFlashAttribute("message", "Section information has been updated");
         return "redirect:/admin/updateSection/" + sectionUpdateFormModel.getId();
+    }
+
+
+    @GetMapping("adminDetails")
+    public String viewDetails(Model model, Principal principal){
+        User student = userService.findByEmail(principal.getName());
+        model.addAttribute("user", student);
+        return "admin/adminDetails";
+    }
+
+    @PostMapping("adminDetails")
+    public @ResponseBody()
+    Map<String, Object> editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
+        User user = userService.findByEmail(principal.getName());
+        Map<String, Object> data = new HashMap<>();
+        String fieldMsg = "";
+
+        switch (field) {
+            case "firstName":
+                try {
+                    user.setFirstName(value);
+                    userService.saveUser(user);
+                } catch (TransactionSystemException e) {
+                    data.put("success", false);
+                    data.put("message", "First name must be between 2 and 200 characters");
+                    return data;
+                }
+                fieldMsg = "First name";
+                break;
+            case "lastName":
+                try {
+                    user.setLastName(value);
+                    userService.saveUser(user);
+                } catch(TransactionSystemException e){
+                    data.put("success", false);
+                    data.put("message", "Last name must be between 2 and 200 characters");
+                    return data;
+                }
+                fieldMsg = "Last name";
+                break;
+            case "address":
+                try {
+                    user.setAddress(value);
+                    userService.saveUser(user);
+                } catch(TransactionSystemException e){
+                    data.put("success", false);
+                    data.put("message", "Address must be a valid address format");
+                    return data;
+                }
+                fieldMsg = "Address";
+                break;
+        }
+
+        data.put("success", true);
+        data.put("message", fieldMsg + " successfully changed");
+        return data;
+    }
+
+
+    @PostMapping("changePassword")
+    public String changePassword(RedirectAttributes redirect, @RequestParam("newPassword")String newPassword, @RequestParam("confirmPassword")String confirmPassword, Principal principal){
+        if(!newPassword.equals(confirmPassword)){
+            redirect.addFlashAttribute("errorMsg", "Passwords do not match");
+            return "redirect:/admin/adminDetails";
+        }
+        User user = userService.findByEmail(principal.getName());
+        try{
+            user.setPassword(newPassword);
+            user.setPasswordMatch(confirmPassword);
+            userService.saveUser(user, user.getRole());
+        } catch (TransactionSystemException e){
+            redirect.addFlashAttribute("errorMsg", "Password could not be validated. No change was made");
+            return "redirect:/admin/adminDetails";
+        }
+        redirect.addFlashAttribute("message", "New password saved");
+        return "redirect:/admin/adminDetails";
     }
 
 }

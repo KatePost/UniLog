@@ -14,6 +14,8 @@
             $("#filter").change(function(){
                 window.location = "/admin/courseRegistrations/" + $(this).val();
             });
+            let params = new URLSearchParams(location.search);
+            $("#" + params.get("sortBy")).parent().addClass("table-active");
 
         });
     </script>
@@ -39,16 +41,16 @@
             <table class="table table-hover">
                 <thead class="table-light">
                 <tr>
-                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=student">Student</a></th>
-                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=courseCode">Course Code</a></th>
-                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=startDate">Semester</a></th>
-                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=dueDate">Due Date</a></th>
-                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=datePaid">Payment</a></th>
+                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=student" id="student">Student</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=courseCode" id="courseCode">Course Code</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=startDate" id="startDate">Semester</a></th>
+                    <th class="nav-item p-0" scope="col"><a class="nav-link" href="?sortBy=dueDate" id="dueDate">Due Date</a></th>
+                    <th class="nav-item p-0" colspan="2" scope="col"><a class="nav-link" href="?sortBy=datePaid" id="datePaid">Payment</a></th>
                 </tr>
                 </thead>
                 <tbody>
                 <!---->
-                <form action="#" th:action="@{/admin/deleteRegistration}" method="post">
+                <form action="#" th:action="@{/admin/deleteRegistration}" method="post" id="deleteForm">
                     <tr th:each="regCourse: ${registeredCourses}" th:id="|reg${regCourse.id}|" th:onclick="|goToReg(${regCourse.id})|">
                         <td><span th:text="${regCourse.user.lastName}"></span>, <span th:text="${regCourse.user.firstName}"></span></td>
                         <td th:text="${regCourse.user.email}"></td>
@@ -64,16 +66,12 @@
                             <input type="checkbox" class="courseId" name="sectionId" th:value="${regCourse.id}">
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="6"></td>
-                        <td>
-                            <button type="submit" class="btn btn-danger">Delete</button>
-<!--                            <button type="submit" class="btn btn-secondary" name="action" value="save">Proceed to Payment</button>-->
-                        </td>
-                    </tr>
                 </form>
                 </tbody>
             </table>
+            <div class="hstack justify-content-end mb-5">
+                <button type="submit" form="deleteForm" class="btn btn-danger">Delete</button>
+            </div>
         </div>
     </div>
     <div th:if="${singleCourse}" class="card w-auto position-absolute top-50 start-50 translate-middle">

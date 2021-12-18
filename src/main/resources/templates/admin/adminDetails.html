@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/components :: head(~{::title}, ~{}, ~{::script})">
+    <title>Admin Home</title>
+    <script th:src="@{/scripts/editProfile.js}"></script>
+</head>
+<body>
+<div class="container">
+    <header th:insert="fragments/components :: header"></header>
+    <div th:replace="fragments/adminGeneral :: frame(~{:: #text})">
+        <h1>Your Information</h1>
+        <div id="text">
+            <th:block th:replace="fragments/editUser :: editProfile(@{/admin/changePassword})"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

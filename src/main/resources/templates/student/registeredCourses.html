@@ -4,7 +4,7 @@
     <title>Registered Courses</title>
     <script>
         $(document).ready(function(){
-            var params = new URLSearchParams(location.search);
+            let params = new URLSearchParams(location.search);
             $("#" + params.get("sortBy")).parent().addClass("table-active");
 
             $(":checkbox").change(function(){

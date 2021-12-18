@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Your Information</h1>
+<table class="table" th:fragment="editProfile(url)">
+    <tbody>
+    <tr id="emailRow">
+        <th scope="row"><label for="email">Email</label></th>
+        <td colspan="3"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
+    </tr>
+    <tr id="firstNameRow">
+        <th scope="row"><label for="firstName">First Name</label></th>
+        <td colspan="2"><input id="firstName" name="firstName" type="text" class="form-control-plaintext" readonly th:field="${user.firstName}"></td>
+        <td>
+            <button class="btn btn-secondary editBtn" value="firstName">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="firstName">Save</button>
+        </td>
+    </tr>
+    <tr id="lastNameRow">
+        <th scope="row"><label for="lastName">Last Name</label></th>
+        <td colspan="2"><input id="lastName" name="lastName" type="text" class="form-control-plaintext" readonly th:field="${user.lastName}"></td>
+        <td>
+            <button class="btn btn-secondary editBtn" value="lastName">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="lastName">Save</button>
+        </td>
+    </tr>
+    <tr id="addressRow">
+        <th scope="row"><label for="address">Address </label></th>
+        <td colspan="2"><input id="address" name="address" type="text" class="form-control-plaintext" readonly th:field="${user.address}"></td>
+        <td>
+            <button class="btn btn-secondary editBtn" value="address">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="address">Save</button>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><label for="birthdate">Date of Birth </label></th>
+        <td colspan="3"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
+    </tr>
+    <tr>
+        <th scope="row">Reset Password</th>
+        <td><input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New password" form="passwordForm" aria-label="new password"></td>
+        <td><input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm new password" form="passwordForm" aria-label="confirm password"></td>
+        <td>
+            <button class="btn btn-secondary" value="password" form="passwordForm">Save</button>
+            <form id="passwordForm" action="#" method="post" th:action="${url}"></form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

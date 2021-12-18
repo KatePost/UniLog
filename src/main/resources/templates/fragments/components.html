@@ -39,6 +39,7 @@
 
             <!-- Other Nav Items -->
             <li sec:authorize="hasAuthority('STUDENT')" class="nav-item"><a th:href="@{/student/studentDetails}" class="nav-link">Student Details</a></li>
+            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item"><a th:href="@{/admin/adminDetails}" class="nav-link">View Profile</a></li>
             <li sec:authorize="isAnonymous()" class="nav-item"><a th:href="@{/register}" class="nav-link">Register</a></li>
 
             <!-- Sign In/Out button -->
