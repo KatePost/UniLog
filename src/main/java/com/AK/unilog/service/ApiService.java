@@ -35,41 +35,25 @@ public class ApiService {
         return courseRepository.findByCourseNumber(courseNumber).get();
     }
 
-    public List<Course> getCourseByNumberRegex(String regex) {
-        List<Course> courseList = courseRepository.findAll();
-        ArrayList<Course> matchingCourses = new ArrayList<>();
-        for (Course course : courseList) {
-            if (course.getCourseNumber().matches(regex)) {
-                matchingCourses.add(course);
-            }
-        }
-        return matchingCourses;
+    public List<Section> getSectionByCourseNumberSearch(String courseNumber){
+        Optional<List<Section>> sectionList = sectionsRepository.findByCourseCourseNumberContainingIgnoreCase(courseNumber);
+        return sectionList.orElse(null);
     }
 
-    public List<Course> getAvailableCourseByNumberRegex(String regex) {
-        Optional<List<Course>> courseListOptional = courseRepository.findByDisabledFalse();
-        ArrayList<Course> matchingCourses = new ArrayList<>();
-        if (courseListOptional.isPresent()) {
-            List<Course> courseList = courseListOptional.get();
-            for (Course course : courseList) {
-                if (course.getCourseNumber().matches(regex)) {
-                    matchingCourses.add(course);
-                }
-            }
-        }
-        return matchingCourses;
+    public List<Course> getCourseByCourseNumberSearch(String courseNumber) {
+        Optional<List<Course>> courseList = courseRepository.findByCourseNumberContainingIgnoreCase(courseNumber);
+        return courseList.orElse(null);
     }
 
-    //FIXME this needs to be like in the repo
-    public List<Section> getSectionByNumberRegex(String regex) {
-        List<Section> sectionList = sectionsRepository.findByDisabledFalse().get();
-        ArrayList<Section> matchingSections = new ArrayList<>();
-        for (Section section : sectionList) {
-            if (section.getCourse().getCourseNumber().matches(regex)) {
-                matchingSections.add(section);
-            }
-        }
-        return matchingSections;
+    public List<Course> getAvailableCourseByNumberSearch(String courseNumber) {
+        Optional<List<Course>> courseListOptional = courseRepository.findByDisabledFalseAndCourseNumberContainingIgnoreCase(courseNumber);
+        return courseListOptional.orElse(null);
+    }
+
+    //student section search
+    public List<Section> getAvailableSectionByNumberSearch(String courseNumber) {
+        Optional<List<Section>> sectionList = sectionsRepository.findByDisabledFalseAndCourseCourseNumberContainingIgnoreCase(courseNumber);
+        return sectionList.orElse(null);
     }
 
     public void toggleDisableCourse(String courseNumber) {
@@ -99,19 +83,6 @@ public class ApiService {
             sectionObj.setDisabled(!sectionObj.isDisabled());
             sectionsRepository.save(sectionObj);
         }
-    }
-
-    public List<Section> getAvailableSectionsByCourse(String courseNumber) {
-        Optional<Course> course = courseRepository.findByCourseNumber(courseNumber);
-        if (course.isPresent()) {
-            Optional<List<Section>> listOfSections = sectionsRepository.findByCourseAndDisabledIsFalse(course.get());
-            if (listOfSections.isPresent()) {
-                System.out.println("list of sections by course number" + listOfSections.get());
-                return listOfSections.get();
-            }
-        }
-        System.out.println("no available section with " + courseNumber);
-        return null;
     }
 
     public List<Section> getAvailableSections() {

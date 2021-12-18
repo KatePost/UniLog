@@ -22,7 +22,16 @@
     <form method="post" th:action="@{/admin/newSection}" class="form" th:object="${sectionFormModel}">
       <div class="row justify-content-around">
         <div class="col-3 p-3 text-end">Course Number (7 characters):</div>
-        <div class="col-5 p-3"><input type="text" th:field="*{courseNumber}" class="form-control"></div>
+        <div class="col-5 p-3">
+          <select th:field="*{courseNumber}" class="form-control">
+            <optgroup label="Course Number">
+              <option th:each="item: ${courses}" th:value="${item.courseNumber}" th:text="${item.courseNumber}"></option>
+            </optgroup>
+          </select>
+        </div>
+<!--        <input type="text" th:field="*{courseNumber}" class="form-control">-->
+
+
         <p class="text-danger text-center" th:if="${#fields.hasErrors('courseNumber')}"  th:errors="*{courseNumber}"></p>
       </div>
 

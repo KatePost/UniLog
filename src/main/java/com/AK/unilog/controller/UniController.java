@@ -85,6 +85,11 @@ public class UniController {
         return "redirect:/admin/home";
     }
 
+    @GetMapping("/recoverPassword")
+    public String showRecoverPassword(){
+        return "recoverPassword";
+    }
+
 //    @GetMapping("/home")
 //    public String getHome(){
 //        return "redirect:/";

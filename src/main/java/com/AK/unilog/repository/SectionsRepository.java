@@ -18,5 +18,13 @@ public interface SectionsRepository extends JpaRepository<Section, Long> {
     Optional<List<Section>> findByCourseAndDisabledIsFalse(Course course);
 
     Optional<List<Section>> findByDisabledFalse();
+
+    //student section search
+    //disabled is false and ignore case courseNumber seach
+    Optional<List<Section>> findByDisabledFalseAndCourseCourseNumberContainingIgnoreCase(String courseNumber);
+
+    Optional<List<Section>> findByCourseCourseNumberContainingIgnoreCase(String courseNumber);
+
+
 }
 
