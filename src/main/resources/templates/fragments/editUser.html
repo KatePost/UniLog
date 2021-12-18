@@ -6,11 +6,15 @@
 </head>
 <body>
 <h1>Your Information</h1>
-<table class="table" th:fragment="editProfile(url)">
+<table class="table" th:fragment="editProfile(pwUrl, otherUser)">
     <tbody>
     <tr id="emailRow">
         <th scope="row"><label for="email">Email</label></th>
-        <td colspan="3"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
+        <td th:colspan="${otherUser}? 2 : 3"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
+        <td th:if="${otherUser}">
+            <button class="btn btn-secondary editBtn" value="email">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="email">Save</button>
+        </td>
     </tr>
     <tr id="firstNameRow">
         <th scope="row"><label for="firstName">First Name</label></th>
@@ -38,7 +42,11 @@
     </tr>
     <tr>
         <th scope="row"><label for="birthdate">Date of Birth </label></th>
-        <td colspan="3"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
+        <td th:colspan="${otherUser}? 2 : 3"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
+        <td th:if="${otherUser}">
+            <button class="btn btn-secondary editBtn" value="birthdate">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="birthdate">Save</button>
+        </td>
     </tr>
     <tr>
         <th scope="row">Reset Password</th>
@@ -46,7 +54,7 @@
         <td><input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm new password" form="passwordForm" aria-label="confirm password"></td>
         <td>
             <button class="btn btn-secondary" value="password" form="passwordForm">Save</button>
-            <form id="passwordForm" action="#" method="post" th:action="${url}"></form>
+            <form id="passwordForm" action="#" method="post" th:action="${pwUrl}"></form>
         </td>
     </tr>
     </tbody>

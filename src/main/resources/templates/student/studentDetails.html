@@ -11,7 +11,7 @@
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
         <div id="text">
             <h1>Your Information</h1>
-            <th:block th:replace="fragments/editUser :: editProfile(@{/student/changePassword})" />
+            <th:block th:replace="fragments/editUser :: editProfile(@{/student/changePassword}, false)" />
         </div>
     </div>
 </div>

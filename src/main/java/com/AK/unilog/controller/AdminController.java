@@ -23,6 +23,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
+import static com.AK.unilog.utils.Users.getStringObjectMap;
+
 @Controller
 @RequestMapping("/admin/*")
 public class AdminController {
@@ -236,50 +238,54 @@ public class AdminController {
     @PostMapping("adminDetails")
     public @ResponseBody()
     Map<String, Object> editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
-        User user = userService.findByEmail(principal.getName());
-        Map<String, Object> data = new HashMap<>();
-        String fieldMsg = "";
-
-        switch (field) {
-            case "firstName":
-                try {
-                    user.setFirstName(value);
-                    userService.saveUser(user);
-                } catch (TransactionSystemException e) {
-                    data.put("success", false);
-                    data.put("message", "First name must be between 2 and 200 characters");
-                    return data;
-                }
-                fieldMsg = "First name";
-                break;
-            case "lastName":
-                try {
-                    user.setLastName(value);
-                    userService.saveUser(user);
-                } catch(TransactionSystemException e){
-                    data.put("success", false);
-                    data.put("message", "Last name must be between 2 and 200 characters");
-                    return data;
-                }
-                fieldMsg = "Last name";
-                break;
-            case "address":
-                try {
-                    user.setAddress(value);
-                    userService.saveUser(user);
-                } catch(TransactionSystemException e){
-                    data.put("success", false);
-                    data.put("message", "Address must be a valid address format");
-                    return data;
-                }
-                fieldMsg = "Address";
-                break;
-        }
-
-        data.put("success", true);
-        data.put("message", fieldMsg + " successfully changed");
-        return data;
+        return getStringObjectMap(field, value, principal.getName(), true);
     }
+
+//    static Map<String, Object> getStringObjectMap(@RequestParam("field") String field, @RequestParam("value") String value, String userEmail, UserService userService) {
+//        User user = userService.findByEmail(userEmail);
+//        Map<String, Object> data = new HashMap<>();
+//        String fieldMsg = "";
+//
+//        switch (field) {
+//            case "firstName":
+//                try {
+//                    user.setFirstName(value);
+//                    userService.saveUser(user);
+//                } catch (TransactionSystemException e) {
+//                    data.put("success", false);
+//                    data.put("message", "First name must be between 2 and 200 characters");
+//                    return data;
+//                }
+//                fieldMsg = "First name";
+//                break;
+//            case "lastName":
+//                try {
+//                    user.setLastName(value);
+//                    userService.saveUser(user);
+//                } catch(TransactionSystemException e){
+//                    data.put("success", false);
+//                    data.put("message", "Last name must be between 2 and 200 characters");
+//                    return data;
+//                }
+//                fieldMsg = "Last name";
+//                break;
+//            case "address":
+//                try {
+//                    user.setAddress(value);
+//                    userService.saveUser(user);
+//                } catch(TransactionSystemException e){
+//                    data.put("success", false);
+//                    data.put("message", "Address must be a valid address format");
+//                    return data;
+//                }
+//                fieldMsg = "Address";
+//                break;
+//        }
+//
+//        data.put("success", true);
+//        data.put("message", fieldMsg + " successfully changed");
+//        return data;
+//    }
 
 
     @PostMapping("changePassword")
@@ -301,6 +307,25 @@ public class AdminController {
         return "redirect:/admin/adminDetails";
     }
 
+    @PostMapping("changeUserPassword/{id}")
+    public String changePassword(RedirectAttributes redirect, @RequestParam("newPassword")String newPassword, @RequestParam("confirmPassword")String confirmPassword, @PathVariable("id")long id){
+        if(!newPassword.equals(confirmPassword)){
+            redirect.addFlashAttribute("errorMsg", "Passwords do not match");
+            return "redirect:/admin/editUser/" + id;
+        }
+        User user = userService.getById(id);
+        try{
+            user.setPassword(newPassword);
+            user.setPasswordMatch(confirmPassword);
+            userService.saveUser(user, user.getRole());
+        } catch (TransactionSystemException e){
+            redirect.addFlashAttribute("errorMsg", "Password could not be validated. No change was made");
+            return "redirect:/admin/editUser/" + id;
+        }
+        redirect.addFlashAttribute("message", "New password saved");
+        return "redirect:/admin/editUser/" + id;
+    }
+
     @GetMapping("userList")
     public String viewUsers(Model model, @RequestParam(value = "sortBy", required = false)String sortBy){
         if(sortBy == null){
@@ -308,5 +333,17 @@ public class AdminController {
         }
         model.addAttribute("userList", userService.findAll(Sort.by(sortBy)));
         return "admin/userList";
+    }
+
+    @GetMapping("editUser/{id}")
+    public String editUser(Model model, @PathVariable("id")long id){
+        model.addAttribute("user", userService.getById(id));
+        return "admin/editUser";
+    }
+
+    @PostMapping("editUser/{id}")
+    public @ResponseBody Map<String, Object> editUser(@PathVariable("id")long id, @RequestParam("field")String field, @RequestParam("value")String value){
+        User user = userService.getById(id);
+        return getStringObjectMap(field, value, user.getEmail(), false);
     }
 }
