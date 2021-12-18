@@ -4,6 +4,9 @@
     <title>Registered Courses</title>
     <script>
         $(document).ready(function(){
+            var params = new URLSearchParams(location.search);
+            $("#" + params.get("sortBy")).parent().addClass("table-active");
+
             $(":checkbox").change(function(){
                 var sum = 0;
                 $(":checkbox:checked").each(function(){
@@ -16,6 +19,10 @@
                     $("#totalBtn").text("Pay $" + sum);
                 }
             });
+
+            $("#filter").change(function(){
+                window.location = "/student/registeredCourses/" + $(this).val();
+            });
         });
     </script>
 </head>
@@ -24,20 +31,34 @@
     <header th:replace="fragments/components :: header"></header>
     <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
         <div id="text">
-            <!-- This will be almost a copy of cart with a few exceptions:
-                - due date is shown
-                - whether or not it's been paid for is shown
-                - functionality to pay for it
-                - think about adding functionality to do payments in bulk -->
+            <div class="dropdown hstack justify-content-end">
+            <select name="filter" id="filter" class="btn btn-primary dropdown-toggle mb-3">
+                <option disabled selected>Filter by</option>
+                <option value="all">All</option>
+                <option value="unpaid">Unpaid</option>
+                <option value="paid">Paid</option>
+                <option value="upcoming">Upcoming / In progress</option>
+                <option value="past">Past</option>
+            </select>
+            </div>
+<!--            <ul class="nav nav-tabs nav-fill">-->
+<!--                <li class="nav-item"><a class="nav-link text-nowrap" href="?sortBy=courseCode" id="courseCode">Course Code</a> </li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="?sortBy=title" id="title">Title</a></li>-->
+<!--                <li class="nav-item"><span class="nav-link">Description</span></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="?sortBy=startDate" id="startDate">Semester</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link text-nowrap" href="?sortBy=dueDate" id="dueDate">Due Date</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="?sortBy=owing" id="owing">Owing</a></li>-->
+<!--            </ul>-->
             <table class="table">
-                <thead>
+                <thead class="table-light">
                 <tr>
-                    <th scope="col">Course Code</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Semester</th>
-                    <th scope="col">Due Date</th>
-                    <th scope="col" colspan="2">Owing</th>
+                    <th scope="col" class="nav-item p-0"><a class="nav-link text-nowrap" href="?sortBy=courseCode" id="courseCode">Course Code</a> </th>
+                    <th scope="col" class="nav-item p-0"><a class="nav-link" href="?sortBy=title" id="title">Title</a></th>
+                    <th scope="col" class="nav-item p-0"><span class="nav-link">Description</span></th>
+                    <th scope="col" class="nav-item p-0"><a class="nav-link" href="?sortBy=startDate" id="startDate">Semester</a></th>
+                    <th scope="col" class="nav-item p-0"><a class="nav-link text-nowrap" href="?sortBy=dueDate" id="dueDate">Due Date</a></th>
+                    <th scope="col" class="nav-item p-0"><a class="nav-link" href="?sortBy=owing" id="owing">Owing</a></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>

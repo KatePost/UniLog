@@ -4,6 +4,9 @@ import com.AK.unilog.entity.*;
 import com.AK.unilog.repository.CartItemRepo;
 import com.AK.unilog.repository.RegistrationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,8 +15,8 @@ import java.util.*;
 @Service
 public class RegistrationService {
 
-    private RegistrationRepo registrationRepo;
-    private CartItemRepo cartItemRepo;
+    private final RegistrationRepo registrationRepo;
+    private final CartItemRepo cartItemRepo;
 
     @Autowired
     public RegistrationService(RegistrationRepo registrationRepo, CartItemRepo cartItemRepo) {
@@ -21,12 +24,76 @@ public class RegistrationService {
         this.cartItemRepo = cartItemRepo;
     }
 
-    public RegistrationRepo getRegistrationRepo() {
+    public RegistrationRepo repo() {
         return registrationRepo;
+    }
+
+    public List<RegisteredCourse> findAll() {
+        return registrationRepo.findAll();
+    }
+
+    public List<RegisteredCourse> findAll(Sort sort) {
+        return registrationRepo.findAll(sort);
+    }
+
+    public List<RegisteredCourse> findAllById(Iterable<Long> longs) {
+        return registrationRepo.findAllById(longs);
+    }
+
+    public List<RegisteredCourse> saveAll(Iterable<RegisteredCourse> entities) {
+        return registrationRepo.saveAll(entities);
+    }
+
+    public void deleteAllInBatch(Iterable<RegisteredCourse> entities) {
+        registrationRepo.deleteAllInBatch(entities);
+    }
+
+    public void deleteAllByIdInBatch(Iterable<Long> longs) {
+        registrationRepo.deleteAllByIdInBatch(longs);
+    }
+
+    public void deleteAllInBatch() {
+        registrationRepo.deleteAllInBatch();
     }
 
     public RegisteredCourse getById(Long id){
         return registrationRepo.getById(id);
+    }
+
+    public List<RegisteredCourse> findAll(Example<RegisteredCourse> example) {
+        return registrationRepo.findAll(example);
+    }
+
+    public List<RegisteredCourse> findAll(Example<RegisteredCourse> example, Sort sort) {
+        return registrationRepo.findAll(example, sort);
+    }
+
+    public void deleteById(Long id){
+        registrationRepo.deleteById(id);
+    }
+
+    public List<RegisteredCourse>findByUser(User user){
+        return registrationRepo.findByUser(user).orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> getRegisteredCourseByPaymentRecord(PaymentRecord paymentRecord) {
+        Optional<List<RegisteredCourse>> registeredCourseList = registrationRepo.findByPaymentRecord(paymentRecord);
+        return registeredCourseList.orElse(null);
+    }
+
+    public List<RegisteredCourse> findUnpaidByUser(User user) {
+        return registrationRepo.findUnpaidByUser(user).orElse(new ArrayList<>());
+    }
+    public List<RegisteredCourse> findPaidByUser(User user) {
+        return registrationRepo.findPaidByUser(user).orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> findPastByUser(User user) {
+        return registrationRepo.findPastByUser(user).orElse(new ArrayList<>());
+    }
+
+    public List<RegisteredCourse> findUpcomingByUser(User user) {
+        return registrationRepo.findUpcomingByUser(user).orElse(new ArrayList<>());
     }
 
     /**
@@ -34,14 +101,14 @@ public class RegistrationService {
      * @param cart The user's cart - a list of courses the student wishes to register for
      * @return Messages - a list of success or failure messages with a detailed list of errors encountered during registration.
      */
-    public HashMap<String, ArrayList<String>> registerCart(Set<CartItem> cart){
+    public HashMap<String, ArrayList<String>> registerCart(Iterable<CartItem> cart){
         HashMap<String, ArrayList<String>> messages = new HashMap<>();
         messages.put("confirmations", new ArrayList<>());
         messages.put("errors", new ArrayList<>());
         for(CartItem item : cart){
             //TODO: think about moving this stuff to its own method
             Section section = item.getSection();
-            Boolean errors = false;
+            boolean errors = false;
             /* validation */
             if(section.isDisabled()){
                 messages.get("errors").add(section.getCourse().getTitle() + " is not currently available");
@@ -77,11 +144,6 @@ public class RegistrationService {
         }
         cartItemRepo.deleteAllInBatch(cart);
         return messages;
-    }
-
-    public List<RegisteredCourse> getRegisteredCourseByPaymentRecord(PaymentRecord paymentRecord) {
-        Optional<List<RegisteredCourse>> registeredCourseList = registrationRepo.findByPaymentRecord(paymentRecord);
-        return registeredCourseList.orElse(null);
     }
 
 }

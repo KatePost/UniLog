@@ -82,10 +82,10 @@ public class AdminController {
 
     @GetMapping("courseRegistrations")
     public String showRegistrations(Model model, @RequestParam(value = "reg", required = false)Long id){
-        List<RegisteredCourse>registeredCourseList = new ArrayList<>(registrationService.getRegistrationRepo().findAll());
+        List<RegisteredCourse>registeredCourseList = new ArrayList<>(registrationService.findAll());
         model.addAttribute("registeredCourses", registeredCourseList);
         if(id != null) {
-            RegisteredCourse registeredCourse = registrationService.getRegistrationRepo().getById(id);
+            RegisteredCourse registeredCourse = registrationService.getById(id);
             model.addAttribute("singleCourse", registeredCourse);
         }
         for(RegisteredCourse course : registeredCourseList){
@@ -101,10 +101,10 @@ public class AdminController {
         }
         StringBuilder message = new StringBuilder("Course registrations deleted: ");
         for (Long id : sectionIdList) {
-            RegisteredCourse deleted = registrationService.getRegistrationRepo().getById(id);
+            RegisteredCourse deleted = registrationService.getById(id);
             message.append(String.format("%s - %s %s %s; ", deleted.getUser().getLastName(), deleted.getSection().getCourse().getCourseNumber(),
                     deleted.getSection().getSemester().name(), deleted.getSection().getYear()));
-            registrationService.getRegistrationRepo().deleteById(id);
+            registrationService.deleteById(id);
         }
         redirect.addFlashAttribute("deleteMsg", message.toString());
         return "redirect:/admin/courseRegistrations";

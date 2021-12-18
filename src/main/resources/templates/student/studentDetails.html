@@ -58,6 +58,10 @@
             <h1>Your Information</h1>
             <table class="table">
                 <tbody>
+                <tr id="emailRow">
+                    <th scope="row"><label for="email">Email</label></th>
+                    <td colspan="3"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
+                </tr>
                 <tr id="firstNameRow">
                     <th scope="row"><label for="firstName">First Name</label></th>
                     <td colspan="2"><input id="firstName" name="firstName" type="text" class="form-control-plaintext" readonly th:field="${user.firstName}"></td>
@@ -74,14 +78,6 @@
                         <button class="btn btn-secondary saveBtn" value="lastName">Save</button>
                     </td>
                 </tr>
-                <tr id="emailRow">
-                    <th scope="row"><label for="email">Email</label></th>
-                    <td colspan="2"><input id="email" name="email" type="text" class="form-control-plaintext" readonly th:field="${user.email}"></td>
-                    <td>
-                        <button class="btn btn-secondary editBtn" value="email">Edit</button>
-                        <button class="btn btn-secondary saveBtn" value="email">Save</button>
-                    </td>
-                </tr>
                 <tr id="addressRow">
                     <th scope="row"><label for="address">Address </label></th>
                     <td colspan="2"><input id="address" name="address" type="text" class="form-control-plaintext" readonly th:field="${user.address}"></td>
@@ -92,11 +88,7 @@
                 </tr>
                 <tr>
                     <th scope="row"><label for="birthdate">Date of Birth </label></th>
-                    <td colspan="2"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
-                    <td>
-<!--                        <button class="btn btn-secondary editBtn" value="birthdate">Edit</button>-->
-<!--                        <button class="btn btn-secondary saveBtn" value="birthdate">Save</button>-->
-                    </td>
+                    <td colspan="3"><input id="birthdate" name="birthdate" type="date" class="form-control-plaintext" readonly th:field="${user.birthdate}"></td>
                 </tr>
                 <tr>
                     <th scope="row">Reset Password</th>
