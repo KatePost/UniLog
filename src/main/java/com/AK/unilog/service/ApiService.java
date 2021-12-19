@@ -2,9 +2,11 @@ package com.AK.unilog.service;
 
 import com.AK.unilog.entity.Course;
 import com.AK.unilog.entity.Section;
+import com.AK.unilog.entity.User;
 import com.AK.unilog.repository.CourseRepository;
 import com.AK.unilog.repository.SectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,24 +37,24 @@ public class ApiService {
         return courseRepository.findByCourseNumber(courseNumber).get();
     }
 
-    public List<Section> getSectionByCourseNumberSearch(String courseNumber){
-        Optional<List<Section>> sectionList = sectionsRepository.findByCourseCourseNumberContainingIgnoreCase(courseNumber);
+    public List<Section> getSectionByCourseNumberSearch(String courseNumber, Sort sort){
+        Optional<List<Section>> sectionList = sectionsRepository.findByCourseCourseNumberContainingIgnoreCase(courseNumber, sort);
         return sectionList.orElse(null);
     }
 
-    public List<Course> getCourseByCourseNumberSearch(String courseNumber) {
-        Optional<List<Course>> courseList = courseRepository.findByCourseNumberContainingIgnoreCase(courseNumber);
+    public List<Course> getCourseByCourseNumberSearch(String courseNumber, Sort sort) {
+        Optional<List<Course>> courseList = courseRepository.findByCourseNumberContainingIgnoreCase(courseNumber, sort);
         return courseList.orElse(null);
     }
 
-    public List<Course> getAvailableCourseByNumberSearch(String courseNumber) {
-        Optional<List<Course>> courseListOptional = courseRepository.findByDisabledFalseAndCourseNumberContainingIgnoreCase(courseNumber);
+    public List<Course> getAvailableCourseByNumberSearch(String courseNumber, Sort sort) {
+        Optional<List<Course>> courseListOptional = courseRepository.findByDisabledFalseAndCourseNumberContainingIgnoreCase(courseNumber, sort);
         return courseListOptional.orElse(null);
     }
 
     //student section search
-    public List<Section> getAvailableSectionByNumberSearch(String courseNumber) {
-        Optional<List<Section>> sectionList = sectionsRepository.findByDisabledFalseAndCourseCourseNumberContainingIgnoreCase(courseNumber);
+    public List<Section> getAvailableSectionByNumberSearch(String courseNumber, Sort sort) {
+        Optional<List<Section>> sectionList = sectionsRepository.findByDisabledFalseAndCourseCourseNumberContainingIgnoreCase(courseNumber, sort);
         return sectionList.orElse(null);
     }
 
@@ -98,5 +100,13 @@ public class ApiService {
     public Section getSectionById(Long id) {
         Optional<Section> section = sectionsRepository.findById(id);
         return section.orElse(null);
+    }
+
+    public List<Section> findAllSectionsSort(Sort sort){
+        return sectionsRepository.findAll(sort);
+    }
+
+    public List<Course> findAllCoursesSort(Sort sort){
+        return courseRepository.findAll(sort);
     }
 }

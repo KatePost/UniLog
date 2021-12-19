@@ -9,10 +9,21 @@
     <div th:replace="fragments/adminGeneral :: frame(~{::#text})">
         <div id="text" class=" p-3">
             <h2>Courses</h2>
+            <div class="row">
             <form class="d-flex pb-2">
-                <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" onclick="searchCourses()" type="button">Search</button>
+                <div class="dropdown col-4 align-content-end">
+                    <select name="sort" id="sort" class="btn btn-outline-primary dropdown-toggle">
+                        <option disabled selected>Filter by</option>
+                        <option value="courseNumber">Course Number</option>
+                        <option value="title">Course Title</option>
+                        <option value="price">Course Price</option>
+                        <option value="prereq">Course Prereq</option>
+                    </select>
+                </div>
+                <input class="form-control me-2" type="search" id="searchVal" placeholder="Search">
+                <button class="btn btn-outline-success col-auto" onclick="searchCourses()" type="button">Fetch Results</button>
             </form>
+            </div>
             <div id="searchResults">
             </div>
         </div>
@@ -23,15 +34,18 @@
         searchCourses();
     })
     function searchCourses() {
-        let url = '/api/allCourses/';
+        let sortBy = $("#sort").val();
+        if(sortBy == null) {
+            sortBy = "courseNumber";
+        }
+        let url = '/api/allCourses?sortBy=' + sortBy;
         if ($('#searchVal').val() != '') {
-            url = url + $('#searchVal').val();
+            url = url + "&searchVal=" + $('#searchVal').val();
         }
         $("#searchResults").load(url);
     }
 
     function displayCourse(courseNumber) {
-        console.log("display course")
         let url = '/admin/singleCourse/' + courseNumber;
         $("#singleCourse").load(url);
     }
