@@ -3,6 +3,7 @@ package com.AK.unilog.controller;
 import com.AK.unilog.entity.*;
 import com.AK.unilog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,70 +23,71 @@ public class ApiController {
     private final UserService userService;
     private final PaymentRecordService paymentRecordService;
     private final RegistrationService registrationService;
-    private final CourseService courseService;
 
     @Autowired
-    public ApiController(ApiService apiService, CartItemService cartItemService, UserService userService,  PaymentRecordService paymentRecordService, RegistrationService registrationService, CourseService courseService) {
+    public ApiController(ApiService apiService, CartItemService cartItemService, UserService userService,  PaymentRecordService paymentRecordService, RegistrationService registrationService) {
         this.apiService = apiService;
         this.cartItemService = cartItemService;
         this.userService = userService;
         this.paymentRecordService = paymentRecordService;
         this.registrationService = registrationService;
-        this.courseService = courseService;
     }
 
     //searches
 
     //admin searching for course
-    @GetMapping("/allCourses/{courseNumber}")
-    public String findCourses(Model model, @PathVariable String courseNumber) {
-        model.addAttribute("listCourses", apiService.getCourseByCourseNumberSearch(courseNumber));
+    @GetMapping("/allCourses")
+    public String findCourses(Model model, @RequestParam(value = "searchVal", required = false)String courseNumber, @RequestParam(value = "sortBy", required = false)String sortBy) {
+        System.out.println(sortBy);
+        System.out.println(courseNumber);
+        if(sortBy == null){
+            sortBy = "courseNumber";
+        }
+        if(courseNumber == null){
+            courseNumber = "";
+        }
+        model.addAttribute("listCourses", apiService.getCourseByCourseNumberSearch(courseNumber, Sort.by(sortBy)));
         return "fragments/components :: resultsList";
     }
 
     //admin searching for section
-    @GetMapping("/allSections/{courseNumber}")
-    public String findSections(Model model, @PathVariable String courseNumber) {
-        model.addAttribute("listSections", apiService.getSectionByCourseNumberSearch(courseNumber));
+    @GetMapping("/allSections")
+    public String findSections(Model model, @RequestParam(value = "searchVal", required = false)String courseNumber, @RequestParam(value = "sortBy", required = false)String sortBy) {
+        System.out.println(sortBy);
+        if(sortBy == null){
+            sortBy = "courseNumber";
+        }
+        if(courseNumber == null){
+            courseNumber = "";
+        }
+        model.addAttribute("listSections", apiService.getSectionByCourseNumberSearch(courseNumber, Sort.by(sortBy)));
         return "fragments/components :: sectionsList";
     }
 
     //student searching for available section
     @GetMapping("/availableSection/{courseNumber}")
-    public String availableSectionsSearch(Model model, @PathVariable String courseNumber) {
+    public String availableSectionsSearch(Model model, @PathVariable String courseNumber, @RequestParam(name = "sortBy", required = false)String sortBy) {
         if (courseNumber.equals("")) {
             model.addAttribute("listSections", apiService.getAvailableSections());
         } else {
-            model.addAttribute("listSections", apiService.getAvailableSectionByNumberSearch(courseNumber));
+            model.addAttribute("listSections", apiService.getAvailableSectionByNumberSearch(courseNumber, Sort.by(sortBy)));
         }
         return "fragments/components :: sectionsList";
     }
 
     //student searching for available courses
     @GetMapping("/availableCourses/{courseNumber}")
-    public String findAvailableCourses(Model model, @PathVariable String courseNumber) {
+    public String findAvailableCourses(Model model, @PathVariable String courseNumber, @RequestParam(name = "sortBy", required = false)String sortBy) {
+        System.out.println(sortBy);
+        if(sortBy == null){
+            sortBy = "courseNumber";
+        }
         if (courseNumber.equals("")) {
             model.addAttribute("listCourses", apiService.getAvailableCourses());
         } else {
-            model.addAttribute("listCourses", apiService.getAvailableCourseByNumberSearch(courseNumber));
+            model.addAttribute("listCourses", apiService.getAvailableCourseByNumberSearch(courseNumber, Sort.by(sortBy)));
         }
         return "fragments/components :: resultsList";
-    }
-
-    //show all
-
-    //show admin all courses
-    @GetMapping("/allCourses/")
-    public String getAllCourses(Model model) {
-        model.addAttribute("listCourses", apiService.getCourses());
-        return "fragments/components :: resultsList";
-    }
-
-    //show admin all sections
-    @GetMapping("allSections/")
-    public String getAllSections(Model model) {
-        model.addAttribute("listSections", apiService.getSections());
-        return "fragments/components :: sectionsList";
     }
 
     //show student all courses

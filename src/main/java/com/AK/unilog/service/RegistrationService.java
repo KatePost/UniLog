@@ -137,7 +137,8 @@ public class RegistrationService {
                 messages.get("errors").add(section.getCourse().getTitle() + " cannot be registered in the past");
                 errors = true;
             }
-            if(section.getSeatsAvailable() < 1){
+            //fixing seats available
+            if(section.getSeatsAvailable() < registrationRepo.findBySection(section).get().size()){
                 messages.get("errors").add(section.getCourse().getTitle() + " is full.");
                 errors = true;
             }

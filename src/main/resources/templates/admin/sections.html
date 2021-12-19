@@ -9,10 +9,25 @@
   <div th:replace="fragments/adminGeneral :: frame(~{::#text})">
     <div id="text" class=" p-3">
       <h2>Sections</h2>
-      <form class="d-flex pb-2">
-        <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" onclick="searchSections()" type="button">Search</button>
-      </form>
+      <div class="row">
+        <form class="d-flex pb-2">
+          <div class="dropdown col-4 align-content-end">
+            <select name="sort" id="sort" class="btn btn-outline-primary dropdown-toggle">
+              <option disabled selected>Filter by</option>
+              <option value="semester">Semester</option>
+              <option value="year">Year</option>
+              <option value="disabled">Disabled</option>
+              <option value="course">Course</option>
+            </select>
+          </div>
+          <input class="form-control me-2" type="search" id="searchVal" placeholder="Search">
+          <button class="btn btn-outline-success col-auto" onclick="searchSections()" type="button">Fetch Results</button>
+        </form>
+      </div>
+<!--      <form class="d-flex pb-2">-->
+<!--        <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">-->
+<!--        <button class="btn btn-outline-success" onclick="searchSections()" type="button">Search</button>-->
+<!--      </form>-->
       <div id="searchResults">
       </div>
     </div>
@@ -23,16 +38,20 @@
     searchSections();
   })
   function searchSections() {
-    let url = '/api/allSections/';
-    if ($('#searchVal').val() != '') {
-      url = url + $('#searchVal').val();
+    let sortBy = $("#sort").val();
+    if(sortBy == null) {
+      sortBy = "course";
     }
+    let url = '/api/allSections?sortBy=' + sortBy;
+    if ($('#searchVal').val() != '') {
+      url = url + "&searchVal=" + $('#searchVal').val();
+    }
+    console.log(url);
     $("#searchResults").load(url);
+    console.log("should have loaded")
   }
 
   function displaySection(id) {
-    console.log("display course" + id);
-    console.log("display course")
     let url = '/admin/singleSection/' + id;
     $("#singleSection").load(url);
   }
