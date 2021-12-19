@@ -54,7 +54,9 @@ public class ApiService {
 
     //student section search
     public List<Section> getAvailableSectionByNumberSearch(String courseNumber, Sort sort) {
+        System.out.println("sort by" + sort);
         Optional<List<Section>> sectionList = sectionsRepository.findByDisabledFalseAndCourseCourseNumberContainingIgnoreCase(courseNumber, sort);
+        System.out.println("section list ");
         return sectionList.orElse(null);
     }
 

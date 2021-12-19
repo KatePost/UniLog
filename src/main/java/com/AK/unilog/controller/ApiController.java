@@ -33,8 +33,6 @@ public class ApiController {
         this.registrationService = registrationService;
     }
 
-    //searches
-
     //admin searching for course
     @GetMapping("/allCourses")
     public String findCourses(Model model, @RequestParam(value = "searchVal", required = false)String courseNumber, @RequestParam(value = "sortBy", required = false)String sortBy) {
@@ -65,28 +63,30 @@ public class ApiController {
     }
 
     //student searching for available section
-    @GetMapping("/availableSection/{courseNumber}")
-    public String availableSectionsSearch(Model model, @PathVariable String courseNumber, @RequestParam(name = "sortBy", required = false)String sortBy) {
-        if (courseNumber.equals("")) {
-            model.addAttribute("listSections", apiService.getAvailableSections());
-        } else {
-            model.addAttribute("listSections", apiService.getAvailableSectionByNumberSearch(courseNumber, Sort.by(sortBy)));
+    @GetMapping("/availableSection")
+    public String availableSectionsSearch(Model model,  @RequestParam(value = "searchVal", required = false)String courseNumber, @RequestParam(name = "sortBy", required = false)String sortBy) {
+        System.out.println("in /availablesection");
+        if(sortBy == null){
+            sortBy = "course.courseNumber";
         }
+        if(courseNumber == null){
+            courseNumber = "";
+        }
+        model.addAttribute("listSections", apiService.getAvailableSectionByNumberSearch(courseNumber, Sort.by(sortBy)));
         return "fragments/components :: sectionsList";
     }
 
     //student searching for available courses
-    @GetMapping("/availableCourses/{courseNumber}")
-    public String findAvailableCourses(Model model, @PathVariable String courseNumber, @RequestParam(name = "sortBy", required = false)String sortBy) {
+    @GetMapping("/availableCourses")
+    public String findAvailableCourses(Model model, @RequestParam(value = "searchVal", required = false)String courseNumber, @RequestParam(value = "sortBy", required = false)String sortBy) {
         System.out.println(sortBy);
         if(sortBy == null){
             sortBy = "courseNumber";
         }
-        if (courseNumber.equals("")) {
-            model.addAttribute("listCourses", apiService.getAvailableCourses());
-        } else {
-            model.addAttribute("listCourses", apiService.getAvailableCourseByNumberSearch(courseNumber, Sort.by(sortBy)));
+        if(courseNumber == null){
+            courseNumber = "";
         }
+        model.addAttribute("listCourses", apiService.getAvailableCourseByNumberSearch(courseNumber, Sort.by(sortBy)));
         return "fragments/components :: resultsList";
     }
 
@@ -96,14 +96,6 @@ public class ApiController {
         model.addAttribute("listCourses", apiService.getAvailableCourses());
         System.out.println(apiService.getAvailableCourses());
         return "fragments/components :: resultsList";
-    }
-
-    //show student all sections
-    @GetMapping("/availableSection/")
-    public String availableSections(Model model) {
-        model.addAttribute("listSections", apiService.getAvailableSections());
-        System.out.println(apiService.getAvailableSections());
-        return "fragments/components :: sectionsList";
     }
 
     //student display a single course info
