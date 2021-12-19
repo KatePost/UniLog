@@ -4,14 +4,11 @@ import com.AK.unilog.entity.Course;
 import com.AK.unilog.entity.RegisteredCourse;
 import com.AK.unilog.entity.Section;
 import com.AK.unilog.entity.User;
-import com.AK.unilog.repository.RegistrationRepo;
-import com.AK.unilog.service.CartItemService;
 import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.HashMap;
