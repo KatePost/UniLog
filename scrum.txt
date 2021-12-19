@@ -173,3 +173,22 @@ Aly
 -sorting and filtering
 3. Where do I need assistance? What do I need to figure out?
 -?
+
+12/18/2021
+Kate
+1. What I have done / not done since last Scrum?
+-back end fixes ie queries instead of loops
+-password recovery
+2. What I plan to do from this scrum to next? (next 24 hours)
+-presentation
+-sorting courses and sections
+3. Where do I need assistance? What do I need to figure out?
+-?
+
+Aly
+1. What I have done / not done since last Scrum?
+-sorting and filtering!! student and admin
+-admin crud for users
+2. What I plan to do from this scrum to next? (next 24 hours)
+-presentation
+3. Where do I need assistance? What do I need to figure out?
