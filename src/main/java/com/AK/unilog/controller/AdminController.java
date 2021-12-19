@@ -228,7 +228,6 @@ public class AdminController {
         return "redirect:/admin/updateSection/" + sectionUpdateFormModel.getId();
     }
 
-
     @GetMapping("adminDetails")
     public String viewDetails(Model model, Principal principal){
         User student = userService.findByEmail(principal.getName());
@@ -242,53 +241,6 @@ public class AdminController {
 
         return getStringObjectMap(field, value, principal.getName(), true);
     }
-
-//    static Map<String, Object> getStringObjectMap(@RequestParam("field") String field, @RequestParam("value") String value, String userEmail, UserService userService) {
-//        User user = userService.findByEmail(userEmail);
-//        Map<String, Object> data = new HashMap<>();
-//        String fieldMsg = "";
-//
-//        switch (field) {
-//            case "firstName":
-//                try {
-//                    user.setFirstName(value);
-//                    userService.saveUser(user);
-//                } catch (TransactionSystemException e) {
-//                    data.put("success", false);
-//                    data.put("message", "First name must be between 2 and 200 characters");
-//                    return data;
-//                }
-//                fieldMsg = "First name";
-//                break;
-//            case "lastName":
-//                try {
-//                    user.setLastName(value);
-//                    userService.saveUser(user);
-//                } catch(TransactionSystemException e){
-//                    data.put("success", false);
-//                    data.put("message", "Last name must be between 2 and 200 characters");
-//                    return data;
-//                }
-//                fieldMsg = "Last name";
-//                break;
-//            case "address":
-//                try {
-//                    user.setAddress(value);
-//                    userService.saveUser(user);
-//                } catch(TransactionSystemException e){
-//                    data.put("success", false);
-//                    data.put("message", "Address must be a valid address format");
-//                    return data;
-//                }
-//                fieldMsg = "Address";
-//                break;
-//        }
-//
-//        data.put("success", true);
-//        data.put("message", fieldMsg + " successfully changed");
-//        return data;
-//    }
-
 
     @PostMapping("changePassword")
     public String changePassword(RedirectAttributes redirect, @RequestParam("newPassword")String newPassword, @RequestParam("confirmPassword")String confirmPassword, Principal principal){

@@ -14,9 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -191,25 +188,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-/*
-    public Set<CartItem> getCart() {
-        return cart;
-    }
-
-    public void setCart(Set<CartItem> cart) {
-        this.cart = cart;
-    }
-*/
-
-/*
-    public Set<RegisteredCourse> getRegisteredCourses() {
-        return registeredCourses;
-    }
-
-    public void setRegisteredCourses(Set<RegisteredCourse> registeredCourses) {
-        this.registeredCourses = registeredCourses;
-    }
-*/
 
     @Override
     public String toString() {
@@ -266,30 +244,9 @@ public class User implements UserDetails {
      */
     public boolean hasPrerequisite(Section section){
 
-//        Course prerequisite = section.getCourse().getPrereq();
-//        if(prerequisite == null){
-//            return true;
-//        }
-//        for(RegisteredCourse registeredCourse : registeredCourses){
-//            if(registeredCourse.getSection().getCourse().getId() == prerequisite.getId()){
-//                if(!registeredCourse.getSection().getStartDate().isAfter(section.getStartDate())){
-//                    return true;
-//                }
-//            }
-//        }
-//        //check if section start date is at least after registered course start date
-//        return false;
         return Users.hasPrerequisite(this, section);
 
     }
-//
-//    public double getUnpaidSum(){
-//        double price = 0.00;
-//        for(RegisteredCourse course : registeredCourses){
-//                price += course.getFee();
-//        }
-//        return price;
-//    }
 
     public enum Role {
         STUDENT, ADMIN
