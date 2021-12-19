@@ -1,7 +1,6 @@
 package com.AK.unilog.entity;
 
 
-import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.utils.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +11,6 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -64,13 +62,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-//    private Set<CartItem> cart;
+    @Column(columnDefinition = "boolean default false")
+    private boolean disabled;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private Set<RegisteredCourse> registeredCourses;
 
-    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, LocalDateTime recoveryExpiration, String recoveryUuid) {//, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses
+    public User(Long id, String firstName, String lastName, String address, LocalDate birthdate, String password, String passwordMatch, String email, String stripeId, Role role, LocalDateTime recoveryExpiration, String recoveryUuid, boolean disabled) {//, Set<CartItem> cart, Set<RegisteredCourse> registeredCourses
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -81,14 +77,21 @@ public class User implements UserDetails {
         this.email = email;
         this.stripeId = stripeId;
         this.role = role;
-//        this.cart = cart;
-//        this.registeredCourses = registeredCourses;
         this.recoveryExpiration = recoveryExpiration;
         this.recoveryUuid = recoveryUuid;
+        this.disabled = disabled;
     }
 
     public User() {
 
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     public Long getId() {

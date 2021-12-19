@@ -26,6 +26,9 @@ public class LoginService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByEmail(username);
+        if(user.isDisabled()){
+            throw new UsernameNotFoundException("user not found");
+        }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities());
     }
 

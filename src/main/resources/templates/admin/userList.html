@@ -32,7 +32,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr th:each="user : ${userList}" th:id="|user${user.id}|" th:onclick="|goToUser(${user.id})|">
+          <tr th:each="user : ${userList}" th:id="|user${user.id}|" th:onclick="|goToUser(${user.id})|" th:class="${user.disabled}? 'text-light table-active'">
             <td th:text="${user.id}"></td>
             <td th:text="${user.firstName}"></td>
             <td th:text="${user.lastName}"></td>

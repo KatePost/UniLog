@@ -7,6 +7,7 @@ $(document).ready(function(){
     $(".editBtn").click(function(){
         let inputId = "#" + $(this).val();
         $(inputId).prop("readonly", false);
+        $(inputId).prop("disabled", false);
         $(inputId).focus();
         $(this).hide();
         $(this).siblings(".saveBtn").show();
@@ -38,6 +39,7 @@ $(document).ready(function(){
         $("#" + inputId).parent().load(window.location + " #" + inputId);
 
         $("#" + inputId).prop("readonly", true);
+        $("#" + inputId).prop("disabled", true);
         $(this).hide();
         $(this).siblings(".editBtn").show();
 

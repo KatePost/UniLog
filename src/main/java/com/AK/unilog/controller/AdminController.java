@@ -10,6 +10,7 @@ import com.AK.unilog.model.SectionUpdateFormModel;
 import com.AK.unilog.service.CourseService;
 import com.AK.unilog.service.RegistrationService;
 import com.AK.unilog.service.UserService;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -237,6 +238,7 @@ public class AdminController {
     @PostMapping("adminDetails")
     public @ResponseBody()
     Map<String, Object> editDetails(@RequestParam("field")String field, @RequestParam("value")String value, Principal principal){
+
         return getStringObjectMap(field, value, principal.getName(), true);
     }
 
@@ -335,14 +337,28 @@ public class AdminController {
     }
 
     @GetMapping("editUser/{id}")
-    public String editUser(Model model, @PathVariable("id")long id){
-        model.addAttribute("user", userService.getById(id));
+    public String editUser(Model model, @PathVariable("id")long id, Principal principal){
+        User user = userService.getById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("otherUser", !principal.getName().equals(user.getEmail()));
         return "admin/editUser";
     }
 
     @PostMapping("editUser/{id}")
-    public @ResponseBody Map<String, Object> editUser(@PathVariable("id")long id, @RequestParam("field")String field, @RequestParam("value")String value){
+    public @ResponseBody Map<String, Object> editUser(@PathVariable("id")long id,
+                                                      @RequestParam("field")String field,
+                                                      @RequestParam("value")String value,
+                                                      Principal principal){
         User user = userService.getById(id);
-        return getStringObjectMap(field, value, user.getEmail(), false);
+        return getStringObjectMap(field, value, user.getEmail(), principal.getName().equals(user.getEmail()));
+    }
+
+    @PostMapping("deactivateUser")
+    public String deleteUser(@RequestParam("deleteId")long id, RedirectAttributes redirect){
+        User user = userService.getById(id);
+        user.setDisabled(!user.isDisabled());
+        userService.saveUser(user);
+        redirect.addFlashAttribute("deleteMsg", user.isDisabled()? "User deactivated" : "User reactivated");
+        return "redirect:/admin/userList";
     }
 }

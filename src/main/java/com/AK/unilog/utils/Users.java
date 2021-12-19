@@ -61,7 +61,7 @@ public class Users {
     public static Map<String, Object> getStringObjectMap(String field, String value, String userEmail, boolean selfEdit) {
         User user = userService.findByEmail(userEmail);
         Map<String, Object> data = new HashMap<>();
-        String fieldMsg = "";
+        String fieldMsg;
 
         switch (field) {
             case "firstName":
@@ -143,6 +143,32 @@ public class Users {
                     data.put("message", "Age validation failed.");
                     return data;
                 }
+                fieldMsg = "Date of birth";
+                break;
+            case "role":
+                if(selfEdit){
+                    data.put("success", false);
+                    data.put("message", "Please have another administrator verify your new role before they change it.");
+                    return data;
+                }
+                try {
+                    user.setRole(User.Role.valueOf(value));
+                    userService.saveUser(user);
+                } catch (IllegalArgumentException e){
+                    data.put("success", false);
+                    data.put("message", "Not a valid role");
+                    return data;
+                } catch (TransactionSystemException e){
+                    data.put("success", false);
+                    data.put("message", "Role validation failed");
+                    return data;
+                }
+                fieldMsg = "Role";
+                break;
+            default:
+                data.put("success", false);
+                data.put("message", "Not a valid field");
+                return data;
         }
 
         data.put("success", true);

@@ -10,7 +10,7 @@
     <div th:replace="fragments/adminGeneral :: frame(~{:: #text})">
         <h1>Your Information</h1>
         <div id="text">
-            <th:block th:replace="fragments/editUser :: editProfile(@{|/admin/changeUserPassword/${user.id}|}, true)"/>
+            <th:block th:replace="fragments/editUser :: editProfile(@{|/admin/changeUserPassword/${user.id}|}, ${otherUser})"/>
         </div>
     </div>
 </div>

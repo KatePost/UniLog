@@ -73,4 +73,13 @@ public class UserService {
     public User getById(Long id) {
         return userRepo.getById(id);
     }
+
+    public boolean deleteById(Long id) {
+        try {
+            userRepo.deleteById(id);
+        } catch (IllegalArgumentException e){
+            return false;
+        }
+        return true;
+    }
 }

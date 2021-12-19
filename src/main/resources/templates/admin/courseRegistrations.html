@@ -52,7 +52,7 @@
                 <!---->
                 <form action="#" th:action="@{/admin/deleteRegistration}" method="post" id="deleteForm">
                     <tr th:each="regCourse: ${registeredCourses}" th:id="|reg${regCourse.id}|" th:onclick="|goToReg(${regCourse.id})|">
-                        <td><span th:text="${regCourse.user.lastName}"></span>, <span th:text="${regCourse.user.firstName}"></span></td>
+                        <td><span th:text="|${regCourse.user.lastName}, ${regCourse.user.firstName}|"></span><span th:if="${regCourse.user.disabled}">*</span></td>
                         <td th:text="${regCourse.user.email}"></td>
                         <td th:text="${regCourse.section.course.courseNumber}"></td>
                         <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div th:if="${singleCourse}" class="card w-auto position-absolute top-50 start-50 translate-middle">
-            <h4 class="card-header" th:text="|${singleCourse.user.lastName}, ${singleCourse.user.firstName}|"></h4>
+            <h4 class="card-header"><span th:text="|${singleCourse.user.lastName}, ${singleCourse.user.firstName}|"></span><span th:if="${singleCourse.user.disabled}" class="text-danger"> (inactive)</span></h4>
             <div class="card-body">
                 <h5 class="card-title" th:text="|${singleCourse.section.course.courseNumber} - ${singleCourse.section.semester} ${singleCourse.section.year}|"></h5>
                 <h6 class="text-danger card-subtitle" th:if="${singleCourse.isOverDue()}">OVERDUE</h6>
@@ -102,9 +102,7 @@
                             <li class="list-group-item">Prerequisite: <span th:text="${singleCourse.section.course.prereq}? ${singleCourse.section.course.prereq.courseNumber} : 'NONE'"></span></li>
                         </ul>
                     </li>
-                    <!-- Going to want to add course title, description, prerequisites-->
                 </ul>
-<!--                <a th:href="@{courseRegistrations}" class="btn btn-secondary">Close</a>-->
                 <a href="javascript:window.location=location.pathname" class="btn btn-secondary">Close</a>
             </div>
     </div>

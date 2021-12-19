@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>Your Information</h1>
-<table class="table" th:fragment="editProfile(pwUrl, otherUser)">
+<div th:fragment="editProfile(pwUrl, otherUser)">
+    <table class="table" th:unless="${user.disabled}">
     <tbody>
     <tr id="emailRow">
         <th scope="row"><label for="email">Email</label></th>
@@ -48,6 +49,20 @@
             <button class="btn btn-secondary saveBtn" value="birthdate">Save</button>
         </td>
     </tr>
+    <tr th:if="${otherUser}">
+        <th scope="row"><label for="role">Role</label></th>
+        <td colspan="2">
+<!--            <input id="role" name="role" type="date" class="form-control-plaintext" readonly th:field="${user.role}">-->
+            <select id="role" name="role" type="date" class="form-select form-control-plaintext" disabled th:field="${user.role}">
+                <option value="STUDENT">Student</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+        </td>
+        <td>
+            <button class="btn btn-secondary editBtn" value="role">Edit</button>
+            <button class="btn btn-secondary saveBtn" value="role">Save</button>
+        </td>
+    </tr>
     <tr>
         <th scope="row">Reset Password</th>
         <td><input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New password" form="passwordForm" aria-label="new password"></td>
@@ -59,6 +74,10 @@
     </tr>
     </tbody>
 </table>
-
+<div th:class="${user.disabled}? 'hstack justify-content-center' : 'hstack justify-content-end'" th:if="${otherUser}">
+    <form action="#" th:action="@{/admin/deactivateUser}" method="post" id="deleteUser"></form>
+    <button form="deleteUser" name="deleteId" id="deleteId" type="submit" class="btn btn-danger" th:value="${user.id}" th:text="${user.disabled}? 'Reactivate User': 'Deactivate User'"></button>
+</div>
+</div>
 </body>
 </html>
