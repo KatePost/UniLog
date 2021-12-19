@@ -162,14 +162,15 @@ public class AdminController {
     @GetMapping("/singleCourse/{courseNumber}")
     public String singleCourseAdmin(Model model, @PathVariable String courseNumber) {
         model.addAttribute("singleCourse", courseService.getCourseByNumber(courseNumber));
-        model.addAttribute("courseUpdateFormModel", new CourseUpdateFormModel());
         return "fragments/adminGeneral :: singleCourse";
     }
 
     @GetMapping("/singleSection/{id}")
     public String singleSectionAdmin(Model model, @PathVariable Long id) {
         model.addAttribute("singleSection", courseService.getSectionById(id));
-        model.addAttribute("sectionUpdateFormModel", new SectionUpdateFormModel());
+        List<RegisteredCourse> list = registrationService.getStudentsBySection(courseService.getSectionById(id));
+        model.addAttribute("studentsRegistered", list);
+        model.addAttribute("seatsTaken", list.size());
         return "fragments/adminGeneral :: singleSection";
     }
 

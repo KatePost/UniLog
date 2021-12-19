@@ -248,11 +248,5 @@ public class StudentController {
         return "redirect:/student/studentDetails";
     }
 
-//    @GetMapping("/emailTest")
-//    public String emailTest(){
-//        System.out.println("Email test");
-//        sendGridEmailService.sendMail();
-//        return "index";
-//    }
 }
 

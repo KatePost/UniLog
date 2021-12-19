@@ -99,7 +99,6 @@ public class UniController {
     public String recoverPassword(@RequestParam("email") String email, Model model){
        User user = userService.findByEmail(email);
        if(user != null){
-           System.out.println("calling recoverPassword");
            passwordRecoveryService.recoverPassword(user);
        }
        model.addAttribute("message", "If an account matching that email is found, it will be emailed the next steps for password recovery");
@@ -137,7 +136,7 @@ public class UniController {
                 return "redirect:/login";
             }
         }
-        redirectAttributes.addFlashAttribute("messageDanger", "Could not authenticate credentials.");
+        redirectAttributes.addFlashAttribute("errorMsg", "Could not authenticate credentials.");
         return "redirect:/login";
     }
 }

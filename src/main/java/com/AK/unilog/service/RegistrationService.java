@@ -164,4 +164,8 @@ public class RegistrationService {
         return messages;
     }
 
+    public List<RegisteredCourse> getStudentsBySection(Section section) {
+        Optional<List<RegisteredCourse>> registeredCourseList = registrationRepo.findBySection(section);
+        return registeredCourseList.orElse(null);
+    }
 }
