@@ -9,10 +9,20 @@
   <div th:replace="fragments/studentGeneral.html :: frame(~{::#text})">
     <div id="text" class=" p-3">
       <h2>Available Sections</h2>
-      <form class="d-flex pb-2">
-        <input class="form-control me-2" type="search" id="searchVal" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" onclick="searchSections()" type="button">Search</button>
-      </form>
+      <div class="row">
+        <form class="d-flex pb-2">
+          <div class="dropdown col-4 align-content-end">
+            <select name="sort" id="sort" class="btn btn-outline-primary dropdown-toggle">
+              <option disabled selected>Sort by</option>
+              <option value="semester">Semester</option>
+              <option value="year">Year</option>
+              <option value="course">Course</option>
+            </select>
+          </div>
+          <input class="form-control me-2" type="search" id="searchVal" placeholder="Search">
+          <button class="btn btn-outline-success col-auto" onclick="searchSections()" type="button">Fetch Results</button>
+        </form>
+      </div>
       <div id="searchResults">
       </div>
     </div>
@@ -24,15 +34,18 @@
     searchSections();
   })
   function searchSections() {
-    let url = '/api/availableSection/';
+    let sortBy = $("#sort").val();
+    if(sortBy == null) {
+      sortBy = "course";
+    }
+    let url = '/api/availableSection?sortBy=' + sortBy;
     if ($('#searchVal').val() != '') {
-      url = url + $('#searchVal').val();
+      url = url + "&searchVal=" + $('#searchVal').val();
     }
     $("#searchResults").load(url);
   }
 
   function displaySection(id) {
-    console.log("display course" + id)
     let url = '/api/student/singleSection/' + id;
     $("#singleSection").load(url);
   }

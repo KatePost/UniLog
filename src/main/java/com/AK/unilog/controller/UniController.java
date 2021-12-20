@@ -119,7 +119,7 @@ public class UniController {
             model.addAttribute("form", recoverPasswordForm );
             return "recoverPasswordForm";
         }
-        redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect." + resetToken);
+        redirectAttributes.addFlashAttribute("errorMsg", "The link you're trying to access is either expired or incorrect.");
         return "redirect:/login";
     }
 
@@ -127,7 +127,6 @@ public class UniController {
     public String passwordReset(RecoverPasswordForm recoverPasswordForm, RedirectAttributes redirectAttributes){
         User user = userService.findByUuid(recoverPasswordForm.getUuid());
 
-        //check that the user hasn't messed with the form inputs
         if(user.getEmail().equals(recoverPasswordForm.getEmail())){
             System.out.println("user email matches token");
             if (passwordRecoveryService.validateNewPassword(user, recoverPasswordForm)){

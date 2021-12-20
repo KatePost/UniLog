@@ -13,7 +13,7 @@
         <form class="d-flex pb-2">
           <div class="dropdown col-4 align-content-end">
             <select name="sort" id="sort" class="btn btn-outline-primary dropdown-toggle">
-              <option disabled selected>Filter by</option>
+              <option disabled selected>Sort by</option>
               <option value="semester">Semester</option>
               <option value="year">Year</option>
               <option value="disabled">Disabled</option>
@@ -46,9 +46,7 @@
     if ($('#searchVal').val() != '') {
       url = url + "&searchVal=" + $('#searchVal').val();
     }
-    console.log(url);
     $("#searchResults").load(url);
-    console.log("should have loaded")
   }
 
   function displaySection(id) {
