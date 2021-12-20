@@ -67,7 +67,7 @@
                     <td th:text="${regCourse.section.course.courseNumber}">label</td>
                     <td th:text="${regCourse.section.course.title}"></td>
                     <td th:text="${regCourse.section.course.description}"></td>
-                    <td><span th:text="${regCourse.section.semester}"></span> <span th:text="${regCourse.section.year}"></span></td>
+                    <td th:text="|${regCourse.section.semester} ${regCourse.section.year}|"></td>
                     <td th:text="${regCourse.dueDate}"></td>
                     <td th:if="${regCourse.paymentRecord}" class="text-success">PAID</td>
                     <td th:unless="${regCourse.paymentRecord}" th:class="${regCourse.isOverDue()}? 'text-danger' : ''" th:text="|$${regCourse.getFee()}|"></td>
