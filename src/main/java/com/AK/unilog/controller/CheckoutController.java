@@ -61,26 +61,21 @@ public class CheckoutController {
         params.put("amount", totalInCents);
         params.put("currency", "cad");
         params.put("source", stripeToken);
-
         try {
             Charge charge = Charge.create(params);
-
             //save chargeId and create paymentRecord
             PaymentRecord paymentRecord = checkoutService.saveCharge(charge, student, total);
-
             //update registered courses to reflect payment
             paymentItemService.updateKeyForRegisteredCourses(paymentRecord);
-
             //remove items from cart
             paymentItemService.clearCart(student);
-
             redirectAttributes.addFlashAttribute("message", "Payment of $" + total + " successful");
-            return "redirect:/student/home";
+            return "redirect:/student/paymentHistory";
         }catch(StripeException ex){
             ex.printStackTrace();
             ex.getMessage();
-            redirectAttributes.addFlashAttribute("deleteMsg", "There was a problem");
-            return "redirect:/student/home";
+            redirectAttributes.addFlashAttribute("errorMsg", "There was a problem with your payment.");
+            return "redirect:/student/registeredCourses";
         }
     }
 

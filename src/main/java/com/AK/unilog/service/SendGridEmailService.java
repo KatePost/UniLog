@@ -26,7 +26,7 @@ public class SendGridEmailService{
         Email from = new Email("unilogak@gmail.com", "UniLog System");
         String subject = "Password reset";
         Email to = new Email(user.getEmail(), user.getFirstName());
-        Content content = new Content("text/html", "test");
+        Content content = new Content("text/html", "follow this link to recover your password: " + link) ;
         Mail mail = new Mail(from, subject, to, content);
 
         mail.setTemplateId("d-f763e9ea34084659a9c9de3afe1055ea");
@@ -34,7 +34,6 @@ public class SendGridEmailService{
         personalization.addDynamicTemplateData("url", "<a href=" + link + ">Click Here</a>");
         personalization.addTo(to);
         mail.personalization.add(personalization);
-        System.out.println(link);
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
@@ -42,7 +41,6 @@ public class SendGridEmailService{
             request.setBody(mail.build());
             Response response = this.sendGrid.api(request);
             System.out.println(response.getBody());
-            System.out.println("sent");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

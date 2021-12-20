@@ -33,19 +33,17 @@ public class StudentController {
     private final CartItemService cartItemService;
     private final PaymentItemService paymentItemService;
     private final PaymentRecordService paymentRecordService;
-    private final SendGridEmailService sendGridEmailService;
 
     @Autowired
     public StudentController(UserService userService, RegistrationService registrationService,
-                             CourseService courseService, CartItemService cartItemService, SectionsRepository sectionsRepository, PaymentItemService paymentItemService,
-                             PaymentRecordService paymentRecordService, SendGridEmailService sendGridEmailService) {
+                             CourseService courseService, CartItemService cartItemService, PaymentItemService paymentItemService,
+                             PaymentRecordService paymentRecordService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.courseService = courseService;
         this.cartItemService = cartItemService;
         this.paymentItemService = paymentItemService;
         this.paymentRecordService = paymentRecordService;
-        this.sendGridEmailService = sendGridEmailService;
     }
 
     @GetMapping({"", "home"})
